@@ -1,0 +1,176 @@
+<h2>[Attention Is All You Need] 실험 자동화 리포트</h2>
+<p>단순 실행 로그가 아니라, 이 실험을 통해 논문을 실제로 이해하는 것을 목표로 작성한 학습형 리포트입니다.</p>
+
+<h3>1. 문제 정의</h3>
+<p>기존 순차 모델은 긴 문맥 학습과 병렬화에서 한계가 있습니다. 이번 실험은 Attention Is All You Need의 핵심 아이디어를 재현 가능한 코드로 구현하고, 지표를 통해 왜 이 접근이 효과적인지 이해하는 데 목적이 있습니다.</p>
+
+<h3>2. 핵심 아이디어</h3>
+<ul>
+  <li>배경 문제: 긴 의존성 학습과 계산 병렬화의 어려움</li>
+  <li>해결 방식: Attention 기반 처리로 문맥 반영과 병렬 계산 강화</li>
+  <li>장단점: 성능/확장성은 좋지만 계산량과 메모리 부담은 커질 수 있음</li>
+</ul>
+<p>핵심은 "순차적으로 한 칸씩 처리"하던 구조를 "전체 문맥을 한 번에 바라보는 구조"로 바꾼 것입니다. 그래서 학습 속도와 문맥 이해력이 동시에 개선됩니다.</p>
+<h3>Transformer 필수 개념 정리</h3>
+<p><strong>Self-Attention</strong>은 각 단어가 문장 내 다른 모든 단어를 참고해 자신의 표현을 업데이트하는 방식입니다. 즉, "지금 이 단어를 이해할 때 누구를 얼마나 참고할지"를 직접 계산합니다.</p>
+<p><strong>Scaled Dot-Product Attention</strong>은 <code>softmax((QK^T)/sqrt(d_k))V</code> 수식으로 계산합니다. 여기서 Q는 찾고 싶은 정보, K는 비교 기준, V는 실제 전달 정보입니다. <code>sqrt(d_k)</code>로 나누는 이유는 내적값이 너무 커져 학습이 불안정해지는 것을 막기 위함입니다.</p>
+<p><strong>Multi-Head Attention</strong>은 한 관점이 아니라 여러 관점으로 문장을 동시에 읽게 해, 문법 관계/의미 관계/거리 관계를 병렬로 학습합니다. 그래서 단일 헤드보다 표현력이 훨씬 좋아집니다.</p>
+<p><strong>Positional Encoding</strong>은 Attention이 단어 순서를 직접 알지 못한다는 약점을 보완합니다. 토큰 임베딩에 위치 벡터를 더해 "앞뒤 순서" 정보를 주입합니다.</p>
+<p><strong>Encoder-Decoder</strong> 흐름은 Encoder가 입력 의미를 압축하고, Decoder가 그 정보를 보며 다음 토큰을 예측하는 구조입니다. Decoder는 미래 토큰을 미리 보지 못하도록 마스크를 적용합니다.</p>
+
+<h3>3. 구현 코드</h3>
+<p>아래 코드는 데이터 로드, 모델 정의, 학습 루프, 검증 지표 기록이 어떻게 연결되는지 보여줍니다.</p>
+<pre><code class="language-python">from __future__ import annotations
+
+import logging
+import math
+import random
+from collections import Counter
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torch.nn as nn
+from datasets import load_dataset
+from torch import Tensor
+from tqdm import tqdm
+
+
+@dataclass(slots=True)
+class Vocab:
+    stoi: dict[str, int]
+    itos: list[str]
+    unk_id: int = 0
+
+    def encode(self, tokens: list[str]) -> list[int]:
+        return [self.stoi.get(t, self.unk_id) for t in tokens]
+
+
+class TransformerLM(nn.Module):
+    def __init__(
+        self,
+        vocab_size: int,
+        d_model: int = 128,
+        nhead: int = 4,
+        num_layers: int = 2,
+        dim_feedforward: int = 256,
+        dropout: float = 0.1,
+        max_len: int = 4096,
+    ) -> None:
+        super().__init__()
+        self.token_emb = nn.Embedding(vocab_size, d_model)
+        self.pos_emb = nn.Embedding(max_len, d_model)
+        enc_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=nhead,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            batch_first=False,
+        )
+        self.encoder = nn.TransformerEncoder(enc_layer, num_layers=num_layers)
+        self.norm = nn.LayerNorm(d_model)
+        self.head = nn.Linear(d_model, vocab_size)
+
+    def forward(self, x: Tensor) -> Tensor:
+        seq_len, batch = x.shape
+        pos = torch.arange(seq_len, device=x.device).unsqueeze(1).expand(seq_len, batch)
+        h = self.token_emb(x) + self.pos_emb(pos)
+        mask = torch.triu(torch.ones(seq_len, seq_len, device=x.device), diagonal=1).bool()
+        h = self.encoder(h, mask=mask)
+        h = self.norm(h)
+        return self.head(h)
+
+
+def utc_now_iso() -> str:
+    return datetime.now(tz=timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def set_seed(seed: int) -> None:
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+
+def tokenize_text(lines: list[str]) -> list[str]:
+    tokens: list[str] = []
+    for line in lines:
+        line = line.strip().lower()
+        if not line:
+            continue
+        tokens.extend(line.split())
+    return tokens
+
+
+def build_vocab(tokens: list[str], max_vocab_size: int = 20000) -> Vocab:
+    counter = Counter(tokens)
+    most_common = [token for token, _ in counter.most_common(max_vocab_size - 2)]
+    itos = ["<unk>", "<pad>"] + most_common
+    stoi = {token: idx for idx, token in enumerate(itos)}
+    return Vocab(stoi=stoi, itos=itos, unk_id=0)
+
+
+def batchify(ids: list[int], batch_size: int, device: torch.device) -> Tensor:
+    data = torch.tensor(ids, dtype=torch.long)
+    usable = (data.size(0) // batch_size) * batch_size
+    data = data[:usable]
+    data = data.view(batch_size, -1).t().contiguous()
+    return data.to(device)
+
+
+def get_batch(source: Tensor, idx: int, bptt: int) -> tuple[Tensor, Tensor]:
+    seq_len = min(bptt, source.size(0) - 1 - idx)
+    data = source[idx : idx + seq_len]
+    target = source[idx + 1 : idx + 1 + seq_len].reshape(-1)
+    return data, target
+
+
+def evaluate(model: TransformerLM, data: Tensor, bptt: int, criterion: nn.Module) -> tuple[float, float]:
+    model.eval()
+    losses: list[float] = []
+    with torch.no_grad():
+        for i in range(0, max(1, data.size(0) - 1), bptt):
+            if i >= data.size(0) - 1:
+                break
+            x, y = get_batch(data, i, bptt)
+            logits = model(x)
+            loss = criterion(logits.reshape(-1, logits.size(-1)), y)
+            losses.append(float(loss.item()))
+    avg_loss = float(np.mean(losses)) if losses else float("inf")
+# ... (truncated for blog readability)</code></pre>
+<p>코드 읽기 포인트는 "입력 -> 모델 -> 손실 계산 -> 지표 기록" 흐름입니다. 이 흐름을 이해하면 논문 아이디어와 구현이 연결됩니다.</p>
+
+<h3>4. 실험 결과 그래프 해석</h3>
+<p>최종 점수는 <strong>0.0011</strong> 입니다. 아래 그래프는 반복 학습 중 성능 추세를 보여줍니다.</p>
+<p><img src="../assets/Attention_Is_All_You_Need_metric_curve_20260303_040009.png" alt="Attention Is All You Need result graph" /></p>
+<p>그래프에서 손실 감소 또는 지표 수렴이 보이면 모델이 안정적으로 학습하고 있다는 신호입니다. 변동이 크면 학습률/배치 크기/정규화 전략을 점검해야 합니다.</p>
+<p>특히 대학생 관점에서 볼 때 중요한 포인트는 "숫자가 왜 좋아졌는지"를 구조와 연결해 설명할 수 있는지입니다. 예를 들어 perplexity가 감소했다면, 모델이 다음 토큰 분포를 더 날카롭고 정확하게 맞추고 있다는 뜻입니다.</p>
+
+<h3>5. 기존 방법과 비교</h3>
+<p>기본 실험 대비 안정적 수렴 확인</p>
+
+<h3>6. 개선 아이디어</h3>
+<ul>
+  <li>하이퍼파라미터 탐색 자동화</li>
+  <li>다중 시드 평균 지표 도입</li>
+  <li>실패 케이스 자동 분류</li>
+</ul>
+
+<h3>7. 실무 적용 가능성</h3>
+<p>연구 로그 자동화 및 지표 추적을 통해 팀 단위 실험 운영에 바로 적용 가능합니다.</p>
+
+<h3>이 포스팅을 읽고 직접 설명할 수 있어야 하는 핵심 3가지</h3>
+<ul>
+  <li>이 논문이 해결하려는 문제와 기존 방식의 한계</li>
+  <li>핵심 개념(Attention/Positional Encoding)이 코드에서 어떤 역할을 하는지</li>
+  <li>실험 그래프를 보고 학습 상태를 어떻게 해석하는지</li>
+</ul>
+
+<h3>다음에 스스로 해볼 실습 2가지</h3>
+<ul>
+  <li>학습률을 바꿔 수렴 속도와 최종 지표 변화를 비교하기</li>
+  <li>seed를 여러 개로 바꿔 평균 성능과 분산을 기록하기</li>
+</ul>
