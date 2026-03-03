@@ -73,10 +73,29 @@
 </table>
 <p>score_gain_vs_baseline: <strong>0.903448</strong></p>
 <p>핵심은 '양방향 문맥을 보는 복원 방식이 실제 토큰 예측 정확도를 얼마나 높이는가'입니다.</p>
+<h3>6-1. 다음 실험 설계/실행: Mask Ratio Sweep</h3>
+<p>이번 추가 실험은 마스크 비율을 <code>0.15 / 0.30 / 0.45</code>로 바꿔가며 MLM 성능 변화를 비교하는 ablation입니다.</p>
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>mask_ratio</th>
+      <th>baseline_score</th>
+      <th>bert_score</th>
+      <th>top1_acc</th>
+      <th>top5_acc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>0.15</td><td>0.075862</td><td>1.000000</td><td>1.000000</td><td>1.000000</td></tr>
+    <tr><td>0.30</td><td>0.075862</td><td>1.000000</td><td>1.000000</td><td>1.000000</td></tr>
+    <tr><td>0.45</td><td>0.075862</td><td>1.000000</td><td>1.000000</td><td>1.000000</td></tr>
+  </tbody>
+</table>
+<p>해석: 현재 toy-corpus에서는 비율 변화에 따른 차이가 작게 나왔다. 다음 단계에서는 더 큰 코퍼스/도메인 데이터로 스윕해야 실제 최적 비율 차이를 관찰할 수 있다.</p>
 
 <h3>7. 실험 결과 그래프 해석</h3>
 <p>최종 점수는 <strong>1.0000</strong> 입니다. 아래 그래프는 반복 학습 중 성능 추세를 보여줍니다.</p>
-<p><img src="../assets/BERT_metric_curve_20260303_085706.png" alt="BERT result graph" /></p>
+<p><img src="../assets/BERT_metric_curve_20260303_090430.png" alt="BERT result graph" /></p>
 <p>그래프에서 손실 감소 또는 지표 수렴이 보이면 모델이 안정적으로 학습하고 있다는 신호입니다. 변동이 크면 학습률/배치 크기/정규화 전략을 점검해야 합니다.</p>
 <p>특히 대학생 관점에서 볼 때 중요한 포인트는 "숫자가 왜 좋아졌는지"를 구조와 연결해 설명할 수 있는지입니다. 예를 들어 perplexity가 감소했다면, 모델이 다음 토큰 분포를 더 날카롭고 정확하게 맞추고 있다는 뜻입니다.</p>
 <p>추가 해석: 초반 구간에서 급격히 지표가 개선되고, 후반으로 갈수록 완만해지는 패턴은 "기초 패턴 학습 -> 미세 조정" 단계로 전환되는 전형적인 학습 곡선과 유사합니다.</p>
