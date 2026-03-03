@@ -2,6 +2,9 @@
 
 Python 3.11 기반 연구 자동화 프로젝트입니다.
 
+## Live Blog
+- https://kyougit.github.io/ai_research_portfolio/
+
 ## 환경 변수
 - `CLAUDE_API_KEY`: Claude API 키 (없으면 블로그 생성은 로컬 템플릿으로 진행)
 - `GITHUB_REPO_NAME`: `owner/repo` 형식 (예: `smile/ai_research_portfolio`)
