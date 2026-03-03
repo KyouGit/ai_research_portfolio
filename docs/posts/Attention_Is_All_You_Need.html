@@ -1,7 +1,7 @@
 <h2>[Attention Is All You Need] 실험 자동화 리포트</h2>
 <p>이 글은 <strong>논문 개념 설명 + 실험 결과 해석</strong>만 빠르게 볼 수 있도록 구성했습니다.</p>
 <p><strong>한눈에 보기:</strong> 1) 왜 필요한가 2) 핵심 개념 3) 실험 그래프 해석 4) 다음 액션</p>
-<p><strong>요약 결론:</strong> 이번 설정에서는 Transformer가 baseline보다 더 낮은 perplexity를 보여 문맥 학습 이점을 수치로 확인했습니다.</p>
+<p><strong>요약 결론:</strong> 이번 실험은 Transformer 개념 문서를 대상으로 한 RAG QA 시나리오에서, 단순 검색 대비 답변 품질 개선 가능성을 점검했습니다.</p>
 
 <h3>1. 문제 정의</h3>
 <p>기존 순차 모델은 긴 문맥 학습과 병렬화에서 한계가 있습니다. 이번 실험은 Attention Is All You Need의 핵심 아이디어를 재현 가능한 코드로 구현하고, 지표를 통해 왜 이 접근이 효과적인지 이해하는 데 목적이 있습니다.</p>
@@ -19,6 +19,10 @@
 <p><strong>Multi-Head Attention</strong>은 한 관점이 아니라 여러 관점으로 문장을 동시에 읽게 해, 문법 관계/의미 관계/거리 관계를 병렬로 학습합니다. 그래서 단일 헤드보다 표현력이 훨씬 좋아집니다.</p>
 <p><strong>Positional Encoding</strong>은 Attention이 단어 순서를 직접 알지 못한다는 약점을 보완합니다. 토큰 임베딩에 위치 벡터를 더해 "앞뒤 순서" 정보를 주입합니다.</p>
 <p><strong>Encoder-Decoder</strong> 흐름은 Encoder가 입력 의미를 압축하고, Decoder가 그 정보를 보며 다음 토큰을 예측하는 구조입니다. Decoder는 미래 토큰을 미리 보지 못하도록 마스크를 적용합니다.</p>
+<h3>검색 방법 설명: TF-IDF vs LSA(Dense)</h3>
+<p><strong>TF-IDF</strong>는 단어 빈도 기반 희소 벡터 검색입니다. 질문과 문서에 같은 단어가 많이 겹칠수록 점수가 올라갑니다. 구현이 간단하고 빠르지만, 표현이 조금만 바뀌어도 매칭이 약해질 수 있습니다.</p>
+<p><strong>LSA(Dense)</strong>는 TF-IDF 행렬을 저차원 의미 공간으로 압축해 밀집 임베딩으로 비교하는 방식입니다. 단어가 완전히 같지 않아도 의미가 비슷하면 더 잘 찾을 수 있습니다.</p>
+<p>이번 실험의 핵심은 "정확히 같은 단어 매칭"(TF-IDF)과 "의미 기반 매칭"(LSA Dense) 중 어떤 방식이 질문-근거 문서 연결에 더 유리한지 확인하는 것입니다.</p>
 <h3>핵심 수식 정리</h3>
 <ul>
   <li><code>Attention(Q,K,V)=softmax((QK^T)/sqrt(d_k))V</code>: 토큰 간 관련도를 확률화해 문맥 벡터를 만드는 핵심 식</li>
@@ -32,59 +36,56 @@
 
 <h3>4. 실험 설정</h3>
 <ul>
-  <li>데이터셋: wikitext-2-raw-v1</li>
-  <li>모델: TransformerLM(d_model=256,nhead=8,layers=4)</li>
-  <li>반복 횟수: 480</li>
+  <li>데이터셋: internal_transformer_concept_corpus</li>
+  <li>모델: Sparse_TFIDF_vs_Dense_LSA + Sentence_Extractor</li>
+  <li>반복 횟수: -</li>
   <li>랜덤 시드: 42</li>
+  <li>태스크 유형: rag_qa</li>
 </ul>
 <p>설정 의도: 복잡한 튜닝보다 개념 검증에 초점을 두고, 작은 모델 크기에서 수렴 패턴과 지표 변화를 먼저 확인했습니다.</p>
 
 <h3>5. 평가 지표 정의</h3>
 <ul>
-  <li><strong>score</strong>: 실험 결과를 한눈에 비교하기 위한 요약 지표</li>
-  <li><strong>loss</strong>: 모델 예측 오차(작을수록 좋음)</li>
-  <li><strong>perplexity</strong>: 언어모델의 혼란도(작을수록 좋음)</li>
+  <li><strong>retrieval_acc</strong>: 정답 근거 문서를 top-1에서 맞춘 비율</li>
+  <li><strong>answer_keyword_f1</strong>: 답변에 핵심 키워드가 포함된 정도</li>
+  <li><strong>score</strong>: <code>0.6*retrieval_acc + 0.4*answer_keyword_f1</code></li>
 </ul>
-<p>이번 실행에서 확인된 score는 <strong>0.0020</strong>, perplexity는 <strong>499.96230589688776</strong> 입니다.</p>
-<p>특히 perplexity는 "모델이 다음 단어를 얼마나 헷갈리는가"를 나타내므로, 대학생 관점에서는 "정답 확률 분포를 얼마나 날카롭게 학습했는가"로 이해하면 됩니다.</p>
-
-<h3>6. 다른 모델과 비교 (Baseline vs Transformer)</h3>
+<p>이번 실행의 transformer_score는 <strong>0.666667</strong> 입니다.</p>
+<h3>6. 다른 모델과 비교 (Baseline vs Transformer-style RAG)</h3>
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr>
-      <th>모델</th>
-      <th>핵심 아이디어</th>
-      <th>Perplexity(낮을수록 좋음)</th>
+      <th>방법</th>
+      <th>retrieval_acc</th>
+      <th>answer_keyword_f1</th>
+      <th>overall_score</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Unigram</td>
-      <td>이전 문맥 무시, 단어 빈도만 사용</td>
-      <td>755.5195875473249</td>
+      <td>baseline_tfidf</td>
+      <td>0.666667</td>
+      <td>0.416667</td>
+      <td>0.566667</td>
     </tr>
     <tr>
-      <td>Bigram</td>
-      <td>직전 1개 단어만 조건부로 사용</td>
-      <td>596.7065709290398</td>
-    </tr>
-    <tr>
-      <td>Transformer</td>
-      <td>Self-Attention으로 긴 문맥 반영</td>
-      <td>499.96230589688776</td>
+      <td>transformer_style_rag</td>
+      <td>0.833333</td>
+      <td>0.416667</td>
+      <td>0.666667</td>
     </tr>
   </tbody>
 </table>
-<p>Baseline 대비 개선률(최고 baseline 기준): <strong>0.162130</strong></p>
-<p>현재 실험에서는 baseline 대비 성능 개선이 관찰되어, Attention 기반 구조의 이점이 지표로 이어졌습니다.</p>
+<p>score_gain_vs_baseline: <strong>0.100000</strong></p>
+<p>핵심은 '질문에 맞는 근거를 정확히 찾고, 근거 기반 답변을 생성했는가'입니다.</p>
 
 <h3>7. 실험 결과 그래프 해석</h3>
-<p>최종 점수는 <strong>0.0020</strong> 입니다. 아래 그래프는 반복 학습 중 성능 추세를 보여줍니다.</p>
-<p><img src="../assets/Attention_Is_All_You_Need_metric_curve_20260303_074836.png" alt="Attention Is All You Need result graph" /></p>
+<p>최종 점수는 <strong>0.0000</strong> 입니다. 아래 그래프는 반복 학습 중 성능 추세를 보여줍니다.</p>
+<p><img src="../assets/Attention_Is_All_You_Need_metric_curve_20260303_084643.png" alt="Attention Is All You Need result graph" /></p>
 <p>그래프에서 손실 감소 또는 지표 수렴이 보이면 모델이 안정적으로 학습하고 있다는 신호입니다. 변동이 크면 학습률/배치 크기/정규화 전략을 점검해야 합니다.</p>
 <p>특히 대학생 관점에서 볼 때 중요한 포인트는 "숫자가 왜 좋아졌는지"를 구조와 연결해 설명할 수 있는지입니다. 예를 들어 perplexity가 감소했다면, 모델이 다음 토큰 분포를 더 날카롭고 정확하게 맞추고 있다는 뜻입니다.</p>
 <p>추가 해석: 초반 구간에서 급격히 지표가 개선되고, 후반으로 갈수록 완만해지는 패턴은 "기초 패턴 학습 -> 미세 조정" 단계로 전환되는 전형적인 학습 곡선과 유사합니다.</p>
-<h3>7-1. 실험 결과 예시 (모델 출력 샘플)</h3><p><strong>예시 1 (next_token_prediction)</strong><br/>입력 문맥: <code>. = = early career =</code><br/>정답 토큰: <code>=</code><br/>Top-k 예측(확률/순위): <code>1:=(0.4289) | 2:the(0.0869) | 3:in(0.0188) | 4:<unk>(0.0166) | 5:on(0.0094)</code></p><p><strong>예시 2 (next_token_prediction)</strong><br/>입력 문맥: <code>on the southern edge of the</code><br/>정답 토큰: <code><unk></code><br/>Top-k 예측(확률/순위): <code>1:<unk>(0.0341) | 2:film(0.0123) | 3:first(0.0111) | 4:united(0.0107) | 5:city(0.0096)</code></p><p><strong>예시 3 (next_token_prediction)</strong><br/>입력 문맥: <code>1861 . its strategic position at</code><br/>정답 토큰: <code>the</code><br/>Top-k 예측(확률/순위): <code>1:the(0.3760) | 2:a(0.0752) | 3:<unk>(0.0423) | 4:his(0.0334) | 5:its(0.0149)</code></p>
+<h3>7-1. 실험 결과 예시 (모델 출력 샘플)</h3><p><strong>예시 1 (rag_qa)</strong><br/>질문: <code>Why is positional encoding needed in a Transformer?</code><br/>정답(참조): <code>Because attention alone cannot represent token order.</code><br/>모델 답변: <code>Transformers need positional encoding because attention alone is permutation-invariant</code><br/>검색 Top-k(문서/점수): <code>1:d4(1.0710) | 2:d6(0.1581) | 3:d1(0.1338)</code><br/>근거 문서 hit: <code>True</code></p><p><strong>예시 2 (rag_qa)</strong><br/>질문: <code>What is the role of sqrt(d_k) in attention?</code><br/>정답(참조): <code>It scales dot products to keep softmax stable and gradients well-behaved.</code><br/>모델 답변: <code>The sqrt(d_k) scaling stabilizes gradients when key/query dimensions are large</code><br/>검색 Top-k(문서/점수): <code>1:d2(0.9346) | 2:d1(0.3014) | 3:d5(0.3003)</code><br/>근거 문서 hit: <code>True</code></p><p><strong>예시 3 (rag_qa)</strong><br/>질문: <code>How does multi-head attention help compared to a single head?</code><br/>정답(참조): <code>It attends in multiple subspaces so different relations can be captured in parallel.</code><br/>모델 답변: <code>Multi-head attention projects inputs into multiple subspaces and attends in parallel</code><br/>검색 Top-k(문서/점수): <code>1:d3(1.0779) | 2:d1(0.1210) | 3:d5(0.0817)</code><br/>근거 문서 hit: <code>True</code></p>
 
 <h3>8. 기존 방법과 비교</h3>
 <p>기본 실험 대비 안정적 수렴 확인</p>
@@ -97,8 +98,8 @@
 </ul>
 
 <h3>10. 한계와 다음 실험 계획</h3>
-<p><strong>이번 실험에서 배운 점:</strong> Transformer가 baseline보다 낮은 perplexity를 달성해, 충분한 학습 예산에서 문맥 모델링 이점이 수치로 확인되었다.</p>
-<p><strong>다음 실험 액션:</strong> 현재 설정을 기준으로 seed 3회 반복 후 평균/분산을 보고하고, 학습률 스케줄러를 도입한다.</p>
+<p><strong>이번 실험에서 배운 점:</strong> Dense 검색 임베딩(LSA) 기반 retriever가 sparse TF-IDF 대비 질의-문서 매칭 품질을 높였다.</p>
+<p><strong>다음 실험 액션:</strong> 다음 단계로 sentence-transformer + FAISS로 교체해 dense retrieval 품질과 latency를 함께 측정한다.</p>
 <p>한계: 현재 설정은 학습 step과 모델 크기가 제한적이므로, 논문 수준 성능 재현이라기보다 구조적 유효성 확인에 가깝습니다.</p>
 <p>다음 단계: 동일 데이터셋에서 LSTM baseline을 추가하고, seed 3회 평균/분산까지 보고서에 포함하면 신뢰도가 크게 올라갑니다.</p>
 
