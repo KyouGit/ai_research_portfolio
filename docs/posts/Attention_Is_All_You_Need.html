@@ -13,6 +13,11 @@
   <li>장단점: 성능/확장성은 좋지만 계산량과 메모리 부담은 커질 수 있음</li>
 </ul>
 <p>핵심은 "순차적으로 한 칸씩 처리"하던 구조를 "전체 문맥을 한 번에 바라보는 구조"로 바꾼 것입니다. 그래서 학습 속도와 문맥 이해력이 동시에 개선됩니다.</p>
+<h3>2-1. 모델 구조 그림 (Figure 1)</h3>
+<p><img src="../assets/Attention_architecture_diagram.png" alt="Transformer architecture diagram" /></p>
+<p><strong>Figure 1 해설 - 블록 역할:</strong> Input Tokens는 원문 토큰, Embedding+PosEnc는 의미/순서 결합, Encoder Stack은 입력 문맥 압축, Decoder Stack은 이전 출력과 인코더 정보를 이용해 다음 토큰을 생성, Output은 최종 분포를 의미합니다.</p>
+<p><strong>Figure 1 해설 - 데이터 흐름:</strong> 입력 토큰 -> 임베딩/위치정보 -> 인코더 컨텍스트 -> 디코더 생성 -> 출력 확률 순서로 진행됩니다.</p>
+<p><strong>Figure 1 해설 - 병목/한계:</strong> Attention 연산은 시퀀스 길이 n에 대해 O(n^2) 메모리/연산 복잡도를 가져 긴 문장에서 비용이 빠르게 증가합니다.</p>
 <h3>Transformer 필수 개념 정리</h3>
 <p><strong>Self-Attention</strong>은 각 단어가 문장 내 다른 모든 단어를 참고해 자신의 표현을 업데이트하는 방식입니다. 즉, "지금 이 단어를 이해할 때 누구를 얼마나 참고할지"를 직접 계산합니다.</p>
 <p><strong>Scaled Dot-Product Attention</strong>은 <code>softmax((QK^T)/sqrt(d_k))V</code> 수식으로 계산합니다. 여기서 Q는 찾고 싶은 정보, K는 비교 기준, V는 실제 전달 정보입니다. <code>sqrt(d_k)</code>로 나누는 이유는 내적값이 너무 커져 학습이 불안정해지는 것을 막기 위함입니다.</p>
@@ -29,6 +34,7 @@
   <li><code>Perplexity = exp(CrossEntropy)</code>: 모델의 혼란도를 나타내는 지표(낮을수록 좋음)</li>
   <li><code>score = 1/(1+perplexity)</code>: 실험 비교를 위한 요약 점수(클수록 좋음)</li>
 </ul>
+<p><strong>기호 정의:</strong> Q(Query)=현재 토큰이 찾는 정보, K(Key)=비교 기준 벡터, V(Value)=실제 전달될 정보, d_k=Key 차원, CrossEntropy=정답 분포와 예측 분포의 차이입니다.</p>
 <p>수식 해석은 반드시 수치 변화와 연결해서 읽어야 하며, 단순 암기보다 "왜 이 식이 필요한가"를 설명할 수 있어야 합니다.</p>
 
 <h3>3. 실험 목적</h3>

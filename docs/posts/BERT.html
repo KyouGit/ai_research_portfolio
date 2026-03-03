@@ -13,14 +13,20 @@
   <li>장단점: 성능/확장성은 좋지만 계산량과 메모리 부담은 커질 수 있음</li>
 </ul>
 <p>핵심은 "순차적으로 한 칸씩 처리"하던 구조를 "전체 문맥을 한 번에 바라보는 구조"로 바꾼 것입니다. 그래서 학습 속도와 문맥 이해력이 동시에 개선됩니다.</p>
+<h3>2-1. 모델 구조 그림 (Figure 1)</h3>
+<p><img src="../assets/BERT_mlm_architecture_diagram.png" alt="BERT MLM architecture diagram" /></p>
+<p><strong>Figure 1 해설 - 블록 역할:</strong> Tokenized Input은 원문 토큰, [MASK] Replace는 예측 대상 가림, Bidirectional Encoder는 좌우 문맥 통합 표현 생성, MLM Head는 마스크 위치의 토큰 분포 산출, Top-k는 후보 복원 결과입니다.</p>
+<p><strong>Figure 1 해설 - 데이터 흐름:</strong> 입력 토큰 -> 마스킹 -> 양방향 인코더 표현 -> MLM 분류 헤드 -> 복원 후보 출력 순서로 처리됩니다.</p>
+<p><strong>Figure 1 해설 - 병목/한계:</strong> 큰 vocabulary softmax와 도메인 불일치(사전학습 코퍼스 vs 실제 데이터)가 성능 병목이 될 수 있습니다.</p>
 
 
 <h3>핵심 수식 정리</h3>
 <ul>
-  <li><code>Attention(Q,K,V)=softmax((QK^T)/sqrt(d_k))V</code>: 토큰 간 관련도를 확률화해 문맥 벡터를 만드는 핵심 식</li>
-  <li><code>Perplexity = exp(CrossEntropy)</code>: 모델의 혼란도를 나타내는 지표(낮을수록 좋음)</li>
-  <li><code>score = 1/(1+perplexity)</code>: 실험 비교를 위한 요약 점수(클수록 좋음)</li>
+  <li><code>L_MLM = -sum(log P(x_t | x_masked))</code>: 마스킹된 위치 t의 정답 토큰 확률을 최대화하는 손실</li>
+  <li><code>score = 0.7*top1_acc + 0.3*top5_acc</code>: 정확 복원(top-1)과 후보 생성(top-5)을 함께 반영한 점수</li>
+  <li><code>softmax(z_i)=exp(z_i)/sum_j exp(z_j)</code>: MLM head의 로짓을 확률 분포로 변환</li>
 </ul>
+<p><strong>기호 정의:</strong> x_t=원래 정답 토큰, x_masked=마스킹된 입력, P(.)=모델 예측 확률, z_i=토큰 i의 로짓, top1_acc=1순위 정답률, top5_acc=상위5 포함률.</p>
 <p>수식 해석은 반드시 수치 변화와 연결해서 읽어야 하며, 단순 암기보다 "왜 이 식이 필요한가"를 설명할 수 있어야 합니다.</p>
 
 <h3>3. 실험 목적</h3>
