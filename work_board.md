@@ -9,12 +9,12 @@
 ## 보드 요약
 - total: 28
 - todo: 0
-- doing: 1
-- done: 27
-- last_updated_utc: 2026-03-03T07:49:46Z
+- doing: 0
+- done: 28
+- last_updated_utc: 2026-03-03T08:06:03Z
 
 ## 요청 목록
-- [ ] request_id: req-20260303-025342-5384 | status: doing | title: 논문 추가: Attention Is All You Need Repro | created_at_utc: 2026-03-03T02:53:42Z | started_at_utc: 2026-03-03T02:53:42Z | completed_at_utc: - | updated_at_utc: 2026-03-03T02:53:42Z | files: paper_list.md | summary: 논문 추가 작업 시작
+- [ ] request_id: req-20260303-025342-5384 | status: done | title: 논문 추가: Attention Is All You Need Repro | created_at_utc: 2026-03-03T02:53:42Z | started_at_utc: 2026-03-03T02:53:42Z | completed_at_utc: 2026-03-03T08:06:03Z | updated_at_utc: 2026-03-03T08:06:03Z | files: paper_list.md | summary: 자동 복구: 이전 세션 중단으로 stale doing 요청을 종료함(필요 시 새 요청으로 재개).
 - [ ] request_id: req-20260303-025428-4427 | status: done | title: 논문 추가: Transformer Paper Repro | created_at_utc: 2026-03-03T02:54:28Z | started_at_utc: 2026-03-03T02:54:28Z | completed_at_utc: 2026-03-03T02:54:28Z | updated_at_utc: 2026-03-03T02:54:28Z | files: paper_list.md, papers/Transformer_Paper_Repro/experiment.py, papers/Transformer_Paper_Repro/implementation_notes.md, papers/Transformer_Paper_Repro/theory.md | summary: 논문 구조 생성 완료
 - [ ] request_id: req-20260303-025428-6c52 | status: done | title: 논문 체크: Transformer Paper Repro | created_at_utc: 2026-03-03T02:54:28Z | started_at_utc: 2026-03-03T02:54:28Z | completed_at_utc: 2026-03-03T02:54:28Z | updated_at_utc: 2026-03-03T02:54:28Z | files: paper_list.md | summary: 체크 완료
 - [ ] request_id: req-20260303-025428-72aa | status: done | title: 실험 실행: Transformer Paper Repro | created_at_utc: 2026-03-03T02:54:28Z | started_at_utc: 2026-03-03T02:54:28Z | completed_at_utc: 2026-03-03T02:54:28Z | updated_at_utc: 2026-03-03T02:54:28Z | files: metrics.csv | summary: 실패: unterminated string literal (detected at line 60) (experiment.py, line 60)
@@ -127,6 +127,7 @@
 - 2026-03-03T07:49:46Z | request_id: req-20260303-074946-bb80 | event: created | status: todo | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: - | note: 요청 등록
 - 2026-03-03T07:49:46Z | request_id: req-20260303-074946-bb80 | event: started | status: doing | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: work_board.md | note: 블로그 작업 시작
 - 2026-03-03T07:49:46Z | request_id: req-20260303-074946-bb80 | event: completed | status: done | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: blog_Attention_Is_All_You_Need.html, docs/assets/Attention_Is_All_You_Need_metric_curve_20260303_074836.png, docs/posts/Attention_Is_All_You_Need.html | note: [github-pages] publish prepared: commit/push to deploy
+- 2026-03-03T08:06:03Z | request_id: req-20260303-025342-5384 | event: completed | status: done | title: 논문 추가: Attention Is All You Need Repro | files: paper_list.md | note: 자동 복구: 이전 세션 중단으로 stale doing 요청을 종료함(필요 시 새 요청으로 재개).
 
 ## 무결성 규칙
 - 요청 목록의 각 request_id는 유일해야 한다.

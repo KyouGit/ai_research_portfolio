@@ -1,0 +1,10 @@
+# Keep repository focused on experiment artifacts only
+__pycache__/
+.ipynb_checkpoints/
+*.py
+system_logs/
+archive/
+
+# Local temporary files
+*.tmp
+*.swp
