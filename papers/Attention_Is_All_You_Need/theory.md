@@ -136,3 +136,45 @@ Attention Is All You Need는 단순한 모델 제안이 아니라,
 - Transformer가 RNN의 어떤 병목을 어떻게 해결했는지
 - Attention 수식 각 항이 실제로 어떤 의미를 갖는지
 - 실험 지표(loss/perplexity)를 보고 모델 상태를 해석하는 방법
+
+## 13. 핵심 수식 정리
+아래 수식은 발표/면접에서 자주 물어보는 핵심이다.
+
+1. Scaled Dot-Product Attention
+```text
+Attention(Q, K, V) = softmax((QK^T) / sqrt(d_k)) V
+```
+- 의미: 토큰 간 관련도를 계산해 중요한 정보만 강조해 합성
+- 왜 필요한가: 긴 문맥 관계를 직접 모델링
+- 주의: scale이 없으면 softmax 포화로 학습 불안정 가능
+
+2. Positional Encoding
+```text
+PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+```
+- 의미: 순서 정보를 임베딩에 주입
+- 왜 필요한가: Attention은 순서에 둔감하기 때문
+
+3. Perplexity
+```text
+Perplexity = exp(CrossEntropy)
+```
+- 의미: 모델이 다음 토큰을 얼마나 헷갈리는지
+- 해석: 낮을수록 언어모델 성능이 좋음
+
+## 14. 예상 질문 리스트와 답변
+Q1. Transformer는 왜 RNN보다 병렬화에 유리한가?  
+A1. RNN은 시점 의존으로 순차 계산이 필요하지만, Transformer는 전체 시퀀스 attention을 행렬 연산으로 처리해 병렬 계산이 가능하다.
+
+Q2. Multi-Head Attention이 단일 Head보다 좋은 이유는?  
+A2. 여러 헤드가 서로 다른 관계(문법/의미/거리)를 동시에 학습해 표현력이 증가한다.
+
+Q3. 이번 실험에서 Transformer가 baseline보다 안 좋게 나온 이유는 무엇일 수 있나?  
+A3. step 수 부족, 모델 크기 제한, 튜닝 부족으로 과소학습일 가능성이 높다.
+
+Q4. baseline 비교를 꼭 해야 하는 이유는?  
+A4. 절대 수치만 보면 의미 해석이 어렵고, 간단한 모델과 비교해야 구조적 이점/한계를 명확히 설명할 수 있다.
+
+Q5. 다음 실험 우선순위를 어떻게 정해야 하나?  
+A5. step 확대 -> learning rate 튜닝 -> 다중 seed 평균 순서로 진행해 성능과 신뢰도를 함께 확보한다.

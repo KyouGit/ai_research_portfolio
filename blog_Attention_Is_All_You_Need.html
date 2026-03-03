@@ -19,6 +19,13 @@
 <p><strong>Multi-Head Attention</strong>은 한 관점이 아니라 여러 관점으로 문장을 동시에 읽게 해, 문법 관계/의미 관계/거리 관계를 병렬로 학습합니다. 그래서 단일 헤드보다 표현력이 훨씬 좋아집니다.</p>
 <p><strong>Positional Encoding</strong>은 Attention이 단어 순서를 직접 알지 못한다는 약점을 보완합니다. 토큰 임베딩에 위치 벡터를 더해 "앞뒤 순서" 정보를 주입합니다.</p>
 <p><strong>Encoder-Decoder</strong> 흐름은 Encoder가 입력 의미를 압축하고, Decoder가 그 정보를 보며 다음 토큰을 예측하는 구조입니다. Decoder는 미래 토큰을 미리 보지 못하도록 마스크를 적용합니다.</p>
+<h3>핵심 수식 정리</h3>
+<ul>
+  <li><code>Attention(Q,K,V)=softmax((QK^T)/sqrt(d_k))V</code>: 토큰 간 관련도를 확률화해 문맥 벡터를 만드는 핵심 식</li>
+  <li><code>Perplexity = exp(CrossEntropy)</code>: 모델의 혼란도를 나타내는 지표(낮을수록 좋음)</li>
+  <li><code>score = 1/(1+perplexity)</code>: 실험 비교를 위한 요약 점수(클수록 좋음)</li>
+</ul>
+<p>수식 해석은 반드시 수치 변화와 연결해서 읽어야 하며, 단순 암기보다 "왜 이 식이 필요한가"를 설명할 수 있어야 합니다.</p>
 
 <h3>3. 실험 목적</h3>
 <p>이번 실험은 "Attention Is All You Need 개념이 실제 지표 개선으로 이어지는가"를 확인하는 데 목적이 있습니다.</p>
@@ -103,6 +110,17 @@
 
 <h3>12. 실무 적용 가능성</h3>
 <p>연구 로그 자동화 및 지표 추적을 통해 팀 단위 실험 운영에 바로 적용 가능합니다.</p>
+<h3>예상 질문과 답변</h3>
+<p><strong>Q1. 왜 perplexity를 핵심 지표로 봤나요?</strong><br/>
+A1. 언어모델에서 perplexity는 "다음 단어를 얼마나 자신 있게 맞추는지"를 직접적으로 보여주기 때문에, 구조 비교에 가장 해석이 명확합니다.</p>
+<p><strong>Q2. 이번 결과에서 Transformer가 baseline보다 불리한 이유는?</strong><br/>
+A2. 현재 설정은 step 수와 모델 크기가 작아 과소학습일 가능성이 큽니다. Transformer는 충분한 학습량에서 장점이 드러나는 경우가 많습니다.</p>
+<p><strong>Q3. baseline 비교에서 unigram/bigram을 넣은 이유는?</strong><br/>
+A3. 문맥 정보를 거의 못 쓰는 모델과의 차이를 수치로 보여주면 Transformer의 구조적 의미를 더 명확히 설명할 수 있기 때문입니다.</p>
+<p><strong>Q4. 다음 실험에서 무엇을 먼저 바꿔야 하나요?</strong><br/>
+A4. step 수 확대, learning rate 튜닝, seed 반복 평균 순서로 진행하는 것이 가장 재현성과 해석력을 높입니다.</p>
+<p><strong>Q5. 이 실험에서 얻은 핵심 인사이트 한 줄은?</strong><br/>
+A5. "Transformer는 잠재력이 높지만, 작은 학습 예산에서는 baseline보다 늦게 성능이 올라올 수 있다"는 점입니다.</p>
 
 <h3>이 포스팅을 읽고 직접 설명할 수 있어야 하는 핵심 3가지</h3>
 <ul>
