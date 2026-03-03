@@ -1,5 +1,96 @@
-<h2>AI Research Portfolio Blog</h2>
-<p>GitHub Pages published posts</p>
-<ul>
-<li><a href="posts/Attention_Is_All_You_Need.html">[Attention Is All You Need] 실험 자동화 리포트</a> | tags: AI, 논문리뷰, 실험자동화, Attention_Is_All_You_Need | updated_utc: 2026-03-03 06:15:55Z</li>
-</ul>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Blog</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #dbe3ee;
+      --accent: #0f4c81;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eef3ff 0%, var(--bg) 40%);
+    }
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+    }
+    .hero {
+      background: #ffffffcc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(2px);
+    }
+    .hero h1 {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+    .card a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .card a:hover {
+      text-decoration: underline;
+    }
+    .summary {
+      margin: 0 0 10px;
+      color: #374151;
+      font-size: 0.95rem;
+    }
+    .meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>AI Research Portfolio</h1>
+      <p>논문 핵심 개념과 실험 결과를 빠르게 읽는 포스트 모음</p>
+    </section>
+    <section class="grid">
+      <article class="card">
+  <h3><a href="posts/Attention_Is_All_You_Need.html">[Attention Is All You Need] 실험 자동화 리포트</a></h3>
+  <p class="summary">논문 핵심 개념 설명 + 실험 결과 해석</p>
+  <p class="meta"><strong>tags</strong>: AI, 논문리뷰, 실험자동화, Attention_Is_All_You_Need</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-03 06:34:50Z</p>
+</article>
+    </section>
+  </main>
+</body>
+</html>
