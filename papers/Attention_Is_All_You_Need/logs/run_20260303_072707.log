@@ -1,0 +1,9 @@
+2026-03-03 07:27:07,388 | INFO | experiment_start paper=Attention Is All You Need seed=42 iterations=80
+2026-03-03 07:27:07,401 | INFO | device=cuda
+2026-03-03 07:27:17,088 | INFO | baseline unigram_ppl=755.5196 bigram_ppl=596.7066
+2026-03-03 07:27:19,426 | INFO | step=1 train_loss=10.0677 val_loss=10.0153 val_ppl=22365.9070
+2026-03-03 07:27:20,290 | INFO | step=20 train_loss=9.1093 val_loss=9.0216 val_ppl=8280.1794
+2026-03-03 07:27:21,170 | INFO | step=40 train_loss=8.1625 val_loss=8.0815 val_ppl=3234.0632
+2026-03-03 07:27:22,074 | INFO | step=60 train_loss=7.4825 val_loss=7.4252 val_ppl=1677.6830
+2026-03-03 07:27:22,943 | INFO | step=80 train_loss=7.1308 val_loss=6.9951 val_ppl=1091.2905
+2026-03-03 07:27:23,088 | INFO | experiment_done final_val_ppl=1091.290455295115 score=0.000916

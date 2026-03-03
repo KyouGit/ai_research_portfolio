@@ -1,0 +1,15 @@
+paper_name: Attention Is All You Need
+run_at_utc: 2026-03-03T07:27:23Z
+seed: 42
+iterations: 80
+model: TransformerLM(d_model=128,nhead=4,layers=2)
+dataset: wikitext-2-raw-v1
+vocab_size: 20000
+baseline_unigram_ppl: 755.5195875473249
+baseline_bigram_ppl: 596.7065709290398
+final_val_perplexity: 1091.290455295115
+ppl_improvement_vs_best_baseline: -0.828856
+score: 0.000916
+learned_lessons: 단순 n-gram 대비 Transformer가 장거리 문맥을 더 잘 반영해 perplexity를 낮출 가능성을 확인했다.
+next_actions: 학습 step 확대, d_model 확장, 다중 seed 평균으로 안정성 검증
+figure_path: /home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/Attention_Is_All_You_Need/results/metric_curve_20260303_072707.png
