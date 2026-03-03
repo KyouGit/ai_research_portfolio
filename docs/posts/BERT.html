@@ -117,6 +117,22 @@
 <p>한계: 현재 설정은 학습 step과 모델 크기가 제한적이므로, 논문 수준 성능 재현이라기보다 구조적 유효성 확인에 가깝습니다.</p>
 <p>다음 단계: 동일 데이터셋에서 LSTM baseline을 추가하고, seed 3회 평균/분산까지 보고서에 포함하면 신뢰도가 크게 올라갑니다.</p>
 
+<h3>10-1. 용어 사전 (초심자용)</h3>
+<ul>
+  <li><strong>BERT</strong>: 양방향 문맥을 사용하는 Transformer encoder 기반 언어모델</li>
+  <li><strong>MLM (Masked Language Modeling)</strong>: 일부 토큰을 가리고 정답 토큰을 복원하는 학습 방식</li>
+  <li><strong>[MASK]</strong>: 모델이 맞혀야 할 가려진 토큰 표시</li>
+  <li><strong>Bidirectional</strong>: 왼쪽/오른쪽 문맥을 동시에 보고 표현을 학습하는 방식</li>
+  <li><strong>mask ratio</strong>: 문장 토큰 중 몇 %를 가릴지 정하는 비율</li>
+  <li><strong>ablation / sweep</strong>: 특정 설정(예: mask ratio)을 바꿔가며 성능 변화를 비교하는 실험</li>
+  <li><strong>top1_acc</strong>: 정답이 1순위 예측과 일치한 비율</li>
+  <li><strong>top5_acc</strong>: 정답이 상위 5개 후보 안에 포함된 비율</li>
+  <li><strong>baseline_unigram</strong>: 단어 빈도만으로 예측하는 단순 기준 모델</li>
+  <li><strong>softmax</strong>: 로짓을 확률 분포로 바꾸는 함수</li>
+  <li><strong>logit</strong>: softmax 적용 전의 원시 점수</li>
+  <li><strong>score_gain_vs_baseline</strong>: baseline 대비 성능 개선 폭</li>
+</ul>
+
 <h3>11. 개선 아이디어</h3>
 <ul>
   <li>하이퍼파라미터 탐색 자동화</li>
