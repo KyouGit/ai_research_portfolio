@@ -1,9 +1,0 @@
-paper_name: Attention Is All You Need
-run_at_utc: 2026-03-03T04:00:35Z
-seed: 42
-iterations: 120
-dataset: wikitext-2-raw-v1
-vocab_size: 20000
-final_val_perplexity: 893.4866259158812
-score: 0.001118
-figure_path: /home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/Attention_Is_All_You_Need/results/metric_curve_20260303_040009.png
