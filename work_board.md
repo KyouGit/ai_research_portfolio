@@ -6,11 +6,11 @@
 - 상태(todo/doing/done)와 수정 파일, 완료시각(UTC) 자동 반영
 
 ## 보드 요약
-- total: 23
+- total: 24
 - todo: 0
 - doing: 1
-- done: 22
-- last_updated_utc: 2026-03-03T07:33:28Z
+- done: 23
+- last_updated_utc: 2026-03-03T07:37:27Z
 
 ## 요청 목록
 - [ ] request_id: req-20260303-025342-5384 | status: doing | title: 논문 추가: Attention Is All You Need Repro | created_at_utc: 2026-03-03T02:53:42Z | started_at_utc: 2026-03-03T02:53:42Z | completed_at_utc: - | updated_at_utc: 2026-03-03T02:53:42Z | files: paper_list.md | summary: 논문 추가 작업 시작
@@ -36,6 +36,7 @@
 - [ ] request_id: req-20260303-072725-4a29 | status: done | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | created_at_utc: 2026-03-03T07:27:25Z | started_at_utc: 2026-03-03T07:27:25Z | completed_at_utc: 2026-03-03T07:27:25Z | updated_at_utc: 2026-03-03T07:27:25Z | files: blog_Attention_Is_All_You_Need.html, docs/assets/Attention_Is_All_You_Need_metric_curve_20260303_072707.png, docs/posts/Attention_Is_All_You_Need.html | summary: [github-pages] publish prepared: commit/push to deploy
 - [ ] request_id: req-20260303-072852-64d8 | status: done | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | created_at_utc: 2026-03-03T07:28:52Z | started_at_utc: 2026-03-03T07:28:52Z | completed_at_utc: 2026-03-03T07:28:52Z | updated_at_utc: 2026-03-03T07:28:52Z | files: blog_Attention_Is_All_You_Need.html, docs/assets/Attention_Is_All_You_Need_metric_curve_20260303_072707.png, docs/posts/Attention_Is_All_You_Need.html | summary: [github-pages] publish prepared: commit/push to deploy
 - [ ] request_id: req-20260303-073328-939c | status: done | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | created_at_utc: 2026-03-03T07:33:28Z | started_at_utc: 2026-03-03T07:33:28Z | completed_at_utc: 2026-03-03T07:33:28Z | updated_at_utc: 2026-03-03T07:33:28Z | files: blog_Attention_Is_All_You_Need.html, docs/assets/Attention_Is_All_You_Need_metric_curve_20260303_072707.png, docs/posts/Attention_Is_All_You_Need.html | summary: [github-pages] publish prepared: commit/push to deploy
+- [ ] request_id: req-20260303-073727-98c0 | status: done | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | created_at_utc: 2026-03-03T07:37:27Z | started_at_utc: 2026-03-03T07:37:27Z | completed_at_utc: 2026-03-03T07:37:27Z | updated_at_utc: 2026-03-03T07:37:27Z | files: blog_Attention_Is_All_You_Need.html, docs/assets/Attention_Is_All_You_Need_metric_curve_20260303_072707.png, docs/posts/Attention_Is_All_You_Need.html | summary: [github-pages] publish prepared: commit/push to deploy
 
 ## 작업 로그
 - 2026-03-03T02:53:42Z | request_id: req-20260303-025342-5384 | event: created | status: todo | title: 논문 추가: Attention Is All You Need Repro | files: - | note: 요청 등록
@@ -106,6 +107,9 @@
 - 2026-03-03T07:33:28Z | request_id: req-20260303-073328-939c | event: created | status: todo | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: - | note: 요청 등록
 - 2026-03-03T07:33:28Z | request_id: req-20260303-073328-939c | event: started | status: doing | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: work_board.md | note: 블로그 작업 시작
 - 2026-03-03T07:33:28Z | request_id: req-20260303-073328-939c | event: completed | status: done | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: blog_Attention_Is_All_You_Need.html, docs/assets/Attention_Is_All_You_Need_metric_curve_20260303_072707.png, docs/posts/Attention_Is_All_You_Need.html | note: [github-pages] publish prepared: commit/push to deploy
+- 2026-03-03T07:37:27Z | request_id: req-20260303-073727-98c0 | event: created | status: todo | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: - | note: 요청 등록
+- 2026-03-03T07:37:27Z | request_id: req-20260303-073727-98c0 | event: started | status: doing | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: work_board.md | note: 블로그 작업 시작
+- 2026-03-03T07:37:27Z | request_id: req-20260303-073727-98c0 | event: completed | status: done | title: 블로그 생성/GitHub Pages 반영: Attention Is All You Need | files: blog_Attention_Is_All_You_Need.html, docs/assets/Attention_Is_All_You_Need_metric_curve_20260303_072707.png, docs/posts/Attention_Is_All_You_Need.html | note: [github-pages] publish prepared: commit/push to deploy
 
 ## 무결성 규칙
 - 요청 목록의 각 request_id는 유일해야 한다.
