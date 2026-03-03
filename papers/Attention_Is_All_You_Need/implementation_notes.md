@@ -35,6 +35,18 @@
 4. multi-seed 평균 성능 리포트
 5. 실험 설정을 YAML로 분리
 
+## 실험 예산 확장 정책(중요)
+- 목표: baseline(unigram/bigram) 대비 Transformer perplexity 개선
+- 방법: 성능 미달 시 step/모델 크기 자동 확장 후 재시도
+- 시도 정책(예시):
+  1. attempt1: d_model=128, layers=2, steps=기본
+  2. attempt2: d_model=192, layers=3, steps=2배
+  3. attempt3: d_model=256, layers=4, steps=4배
+  4. attempt4: d_model=256, layers=6, steps=6배
+- 중단 조건: baseline보다 낮은 perplexity 달성 시 즉시 종료
+- 결과 기록: 각 attempt별 설정/val_ppl을 result_*.txt에 모두 저장
+- 시각화: best attempt 학습곡선 + baseline/transformer perplexity 비교 그래프를 함께 저장
+
 ## 참고 이미지
 ![Transformer Architecture](results/transformer_architecture_diagram.png)
 ![Attention Formula](results/attention_formula_card.png)

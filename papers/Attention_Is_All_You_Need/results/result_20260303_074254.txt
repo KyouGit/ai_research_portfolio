@@ -1,0 +1,24 @@
+paper_name: Attention Is All You Need
+run_at_utc: 2026-03-03T07:44:01Z
+seed: 42
+requested_iterations: 120
+dataset: wikitext-2-raw-v1
+vocab_size: 20000
+baseline_unigram_ppl: 755.5195875473249
+baseline_bigram_ppl: 596.7065709290398
+best_baseline_ppl: 596.7065709290398
+attempt_count: 3
+best_attempt: 3
+model: TransformerLM(d_model=256,nhead=8,layers=4)
+iterations: 480
+final_val_loss: 6.214532707374134
+final_val_perplexity: 499.96230589688776
+ppl_improvement_vs_best_baseline: 0.162130
+target_achieved: True
+score: 0.001996
+learned_lessons: Transformer가 baseline보다 낮은 perplexity를 달성해, 충분한 학습 예산에서 문맥 모델링 이점이 수치로 확인되었다.
+next_actions: 현재 설정을 기준으로 seed 3회 반복 후 평균/분산을 보고하고, 학습률 스케줄러를 도입한다.
+figure_path: /home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/Attention_Is_All_You_Need/results/metric_curve_20260303_074254.png
+attempt_1: steps=120,d_model=128,nhead=4,layers=2,val_ppl=884.451903
+attempt_2: steps=240,d_model=192,nhead=6,layers=3,val_ppl=666.895838
+attempt_3: steps=480,d_model=256,nhead=8,layers=4,val_ppl=499.962306
