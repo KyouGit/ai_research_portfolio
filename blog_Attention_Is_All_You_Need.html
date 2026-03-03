@@ -80,10 +80,11 @@
 
 <h3>7. 실험 결과 그래프 해석</h3>
 <p>최종 점수는 <strong>0.0020</strong> 입니다. 아래 그래프는 반복 학습 중 성능 추세를 보여줍니다.</p>
-<p><img src="../assets/Attention_Is_All_You_Need_metric_curve_20260303_074254.png" alt="Attention Is All You Need result graph" /></p>
+<p><img src="../assets/Attention_Is_All_You_Need_metric_curve_20260303_074836.png" alt="Attention Is All You Need result graph" /></p>
 <p>그래프에서 손실 감소 또는 지표 수렴이 보이면 모델이 안정적으로 학습하고 있다는 신호입니다. 변동이 크면 학습률/배치 크기/정규화 전략을 점검해야 합니다.</p>
 <p>특히 대학생 관점에서 볼 때 중요한 포인트는 "숫자가 왜 좋아졌는지"를 구조와 연결해 설명할 수 있는지입니다. 예를 들어 perplexity가 감소했다면, 모델이 다음 토큰 분포를 더 날카롭고 정확하게 맞추고 있다는 뜻입니다.</p>
 <p>추가 해석: 초반 구간에서 급격히 지표가 개선되고, 후반으로 갈수록 완만해지는 패턴은 "기초 패턴 학습 -> 미세 조정" 단계로 전환되는 전형적인 학습 곡선과 유사합니다.</p>
+<h3>7-1. 실험 결과 예시 (모델 출력 샘플)</h3><p><strong>예시 1 (next_token_prediction)</strong><br/>입력 문맥: <code>. = = early career =</code><br/>정답 토큰: <code>=</code><br/>Top-k 예측(확률/순위): <code>1:=(0.4289) | 2:the(0.0869) | 3:in(0.0188) | 4:<unk>(0.0166) | 5:on(0.0094)</code></p><p><strong>예시 2 (next_token_prediction)</strong><br/>입력 문맥: <code>on the southern edge of the</code><br/>정답 토큰: <code><unk></code><br/>Top-k 예측(확률/순위): <code>1:<unk>(0.0341) | 2:film(0.0123) | 3:first(0.0111) | 4:united(0.0107) | 5:city(0.0096)</code></p><p><strong>예시 3 (next_token_prediction)</strong><br/>입력 문맥: <code>1861 . its strategic position at</code><br/>정답 토큰: <code>the</code><br/>Top-k 예측(확률/순위): <code>1:the(0.3760) | 2:a(0.0752) | 3:<unk>(0.0423) | 4:his(0.0334) | 5:its(0.0149)</code></p>
 
 <h3>8. 기존 방법과 비교</h3>
 <p>기본 실험 대비 안정적 수렴 확인</p>
