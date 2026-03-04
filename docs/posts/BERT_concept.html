@@ -43,6 +43,26 @@
   <li><strong>[CLS] 경로</strong>: 문장 분류/판단 태스크 입력 벡터</li>
 </ul>
 
+<h3>Encoder 블록 내부를 더 자세히 보기</h3>
+<p>BERT-base는 같은 Encoder 블록을 12번 반복합니다. 한 블록 안에서 일어나는 일은 아래 순서입니다.</p>
+<ol>
+  <li><strong>Multi-Head Self-Attention</strong>: 각 토큰이 다른 토큰을 얼마나 참고할지 계산</li>
+  <li><strong>Add & LayerNorm</strong>: 원래 입력을 더해(residual) 정보 손실을 줄이고 정규화로 학습 안정화</li>
+  <li><strong>Position-wise FFN</strong>: 각 토큰 벡터를 비선형 변환해 표현력 확장</li>
+  <li><strong>Add & LayerNorm</strong>: 다시 residual+정규화로 깊은 층 학습 안정화</li>
+</ol>
+<p>즉, 한 층은 \"토큰 간 관계 학습(Attention)\"과 \"토큰 자체 표현 강화(FFN)\"를 한 번씩 수행합니다. 이 과정을 여러 층 반복하면서 단어의 의미가 점점 문맥 친화적으로 바뀝니다.</p>
+
+<h3>입력에서 출력까지 텐서 흐름</h3>
+<ul>
+  <li>입력 길이 <code>L</code>, hidden 크기 <code>H</code>라면 임베딩 출력은 보통 <code>[L, H]</code></li>
+  <li>Self-Attention을 지나도 shape은 <code>[L, H]</code> 유지 (정보 내용만 갱신)</li>
+  <li>12층을 지나 최종 hidden <code>[L, H]</code>를 얻고, 여기서:</li>
+  <li><code>[CLS]</code> 위치 벡터 <code>[H]</code> -> 분류 head</li>
+  <li><code>[MASK]</code> 위치 벡터 <code>[H]</code> -> vocab 크기 로짓 <code>[|V|]</code> -> softmax</li>
+</ul>
+<p>이렇게 보면 BERT는 \"문장 전체 표현\"과 \"토큰 단위 복원\"을 같은 백본에서 동시에 지원하는 구조라는 점이 명확해집니다.</p>
+
 <h3>연산 과정 상세</h3>
 <ol>
   <li>문장을 토큰화하고 일부 토큰을 [MASK]로 치환</li>
