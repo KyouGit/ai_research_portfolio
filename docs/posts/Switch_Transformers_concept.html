@@ -2,6 +2,26 @@
 <p>이 문서는 AI 전문가가 뉴비에게 설명하듯 작성된 심화판입니다. 개념을 암기하는 것이 아니라, 실무 의사결정에 연결하는 것을 목표로 합니다.</p>
 
 
+
+<!-- deep_context:start -->
+<h3>당시 상황과 역사적 맥락</h3>
+<p>모델 파라미터를 늘릴수록 비용이 급증해, dense 확장의 한계가 산업 규모에서 명확해졌습니다.</p>
+
+<h3>모델 구조/구성요소 역할 (초심자용)</h3>
+<ul>
+  <li>Gating router: 토큰별 expert 선택</li>
+  <li>Sparse expert activation: 일부 expert만 계산해 FLOPs 절감</li>
+  <li>Load balancing term: expert 쏠림 방지</li>
+</ul>
+
+<h3>역사적 의미와 후속 영향</h3>
+<ul>
+  <li>MoE를 대규모 학습의 실용 축으로 끌어올림</li>
+  <li>Mixtral 등 오픈 MoE 모델 설계의 토대</li>
+  <li>"총 파라미터"와 "활성 파라미터" 분리 사고를 정착</li>
+</ul>
+<!-- deep_context:end -->
+
 <h3>1단. 문제 정의</h3>
 <p>Dense model 확장은 비용이 선형적으로 커져 비효율적이다.</p>
 <p>핵심 질문은 "왜 기존 방법으로는 충분하지 않았는가"입니다.</p>

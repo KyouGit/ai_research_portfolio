@@ -2,6 +2,26 @@
 <p>이 문서는 AI 전문가가 뉴비에게 설명하듯 작성된 심화판입니다. 개념을 암기하는 것이 아니라, 실무 의사결정에 연결하는 것을 목표로 합니다.</p>
 
 
+
+<!-- deep_context:start -->
+<h3>당시 상황과 역사적 맥락</h3>
+<p>복잡 추론 문제에서 LLM이 답은 틀리는데 이유를 설명 못 하는 현상이 널리 관찰됐습니다.</p>
+
+<h3>모델 구조/구성요소 역할 (초심자용)</h3>
+<ul>
+  <li>Reasoning trace prompting: 중간 사고 단계를 명시</li>
+  <li>Step decomposition: 복잡 문제를 하위 단계로 분해</li>
+  <li>Final answer synthesis: 단계 결과를 최종 답으로 통합</li>
+</ul>
+
+<h3>역사적 의미와 후속 영향</h3>
+<ul>
+  <li>추론 성능 개선의 간단하지만 강력한 기준 기법</li>
+  <li>Self-Consistency/Tree-of-Thought 등 후속 기법의 출발점</li>
+  <li>면접형 reasoning 프롬프트 설계 표준화</li>
+</ul>
+<!-- deep_context:end -->
+
 <h3>1단. 문제 정의</h3>
 <p>복잡한 추론 문제에서 직접 정답만 요구하면 오류가 잦다.</p>
 <p>핵심 질문은 "왜 기존 방법으로는 충분하지 않았는가"입니다.</p>
