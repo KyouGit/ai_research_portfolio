@@ -36,3 +36,14 @@
 - [Attention Is All You Need 개념](posts/Attention_Is_All_You_Need_concept.html)
 - [BERT MLM 실험](posts/BERT_MLM_experiment.html)
 - [RAG Retrieval 실험](posts/RAG_Retrieval_FAISS_experiment.html)
+
+
+## 7) 비전/탐지
+1. [YOLO](posts/YOLO_concept.html)
+2. [DETR](posts/DETR_concept.html)
+3. [CLIP](posts/CLIP_concept.html)
+
+## 8) 생성모델 (GAN/Diffusion)
+1. [GAN](posts/GAN_concept.html)
+2. [StyleGAN](posts/StyleGAN_concept.html)
+3. [DDPM](posts/DDPM_concept.html)
