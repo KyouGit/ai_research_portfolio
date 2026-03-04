@@ -44,17 +44,18 @@
 <p><strong>score_gain_vs_baseline:</strong> +0.106667</p>
 
 <h3>7. 결과는 얼마나 안정적인가</h3>
-<p>같은 SQuAD 설정에서도 실행 시점/설정에 따라 성능이 흔들렸습니다.</p>
+<p>아래 표는 같은 프로토콜에서 seed만 바꿔 3회 재실행한 결과입니다. (모두 <code>sentence-transformers + FAISS</code> 로컬 캐시 모드)</p>
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr><th>run_at_utc</th><th>baseline_score</th><th>faiss_score</th><th>gain</th></tr>
   </thead>
   <tbody>
-    <tr><td>2026-03-04T00:47:18Z</td><td>0.652267</td><td>0.554133</td><td>-0.098133</td></tr>
-    <tr><td>2026-03-04T00:53:17Z</td><td>0.652267</td><td>0.758933</td><td>+0.106667</td></tr>
+    <tr><td>2026-03-04T01:15:45Z</td><td>0.601600</td><td>0.802667</td><td>+0.201067</td></tr>
+    <tr><td>2026-03-04T01:15:50Z</td><td>0.606400</td><td>0.776267</td><td>+0.169867</td></tr>
+    <tr><td>2026-03-04T01:15:55Z</td><td>0.652267</td><td>0.758933</td><td>+0.106667</td></tr>
   </tbody>
 </table>
-<p><strong>전문가 코멘트:</strong> "한 번 이겼다"로 결론 내리면 안 됩니다. 다회 실행 평균/분산까지 같이 봐야 책임 있는 결론입니다.</p>
+<p><strong>전문가 코멘트:</strong> 3회 모두 baseline 대비 개선이 관찰됐지만, 폭이 다르므로 평균/분산을 함께 제시해야 책임 있는 결론입니다.</p>
 
 <h3>8. 그래프</h3>
 <p><img src="../assets/RAG_Retrieval_FAISS_metric_curve_20260304_005255.png" alt="RAG retrieval evaluation graph" /></p>
@@ -73,7 +74,8 @@
 
 <h3>11. 검증 가능 출처</h3>
 <ul>
-  <li>raw result: <code>papers/Attention_Is_All_You_Need/results/result_20260304_004713.txt</code></li>
-  <li>raw result: <code>papers/Attention_Is_All_You_Need/results/result_20260304_005255.txt</code></li>
-  <li>raw log: <code>papers/Attention_Is_All_You_Need/logs/run_20260304_005255.log</code></li>
+  <li>raw result: <code>papers/Attention_Is_All_You_Need/results/result_20260304_011539.txt</code></li>
+  <li>raw result: <code>papers/Attention_Is_All_You_Need/results/result_20260304_011545.txt</code></li>
+  <li>raw result: <code>papers/Attention_Is_All_You_Need/results/result_20260304_011550.txt</code></li>
+  <li>raw log: <code>papers/Attention_Is_All_You_Need/logs/run_20260304_011550.log</code></li>
 </ul>
