@@ -19,11 +19,11 @@
   },
   {
     "slug": "Attention_Is_All_You_Need_experiment",
-    "title": "[Attention Is All You Need] 실험 리포트 (RAG)",
+    "title": "[Attention Is All You Need] 연계 실험 (RAG Retrieval)",
     "href": "posts/Attention_Is_All_You_Need_experiment.html",
     "tags": "AI, 논문리뷰, 실험자동화, LLM, RAG, FAISS",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:00:00Z",
-    "summary": "SQuAD 기반 TF-IDF vs 임베딩+FAISS 비교 실험 결과"
+    "summary": "논문 연계 응용: SQuAD 기반 TF-IDF vs 임베딩+FAISS 비교"
   }
 ]

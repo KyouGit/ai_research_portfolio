@@ -1,5 +1,6 @@
-<h2>[Attention Is All You Need] 실험 리포트 (RAG)</h2>
-<p>이 문서는 실험 설정/지표/결과 해석을 다룹니다. 모델 구조와 핵심 개념은 <a href="Attention_Is_All_You_Need_concept.html">개념 설명</a> 문서를 참고하세요.</p>
+<h2>[Attention Is All You Need] 연계 실험 리포트 (RAG Retrieval)</h2>
+<p>이 문서는 논문의 아이디어를 응용한 <strong>연계 실험</strong>(RAG 검색 파이프라인 비교)입니다. 모델 구조와 핵심 개념은 <a href="Attention_Is_All_You_Need_concept.html">개념 설명</a> 문서를 참고하세요.</p>
+<p><strong>중요:</strong> 이 실험은 Transformer 내부 attention 연산 자체를 ablation한 논문 직접 재현 실험이 아니라, 임베딩+FAISS 기반 검색이 RAG 품질에 주는 영향을 측정한 응용 실험입니다.</p>
 
 <h3>1. 실험 목적</h3>
 <p>RAG에서 문서 검색 모듈을 바꿨을 때(희소 검색 vs 임베딩 검색) 근거 문서 검색 정확도와 답변 품질이 어떻게 바뀌는지 검증합니다.</p>
