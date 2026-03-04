@@ -12,6 +12,7 @@
     .hero { background:#ffffffcc; border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:18px; }
     .hero h1 { margin:0 0 6px; font-size:1.5rem; }
     .hero p { margin:0; color:var(--muted); }
+    .section { margin-bottom:18px; }
     .section h2 { margin:0 0 10px; font-size:1.1rem; color:#123a5c; }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
     .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
@@ -29,137 +30,183 @@
       <p>논문 핵심 개념과 실험 결과를 분야별로 정리한 포스트 모음</p>
       <p><a href="roadmap.html">순서형 학습 로드맵 보기</a></p>
     </section>
-    <section class="section">
-      <h2>Posts</h2>
-      <div class="grid">
+<section class="section">
+  <h2>LLM</h2>
+  <div class="grid">
 <article class="card">
-  <h3><a href="posts/Attention_Is_All_You_Need_concept.html">[Attention Is All You Need] 개념 설명</a></h3>
-  <p class="summary">Transformer 아키텍처의 출발점</p>
+  <h3><a href="posts/llm/Attention_Is_All_You_Need_concept.html">[Attention Is All You Need] 개념 설명</a></h3>
+  <p class="summary">Transformer 아키텍처의 출발점 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, attention, transformer, encoder-decoder</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/BERT_concept.html">[BERT] 개념 설명</a></h3>
-  <p class="summary">양방향 인코더 사전학습의 핵심</p>
+  <h3><a href="posts/llm/BERT_concept.html">[BERT] 개념 설명</a></h3>
+  <p class="summary">양방향 인코더 사전학습의 핵심 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, bert, mlm, encoder</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/RoBERTa_concept.html">[RoBERTa] 개념 설명</a></h3>
-  <p class="summary">BERT 훈련 레시피 최적화</p>
+  <h3><a href="posts/llm/RoBERTa_concept.html">[RoBERTa] 개념 설명</a></h3>
+  <p class="summary">BERT 훈련 레시피 최적화 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, roberta, pretraining, optimization</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/T5_concept.html">[T5] 개념 설명</a></h3>
-  <p class="summary">모든 NLP를 text-to-text로 통합</p>
+  <h3><a href="posts/llm/T5_concept.html">[T5] 개념 설명</a></h3>
+  <p class="summary">모든 NLP를 text-to-text로 통합 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, t5, text-to-text, transfer learning</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/GPT3_concept.html">[GPT-3] 개념 설명</a></h3>
-  <p class="summary">대규모 in-context learning 패러다임</p>
+  <h3><a href="posts/llm/GPT3_concept.html">[GPT-3] 개념 설명</a></h3>
+  <p class="summary">대규모 in-context learning 패러다임 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, gpt-3, few-shot, in-context learning</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Scaling_Laws_concept.html">[Scaling Laws] 개념 설명</a></h3>
-  <p class="summary">모델/데이터/컴퓨트 스케일 관계</p>
+  <h3><a href="posts/llm/Scaling_Laws_concept.html">[Scaling Laws] 개념 설명</a></h3>
+  <p class="summary">모델/데이터/컴퓨트 스케일 관계 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, scaling laws, compute-optimal</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Chinchilla_concept.html">[Chinchilla] 개념 설명</a></h3>
-  <p class="summary">모델 크기보다 데이터 토큰 최적화</p>
+  <h3><a href="posts/llm/Chinchilla_concept.html">[Chinchilla] 개념 설명</a></h3>
+  <p class="summary">모델 크기보다 데이터 토큰 최적화 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, chinchilla, data scaling, compute</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/InstructGPT_concept.html">[InstructGPT] 개념 설명</a></h3>
-  <p class="summary">RLHF 기반 instruction following</p>
+  <h3><a href="posts/llm/InstructGPT_concept.html">[InstructGPT] 개념 설명</a></h3>
+  <p class="summary">RLHF 기반 instruction following (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, instructgpt, rlhf, alignment</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Constitutional_AI_concept.html">[Constitutional AI] 개념 설명</a></h3>
-  <p class="summary">AI 피드백 기반 정렬 절차</p>
+  <h3><a href="posts/llm/Constitutional_AI_concept.html">[Constitutional AI] 개념 설명</a></h3>
+  <p class="summary">AI 피드백 기반 정렬 절차 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, constitutional ai, harmlessness, rlaif</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/DPO_concept.html">[DPO] 개념 설명</a></h3>
-  <p class="summary">보상모델 없이 선호학습 단순화</p>
+  <h3><a href="posts/llm/DPO_concept.html">[DPO] 개념 설명</a></h3>
+  <p class="summary">보상모델 없이 선호학습 단순화 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, dpo, preference optimization</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Switch_Transformers_concept.html">[Switch Transformers] 개념 설명</a></h3>
-  <p class="summary">MoE로 파라미터 확장 효율화</p>
+  <h3><a href="posts/llm/Switch_Transformers_concept.html">[Switch Transformers] 개념 설명</a></h3>
+  <p class="summary">MoE로 파라미터 확장 효율화 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, switch transformer, moe</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Mixtral_concept.html">[Mixtral] 개념 설명</a></h3>
-  <p class="summary">오픈 MoE 실전 아키텍처</p>
+  <h3><a href="posts/llm/Mixtral_concept.html">[Mixtral] 개념 설명</a></h3>
+  <p class="summary">오픈 MoE 실전 아키텍처 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, mixtral, sparse moe</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/RAG_concept.html">[RAG] 개념 설명</a></h3>
-  <p class="summary">검색+생성 결합 파이프라인</p>
+  <h3><a href="posts/rag_agent/RAG_concept.html">[RAG] 개념 설명</a></h3>
+  <p class="summary">검색+생성 결합 파이프라인 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, rag, retrieval, grounding</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/ReAct_concept.html">[ReAct] 개념 설명</a></h3>
-  <p class="summary">추론과 행동(tool use) 결합</p>
+  <h3><a href="posts/rag_agent/ReAct_concept.html">[ReAct] 개념 설명</a></h3>
+  <p class="summary">추론과 행동(tool use) 결합 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, react, reasoning, acting</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Toolformer_concept.html">[Toolformer] 개념 설명</a></h3>
-  <p class="summary">모델이 도구 호출 타이밍 학습</p>
+  <h3><a href="posts/rag_agent/Toolformer_concept.html">[Toolformer] 개념 설명</a></h3>
+  <p class="summary">모델이 도구 호출 타이밍 학습 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, toolformer, api calling</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Self_RAG_concept.html">[Self-RAG] 개념 설명</a></h3>
-  <p class="summary">생성 중 자기-검색/자기-검증</p>
+  <h3><a href="posts/rag_agent/Self_RAG_concept.html">[Self-RAG] 개념 설명</a></h3>
+  <p class="summary">생성 중 자기-검색/자기-검증 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, self-rag, self-reflection</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Chain_of_Thought_concept.html">[Chain-of-Thought] 개념 설명</a></h3>
-  <p class="summary">중간 추론 단계 명시 기법</p>
+  <h3><a href="posts/llm/Chain_of_Thought_concept.html">[Chain-of-Thought] 개념 설명</a></h3>
+  <p class="summary">중간 추론 단계 명시 기법 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, cot, reasoning prompts</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/Self_Consistency_concept.html">[Self-Consistency] 개념 설명</a></h3>
-  <p class="summary">다중 추론 경로 투표로 정확도 향상</p>
+  <h3><a href="posts/llm/Self_Consistency_concept.html">[Self-Consistency] 개념 설명</a></h3>
+  <p class="summary">다중 추론 경로 투표로 정확도 향상 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, self-consistency, majority vote</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/DeepSeek_R1_concept.html">[DeepSeek-R1] 개념 설명</a></h3>
-  <p class="summary">강화학습 기반 추론 강화 최신 흐름</p>
+  <h3><a href="posts/llm/DeepSeek_R1_concept.html">[DeepSeek-R1] 개념 설명</a></h3>
+  <p class="summary">강화학습 기반 추론 강화 최신 흐름 (심화판)</p>
   <p class="meta"><strong>tags</strong>: AI, 논문리뷰, LLM, deepseek-r1, reasoning, rl</p>
-  <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 01:42:08Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/BERT_MLM_experiment.html">[BERT MLM] 실험 리포트</a></h3>
+  <h3><a href="posts/llm/BERT_MLM_experiment.html">[BERT MLM] 실험 리포트</a></h3>
   <p class="summary">BERT 아이디어 기반 toy MLM 실험과 한계 분석</p>
   <p class="meta"><strong>tags</strong>: AI, 실험자동화, LLM, BERT, MLM</p>
   <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
 </article>
 <article class="card">
-  <h3><a href="posts/RAG_Retrieval_FAISS_experiment.html">[RAG Retrieval] 실험 리포트 (FAISS)</a></h3>
+  <h3><a href="posts/rag_agent/RAG_Retrieval_FAISS_experiment.html">[RAG Retrieval] 실험 리포트 (FAISS)</a></h3>
   <p class="summary">SQuAD 기반 TF-IDF vs 임베딩+FAISS 검색 실험</p>
   <p class="meta"><strong>tags</strong>: AI, 실험자동화, LLM, RAG, FAISS</p>
   <p class="meta"><strong>updated</strong>: 2026-03-04 01:33:17Z</p>
 </article>
-      </div>
-    </section>
+  </div>
+</section>
+<section class="section">
+  <h2>Vision</h2>
+  <div class="grid">
+<article class="card">
+  <h3><a href="posts/vision/YOLO_concept.html">[YOLO] 개념 설명</a></h3>
+  <p class="summary">실시간 객체탐지의 대표 모델 흐름 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, 논문리뷰, Vision, Detection, YOLO</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 04:22:21Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/vision/DETR_concept.html">[DETR] 개념 설명</a></h3>
+  <p class="summary">Transformer 기반 객체탐지 재정의</p>
+  <p class="meta"><strong>tags</strong>: AI, 논문리뷰, Vision, Detection, DETR</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 04:22:21Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/vision/CLIP_concept.html">[CLIP] 개념 설명</a></h3>
+  <p class="summary">이미지-텍스트 대조학습의 핵심 아이디어</p>
+  <p class="meta"><strong>tags</strong>: AI, 논문리뷰, Vision, Multimodal, CLIP</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 04:22:21Z</p>
+</article>
+  </div>
+</section>
+<section class="section">
+  <h2>Generative</h2>
+  <div class="grid">
+<article class="card">
+  <h3><a href="posts/generative/GAN_concept.html">[GAN] 개념 설명</a></h3>
+  <p class="summary">생성자-판별자 경쟁학습의 기본 프레임</p>
+  <p class="meta"><strong>tags</strong>: AI, 논문리뷰, Generative, GAN</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 04:22:21Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/generative/StyleGAN_concept.html">[StyleGAN] 개념 설명</a></h3>
+  <p class="summary">고품질 이미지 생성과 스타일 제어</p>
+  <p class="meta"><strong>tags</strong>: AI, 논문리뷰, Generative, GAN, StyleGAN</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 04:22:21Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/generative/DDPM_concept.html">[DDPM] 개념 설명</a></h3>
+  <p class="summary">확산모델의 기본 생성 메커니즘</p>
+  <p class="meta"><strong>tags</strong>: AI, 논문리뷰, Generative, Diffusion, DDPM</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-04 04:22:21Z</p>
+</article>
+  </div>
+</section>
   </main>
 </body>
 </html>
