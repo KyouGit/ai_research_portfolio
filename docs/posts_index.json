@@ -9,12 +9,21 @@
     "summary": "논문 핵심 개념 설명 + 실험 결과 해석"
   },
   {
-    "slug": "Attention_Is_All_You_Need",
-    "title": "[Attention Is All You Need] 실험 자동화 리포트",
-    "href": "posts/Attention_Is_All_You_Need.html",
-    "tags": "AI, 논문리뷰, 실험자동화, LLM, Attention_Is_All_You_Need",
+    "slug": "Attention_Is_All_You_Need_concept",
+    "title": "[Attention Is All You Need] 개념 설명",
+    "href": "posts/Attention_Is_All_You_Need_concept.html",
+    "tags": "AI, 논문리뷰, LLM, Attention_Is_All_You_Need, Concept",
     "category": "LLM",
-    "updated_utc": "2026-03-03 08:48:57Z",
-    "summary": "논문 핵심 개념 설명 + 실험 결과 해석"
+    "updated_utc": "2026-03-04 01:00:00Z",
+    "summary": "Transformer 핵심 구조/수식/직관을 이해용으로 정리"
+  },
+  {
+    "slug": "Attention_Is_All_You_Need_experiment",
+    "title": "[Attention Is All You Need] 실험 리포트 (RAG)",
+    "href": "posts/Attention_Is_All_You_Need_experiment.html",
+    "tags": "AI, 논문리뷰, 실험자동화, LLM, RAG, FAISS",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:00:00Z",
+    "summary": "SQuAD 기반 TF-IDF vs 임베딩+FAISS 비교 실험 결과"
   }
 ]
