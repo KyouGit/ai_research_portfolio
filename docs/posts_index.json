@@ -5,8 +5,8 @@
     "href": "posts/Attention_Is_All_You_Need_concept.html",
     "tags": "AI, 논문리뷰, LLM, attention, transformer, encoder-decoder",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "Transformer 아키텍처의 출발점"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "Transformer 아키텍처의 출발점 (심화판)"
   },
   {
     "slug": "BERT_concept",
@@ -14,8 +14,8 @@
     "href": "posts/BERT_concept.html",
     "tags": "AI, 논문리뷰, LLM, bert, mlm, encoder",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "양방향 인코더 사전학습의 핵심"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "양방향 인코더 사전학습의 핵심 (심화판)"
   },
   {
     "slug": "RoBERTa_concept",
@@ -23,8 +23,8 @@
     "href": "posts/RoBERTa_concept.html",
     "tags": "AI, 논문리뷰, LLM, roberta, pretraining, optimization",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "BERT 훈련 레시피 최적화"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "BERT 훈련 레시피 최적화 (심화판)"
   },
   {
     "slug": "T5_concept",
@@ -32,8 +32,8 @@
     "href": "posts/T5_concept.html",
     "tags": "AI, 논문리뷰, LLM, t5, text-to-text, transfer learning",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "모든 NLP를 text-to-text로 통합"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "모든 NLP를 text-to-text로 통합 (심화판)"
   },
   {
     "slug": "GPT3_concept",
@@ -41,8 +41,8 @@
     "href": "posts/GPT3_concept.html",
     "tags": "AI, 논문리뷰, LLM, gpt-3, few-shot, in-context learning",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "대규모 in-context learning 패러다임"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "대규모 in-context learning 패러다임 (심화판)"
   },
   {
     "slug": "Scaling_Laws_concept",
@@ -50,8 +50,8 @@
     "href": "posts/Scaling_Laws_concept.html",
     "tags": "AI, 논문리뷰, LLM, scaling laws, compute-optimal",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "모델/데이터/컴퓨트 스케일 관계"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "모델/데이터/컴퓨트 스케일 관계 (심화판)"
   },
   {
     "slug": "Chinchilla_concept",
@@ -59,8 +59,8 @@
     "href": "posts/Chinchilla_concept.html",
     "tags": "AI, 논문리뷰, LLM, chinchilla, data scaling, compute",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "모델 크기보다 데이터 토큰 최적화"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "모델 크기보다 데이터 토큰 최적화 (심화판)"
   },
   {
     "slug": "InstructGPT_concept",
@@ -68,8 +68,8 @@
     "href": "posts/InstructGPT_concept.html",
     "tags": "AI, 논문리뷰, LLM, instructgpt, rlhf, alignment",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "RLHF 기반 instruction following"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "RLHF 기반 instruction following (심화판)"
   },
   {
     "slug": "Constitutional_AI_concept",
@@ -77,8 +77,8 @@
     "href": "posts/Constitutional_AI_concept.html",
     "tags": "AI, 논문리뷰, LLM, constitutional ai, harmlessness, rlaif",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "AI 피드백 기반 정렬 절차"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "AI 피드백 기반 정렬 절차 (심화판)"
   },
   {
     "slug": "DPO_concept",
@@ -86,8 +86,8 @@
     "href": "posts/DPO_concept.html",
     "tags": "AI, 논문리뷰, LLM, dpo, preference optimization",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "보상모델 없이 선호학습 단순화"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "보상모델 없이 선호학습 단순화 (심화판)"
   },
   {
     "slug": "Switch_Transformers_concept",
@@ -95,8 +95,8 @@
     "href": "posts/Switch_Transformers_concept.html",
     "tags": "AI, 논문리뷰, LLM, switch transformer, moe",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "MoE로 파라미터 확장 효율화"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "MoE로 파라미터 확장 효율화 (심화판)"
   },
   {
     "slug": "Mixtral_concept",
@@ -104,8 +104,8 @@
     "href": "posts/Mixtral_concept.html",
     "tags": "AI, 논문리뷰, LLM, mixtral, sparse moe",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "오픈 MoE 실전 아키텍처"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "오픈 MoE 실전 아키텍처 (심화판)"
   },
   {
     "slug": "RAG_concept",
@@ -113,8 +113,8 @@
     "href": "posts/RAG_concept.html",
     "tags": "AI, 논문리뷰, LLM, rag, retrieval, grounding",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "검색+생성 결합 파이프라인"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "검색+생성 결합 파이프라인 (심화판)"
   },
   {
     "slug": "ReAct_concept",
@@ -122,8 +122,8 @@
     "href": "posts/ReAct_concept.html",
     "tags": "AI, 논문리뷰, LLM, react, reasoning, acting",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "추론과 행동(tool use) 결합"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "추론과 행동(tool use) 결합 (심화판)"
   },
   {
     "slug": "Toolformer_concept",
@@ -131,8 +131,8 @@
     "href": "posts/Toolformer_concept.html",
     "tags": "AI, 논문리뷰, LLM, toolformer, api calling",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "모델이 도구 호출 타이밍 학습"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "모델이 도구 호출 타이밍 학습 (심화판)"
   },
   {
     "slug": "Self_RAG_concept",
@@ -140,8 +140,8 @@
     "href": "posts/Self_RAG_concept.html",
     "tags": "AI, 논문리뷰, LLM, self-rag, self-reflection",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "생성 중 자기-검색/자기-검증"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "생성 중 자기-검색/자기-검증 (심화판)"
   },
   {
     "slug": "Chain_of_Thought_concept",
@@ -149,8 +149,8 @@
     "href": "posts/Chain_of_Thought_concept.html",
     "tags": "AI, 논문리뷰, LLM, cot, reasoning prompts",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "중간 추론 단계 명시 기법"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "중간 추론 단계 명시 기법 (심화판)"
   },
   {
     "slug": "Self_Consistency_concept",
@@ -158,8 +158,8 @@
     "href": "posts/Self_Consistency_concept.html",
     "tags": "AI, 논문리뷰, LLM, self-consistency, majority vote",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "다중 추론 경로 투표로 정확도 향상"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "다중 추론 경로 투표로 정확도 향상 (심화판)"
   },
   {
     "slug": "DeepSeek_R1_concept",
@@ -167,8 +167,8 @@
     "href": "posts/DeepSeek_R1_concept.html",
     "tags": "AI, 논문리뷰, LLM, deepseek-r1, reasoning, rl",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:33:17Z",
-    "summary": "강화학습 기반 추론 강화 최신 흐름"
+    "updated_utc": "2026-03-04 01:42:08Z",
+    "summary": "강화학습 기반 추론 강화 최신 흐름 (심화판)"
   },
   {
     "slug": "BERT_MLM_experiment",
