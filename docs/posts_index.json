@@ -1,12 +1,174 @@
 [
   {
+    "slug": "Attention_Is_All_You_Need_concept",
+    "title": "[Attention Is All You Need] 개념 설명",
+    "href": "posts/Attention_Is_All_You_Need_concept.html",
+    "tags": "AI, 논문리뷰, LLM, attention, transformer, encoder-decoder",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "Transformer 아키텍처의 출발점"
+  },
+  {
     "slug": "BERT_concept",
     "title": "[BERT] 개념 설명",
     "href": "posts/BERT_concept.html",
-    "tags": "AI, 논문리뷰, LLM, BERT, Concept",
+    "tags": "AI, 논문리뷰, LLM, bert, mlm, encoder",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:15:00Z",
-    "summary": "BERT 구조, MLM 목표, 핵심 수식을 이해용으로 정리"
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "양방향 인코더 사전학습의 핵심"
+  },
+  {
+    "slug": "RoBERTa_concept",
+    "title": "[RoBERTa] 개념 설명",
+    "href": "posts/RoBERTa_concept.html",
+    "tags": "AI, 논문리뷰, LLM, roberta, pretraining, optimization",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "BERT 훈련 레시피 최적화"
+  },
+  {
+    "slug": "T5_concept",
+    "title": "[T5] 개념 설명",
+    "href": "posts/T5_concept.html",
+    "tags": "AI, 논문리뷰, LLM, t5, text-to-text, transfer learning",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "모든 NLP를 text-to-text로 통합"
+  },
+  {
+    "slug": "GPT3_concept",
+    "title": "[GPT-3] 개념 설명",
+    "href": "posts/GPT3_concept.html",
+    "tags": "AI, 논문리뷰, LLM, gpt-3, few-shot, in-context learning",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "대규모 in-context learning 패러다임"
+  },
+  {
+    "slug": "Scaling_Laws_concept",
+    "title": "[Scaling Laws] 개념 설명",
+    "href": "posts/Scaling_Laws_concept.html",
+    "tags": "AI, 논문리뷰, LLM, scaling laws, compute-optimal",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "모델/데이터/컴퓨트 스케일 관계"
+  },
+  {
+    "slug": "Chinchilla_concept",
+    "title": "[Chinchilla] 개념 설명",
+    "href": "posts/Chinchilla_concept.html",
+    "tags": "AI, 논문리뷰, LLM, chinchilla, data scaling, compute",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "모델 크기보다 데이터 토큰 최적화"
+  },
+  {
+    "slug": "InstructGPT_concept",
+    "title": "[InstructGPT] 개념 설명",
+    "href": "posts/InstructGPT_concept.html",
+    "tags": "AI, 논문리뷰, LLM, instructgpt, rlhf, alignment",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "RLHF 기반 instruction following"
+  },
+  {
+    "slug": "Constitutional_AI_concept",
+    "title": "[Constitutional AI] 개념 설명",
+    "href": "posts/Constitutional_AI_concept.html",
+    "tags": "AI, 논문리뷰, LLM, constitutional ai, harmlessness, rlaif",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "AI 피드백 기반 정렬 절차"
+  },
+  {
+    "slug": "DPO_concept",
+    "title": "[DPO] 개념 설명",
+    "href": "posts/DPO_concept.html",
+    "tags": "AI, 논문리뷰, LLM, dpo, preference optimization",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "보상모델 없이 선호학습 단순화"
+  },
+  {
+    "slug": "Switch_Transformers_concept",
+    "title": "[Switch Transformers] 개념 설명",
+    "href": "posts/Switch_Transformers_concept.html",
+    "tags": "AI, 논문리뷰, LLM, switch transformer, moe",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "MoE로 파라미터 확장 효율화"
+  },
+  {
+    "slug": "Mixtral_concept",
+    "title": "[Mixtral] 개념 설명",
+    "href": "posts/Mixtral_concept.html",
+    "tags": "AI, 논문리뷰, LLM, mixtral, sparse moe",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "오픈 MoE 실전 아키텍처"
+  },
+  {
+    "slug": "RAG_concept",
+    "title": "[RAG] 개념 설명",
+    "href": "posts/RAG_concept.html",
+    "tags": "AI, 논문리뷰, LLM, rag, retrieval, grounding",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "검색+생성 결합 파이프라인"
+  },
+  {
+    "slug": "ReAct_concept",
+    "title": "[ReAct] 개념 설명",
+    "href": "posts/ReAct_concept.html",
+    "tags": "AI, 논문리뷰, LLM, react, reasoning, acting",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "추론과 행동(tool use) 결합"
+  },
+  {
+    "slug": "Toolformer_concept",
+    "title": "[Toolformer] 개념 설명",
+    "href": "posts/Toolformer_concept.html",
+    "tags": "AI, 논문리뷰, LLM, toolformer, api calling",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "모델이 도구 호출 타이밍 학습"
+  },
+  {
+    "slug": "Self_RAG_concept",
+    "title": "[Self-RAG] 개념 설명",
+    "href": "posts/Self_RAG_concept.html",
+    "tags": "AI, 논문리뷰, LLM, self-rag, self-reflection",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "생성 중 자기-검색/자기-검증"
+  },
+  {
+    "slug": "Chain_of_Thought_concept",
+    "title": "[Chain-of-Thought] 개념 설명",
+    "href": "posts/Chain_of_Thought_concept.html",
+    "tags": "AI, 논문리뷰, LLM, cot, reasoning prompts",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "중간 추론 단계 명시 기법"
+  },
+  {
+    "slug": "Self_Consistency_concept",
+    "title": "[Self-Consistency] 개념 설명",
+    "href": "posts/Self_Consistency_concept.html",
+    "tags": "AI, 논문리뷰, LLM, self-consistency, majority vote",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "다중 추론 경로 투표로 정확도 향상"
+  },
+  {
+    "slug": "DeepSeek_R1_concept",
+    "title": "[DeepSeek-R1] 개념 설명",
+    "href": "posts/DeepSeek_R1_concept.html",
+    "tags": "AI, 논문리뷰, LLM, deepseek-r1, reasoning, rl",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:33:17Z",
+    "summary": "강화학습 기반 추론 강화 최신 흐름"
   },
   {
     "slug": "BERT_MLM_experiment",
@@ -14,17 +176,8 @@
     "href": "posts/BERT_MLM_experiment.html",
     "tags": "AI, 실험자동화, LLM, BERT, MLM",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:15:00Z",
+    "updated_utc": "2026-03-04 01:33:17Z",
     "summary": "BERT 아이디어 기반 toy MLM 실험과 한계 분석"
-  },
-  {
-    "slug": "Attention_Is_All_You_Need_concept",
-    "title": "[Attention Is All You Need] 개념 설명",
-    "href": "posts/Attention_Is_All_You_Need_concept.html",
-    "tags": "AI, 논문리뷰, LLM, Attention_Is_All_You_Need, Concept",
-    "category": "LLM",
-    "updated_utc": "2026-03-04 01:00:00Z",
-    "summary": "Transformer 핵심 구조/수식/직관을 이해용으로 정리"
   },
   {
     "slug": "RAG_Retrieval_FAISS_experiment",
@@ -32,7 +185,7 @@
     "href": "posts/RAG_Retrieval_FAISS_experiment.html",
     "tags": "AI, 실험자동화, LLM, RAG, FAISS",
     "category": "LLM",
-    "updated_utc": "2026-03-04 01:00:00Z",
+    "updated_utc": "2026-03-04 01:33:17Z",
     "summary": "SQuAD 기반 TF-IDF vs 임베딩+FAISS 검색 실험"
   }
 ]
