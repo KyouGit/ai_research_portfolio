@@ -1,67 +1,79 @@
 <h2>[RAG Retrieval] 실험 리포트 (FAISS)</h2>
-<p>이 문서는 논문의 아이디어를 응용한 <strong>연계 실험</strong>(RAG 검색 파이프라인 비교)입니다. 모델 구조와 핵심 개념은 <a href="Attention_Is_All_You_Need_concept.html">개념 설명</a> 문서를 참고하세요.</p>
-<p><strong>중요:</strong> 이 실험은 Transformer 내부 attention 연산 자체를 ablation한 논문 직접 재현 실험이 아니라, 임베딩+FAISS 기반 검색이 RAG 품질에 주는 영향을 측정한 응용 실험입니다.</p>
+<p>이 문서는 Transformer 논문의 아이디어를 직접 재현한 실험이 아니라, <strong>연계 응용 실험</strong>입니다. 목표는 "검색기를 바꾸면 RAG 품질이 얼마나 달라지는가"를 검증하는 것입니다.</p>
+<p>개념 설명은 <a href="Attention_Is_All_You_Need_concept.html">Attention 개념 문서</a>를 참고하세요.</p>
 
-<h3>1. 실험 목적</h3>
-<p>RAG에서 문서 검색 모듈을 바꿨을 때(희소 검색 vs 임베딩 검색) 근거 문서 검색 정확도와 답변 품질이 어떻게 바뀌는지 검증합니다.</p>
+<h3>1. 뉴비가 먼저 이해해야 할 핵심</h3>
+<ul>
+  <li>RAG는 "먼저 찾고(retrieve), 그다음 답한다(generate)" 구조입니다.</li>
+  <li>검색이 틀리면 생성도 틀릴 확률이 커집니다.</li>
+  <li>그래서 이번 실험은 생성모델 튜닝보다 <strong>retrieval 품질</strong>에 집중합니다.</li>
+</ul>
 
-<h3>2. 실험 설정</h3>
+<h3>2. 실험 질문</h3>
+<p>같은 데이터셋에서 검색기를 TF-IDF에서 임베딩+FAISS로 바꾸면, 정답 근거를 더 잘 찾는가?</p>
+
+<h3>3. 실험 설정</h3>
 <ul>
   <li>데이터셋: <code>squad_validation_subset_docs239_qa250</code></li>
   <li>Baseline: TF-IDF sparse retrieval</li>
-  <li>개선안: sentence-transformers(<code>all-MiniLM-L6-v2</code>) + FAISS(IndexFlatIP)</li>
-  <li>답변 생성: 검색된 문서 내 문장 추출 기반</li>
-  <li>run_at_utc: 2026-03-04T00:53:17Z</li>
+  <li>비교군: sentence-transformers(<code>all-MiniLM-L6-v2</code>) + FAISS(IndexFlatIP)</li>
+  <li>답변 생성: 검색 문서 내 문장 추출(LLM 생성 아님)</li>
+  <li>대표 실행 시각: <code>2026-03-04T00:53:17Z</code></li>
 </ul>
 
-<h3>3. FAISS 설명 (왜 쓰는가)</h3>
-<p><strong>FAISS</strong>는 벡터 유사도 검색 라이브러리입니다. 문서 임베딩을 인덱스로 저장하고 질의 임베딩의 최근접 이웃(top-k)을 빠르게 찾습니다. 문서 수가 커질수록 단순 브루트포스 대비 검색 지연(latency)을 줄이는 데 큰 이점이 있습니다.</p>
+<h3>4. FAISS를 왜 쓰는가</h3>
+<p>FAISS는 벡터 검색 엔진입니다. 문서 임베딩을 인덱스로 저장하고 질의 임베딩과 가장 가까운 문서를 빠르게 찾습니다. 데이터가 커질수록 brute-force보다 latency를 줄이는 데 유리합니다.</p>
 
-<h3>4. 평가 지표</h3>
+<h3>5. 지표 정의</h3>
 <ul>
   <li><strong>retrieval_acc</strong>: 정답 근거 문서를 top-1로 맞춘 비율</li>
-  <li><strong>answer_keyword_f1</strong>: 생성 답변의 핵심 키워드 포함 비율</li>
+  <li><strong>answer_keyword_f1</strong>: 답변에 핵심 키워드가 포함된 비율</li>
   <li><strong>overall_score</strong>: <code>0.6*retrieval_acc + 0.4*answer_keyword_f1</code></li>
 </ul>
 
-<h3>5. 결과 비교</h3>
+<h3>6. 결과 표 (대표 실행)</h3>
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
-    <tr>
-      <th>방법</th>
-      <th>retrieval_acc</th>
-      <th>answer_keyword_f1</th>
-      <th>overall_score</th>
-    </tr>
+    <tr><th>방법</th><th>retrieval_acc</th><th>answer_keyword_f1</th><th>overall_score</th></tr>
   </thead>
   <tbody>
-    <tr>
-      <td>baseline_tfidf</td>
-      <td>0.688000</td>
-      <td>0.598667</td>
-      <td>0.652267</td>
-    </tr>
-    <tr>
-      <td>st_miniLM_faiss</td>
-      <td>0.808000</td>
-      <td>0.685333</td>
-      <td>0.758933</td>
-    </tr>
+    <tr><td>baseline_tfidf</td><td>0.688000</td><td>0.598667</td><td>0.652267</td></tr>
+    <tr><td>st_miniLM_faiss</td><td>0.808000</td><td>0.685333</td><td>0.758933</td></tr>
   </tbody>
 </table>
 <p><strong>score_gain_vs_baseline:</strong> +0.106667</p>
 
-<h3>6. 결과 그래프</h3>
-<p><img src="../assets/Attention_Is_All_You_Need_metric_curve_20260304_005255.png" alt="RAG evaluation graph" /></p>
-<p>해석: FAISS+임베딩 방식이 검색 정확도와 답변 키워드 충족률 모두에서 baseline을 앞섰습니다. 특히 retrieval 단계에서 상승폭이 커서 최종 점수 개선으로 연결되었습니다.</p>
+<h3>7. 결과는 얼마나 안정적인가</h3>
+<p>같은 SQuAD 설정에서도 실행 시점/설정에 따라 성능이 흔들렸습니다.</p>
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr><th>run_at_utc</th><th>baseline_score</th><th>faiss_score</th><th>gain</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>2026-03-04T00:47:18Z</td><td>0.652267</td><td>0.554133</td><td>-0.098133</td></tr>
+    <tr><td>2026-03-04T00:53:17Z</td><td>0.652267</td><td>0.758933</td><td>+0.106667</td></tr>
+  </tbody>
+</table>
+<p><strong>전문가 코멘트:</strong> "한 번 이겼다"로 결론 내리면 안 됩니다. 다회 실행 평균/분산까지 같이 봐야 책임 있는 결론입니다.</p>
 
-<h3>7. 예시 출력</h3>
-<p><strong>예시 1</strong><br/>질문: <code>How does the secondary theory say most cpDNA is structured?</code><br/>Top-k: <code>1:d1(0.6158) | 2:d172(0.3312) | 3:d13(0.3283)</code><br/>출력: <code>... most cpDNA is actually linear ...</code><br/>근거 hit: <code>True</code></p>
+<h3>8. 그래프</h3>
+<p><img src="../assets/RAG_Retrieval_FAISS_metric_curve_20260304_005255.png" alt="RAG retrieval evaluation graph" /></p>
+<p>이 그래프는 대표 실행 1회의 비교입니다. 정식 리포트로 쓰려면 multi-seed 평균 그래프가 추가되어야 합니다.</p>
+
+<h3>9. 예시 출력</h3>
+<p><strong>예시 1</strong><br/>질문: <code>How does the secondary theory say most cpDNA is structured?</code><br/>Top-k: <code>1:d1(0.6158) | 2:d172(0.3312) | 3:d13(0.3283)</code><br/>근거 hit: <code>True</code></p>
 <p><strong>예시 2</strong><br/>질문: <code>What is the name of the two-tentacled cydippid ... ?</code><br/>Top-k: <code>1:d2(0.4472) | 2:d183(0.3954) | 3:d13(0.3730)</code><br/>근거 hit: <code>True</code></p>
 
-<h3>8. 한계와 다음 단계</h3>
+<h3>10. 한계와 다음 단계</h3>
 <ul>
-  <li>현재 답변 생성은 LLM 생성이 아닌 문장 추출 기반이라 생성 품질 평가에 한계가 있음</li>
-  <li>다음 단계: cross-encoder reranker 추가, top-k 재정렬 성능 비교</li>
-  <li>추가 단계: latency(ms), index build time, memory footprint까지 함께 보고</li>
+  <li>현재 생성 단계는 LLM 생성이 아닌 추출 기반</li>
+  <li>다음 단계: cross-encoder reranker 추가 후 top-k 재정렬 성능 검증</li>
+  <li>latency(ms), index build time, memory footprint를 함께 기록</li>
+</ul>
+
+<h3>11. 검증 가능 출처</h3>
+<ul>
+  <li>raw result: <code>papers/Attention_Is_All_You_Need/results/result_20260304_004713.txt</code></li>
+  <li>raw result: <code>papers/Attention_Is_All_You_Need/results/result_20260304_005255.txt</code></li>
+  <li>raw log: <code>papers/Attention_Is_All_You_Need/logs/run_20260304_005255.log</code></li>
 </ul>

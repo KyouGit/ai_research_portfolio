@@ -18,3 +18,6 @@
 - 개념 포스트와 실험 포스트는 파일을 분리하고, Git 커밋도 분리한다.
 - 예: 1차 커밋(개념): docs/posts/*_concept.html, docs/index.html, docs/posts_index.json
 - 예: 2차 커밋(실험): docs/posts/*_experiment.html, docs/assets/*metric_curve*.png, papers/*/results/*
+- 문체는 AI 전문가가 뉴비에게 설명하듯 작성하고, 결론은 단일 run이 아닌 변동성/한계를 함께 제시한다.
+- 실험 포스트에는 raw result/log 경로를 "검증 가능 출처" 섹션으로 반드시 적는다.
+
