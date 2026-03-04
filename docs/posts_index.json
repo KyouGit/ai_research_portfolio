@@ -1,12 +1,21 @@
 [
   {
-    "slug": "BERT",
-    "title": "[BERT] 실험 자동화 리포트",
-    "href": "posts/BERT.html",
-    "tags": "AI, 논문리뷰, 실험자동화, LLM, BERT",
+    "slug": "BERT_concept",
+    "title": "[BERT] 개념 설명",
+    "href": "posts/BERT_concept.html",
+    "tags": "AI, 논문리뷰, LLM, BERT, Concept",
     "category": "LLM",
-    "updated_utc": "2026-03-03 08:57:28Z",
-    "summary": "논문 핵심 개념 설명 + 실험 결과 해석"
+    "updated_utc": "2026-03-04 01:15:00Z",
+    "summary": "BERT 구조, MLM 목표, 핵심 수식을 이해용으로 정리"
+  },
+  {
+    "slug": "BERT_MLM_experiment",
+    "title": "[BERT MLM] 실험 리포트",
+    "href": "posts/BERT_MLM_experiment.html",
+    "tags": "AI, 실험자동화, LLM, BERT, MLM",
+    "category": "LLM",
+    "updated_utc": "2026-03-04 01:15:00Z",
+    "summary": "BERT 아이디어 기반 toy MLM 실험과 한계 분석"
   },
   {
     "slug": "Attention_Is_All_You_Need_concept",
