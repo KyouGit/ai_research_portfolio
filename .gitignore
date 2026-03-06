@@ -1,0 +1,43 @@
+# Default: ignore everything
+*
+
+# Keep gitignore itself
+!.gitignore
+
+# Keep published site artifacts only
+!docs/
+docs/*
+!docs/index.html
+!docs/roadmap.html
+!docs/ROADMAP.md
+!docs/posts_index.json
+!docs/posts/
+!docs/posts/**
+!docs/assets/
+!docs/assets/**
+
+# Optional: keep CNAME if you add custom domain later
+!docs/CNAME
+
+# Notebook/cache/temp
+**/.ipynb_checkpoints/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Python/ML caches
+**/.hf_cache/
+
+# Runtime artifacts
+system_logs/
+metrics.csv
+work_board.md
+paper_list.md
+archive/
+papers/
+
+# Local source and tooling (ignored in docs-only publishing mode)
+*.py
+README.md
+STARTUP_CHECKLIST.md

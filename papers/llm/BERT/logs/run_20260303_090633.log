@@ -1,4 +1,0 @@
-2026-03-03 09:06:34,343 | INFO | mask_ratio=0.15 baseline_top1=0.0000 baseline_top5=0.0000 top1=0.0000 top5=0.0000 score=0.0000
-2026-03-03 09:06:34,700 | INFO | mask_ratio=0.30 baseline_top1=0.0000 baseline_top5=0.0000 top1=0.0000 top5=0.0000 score=0.0000
-2026-03-03 09:06:35,058 | INFO | mask_ratio=0.45 baseline_top1=0.0000 baseline_top5=0.0000 top1=0.0000 top5=0.0000 score=0.0000
-2026-03-03 09:06:35,261 | INFO | done best_mask=0.15 score=0.0000 gain=0.0000

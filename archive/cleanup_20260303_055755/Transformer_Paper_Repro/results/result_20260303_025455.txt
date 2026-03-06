@@ -1,6 +1,0 @@
-paper_name: Transformer Paper Repro
-run_at_utc: 2026-03-03T02:54:55Z
-seed: 42
-iterations: 120
-final_score: 0.910039
-figure_path: /home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/Transformer_Paper_Repro/results/metric_curve_20260303_025455.png

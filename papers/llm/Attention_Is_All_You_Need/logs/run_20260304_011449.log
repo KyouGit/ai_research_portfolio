@@ -1,2 +1,0 @@
-2026-03-04 01:14:50,459 | INFO | task=rag_qa dataset=squad_validation_subset_docs235_qa250 docs=235 qa=250
-2026-03-04 01:14:52,408 | INFO | done baseline_score=0.6064 transformer_score=0.5152 gain=-0.0912
