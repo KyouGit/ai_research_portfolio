@@ -1,0 +1,2 @@
+2026-03-03 02:54:55,641 | INFO | experiment_start paper=Transformer Paper Repro seed=42 iterations=120
+2026-03-03 02:54:55,796 | INFO | experiment_done score=0.910039 result=/home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/Transformer_Paper_Repro/results/result_20260303_025455.txt fig=/home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/Transformer_Paper_Repro/results/metric_curve_20260303_025455.png

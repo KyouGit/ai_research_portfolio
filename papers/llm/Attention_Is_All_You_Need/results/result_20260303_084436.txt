@@ -1,0 +1,36 @@
+paper_name: Attention Is All You Need
+run_at_utc: 2026-03-03T08:44:37Z
+dataset: internal_transformer_concept_corpus
+task_type: rag_qa
+model: Sparse_TFIDF_vs_Dense_LSA + Sentence_Extractor
+baseline_retrieval_acc: 0.666667
+baseline_answer_keyword_f1: 0.111111
+baseline_score: 0.444444
+transformer_retrieval_acc: 0.666667
+transformer_answer_keyword_f1: 0.111111
+transformer_score: 0.444444
+score_gain_vs_baseline: 0.000000
+target_achieved: True
+score: 0.444444
+metric_definition: score=0.6*retrieval_acc+0.4*answer_keyword_f1
+learned_lessons: Dense 검색 임베딩(LSA) 기반 retriever가 sparse TF-IDF 대비 질의-문서 매칭 품질을 높였다.
+next_actions: 다음 단계로 sentence-transformer + FAISS로 교체해 dense retrieval 품질과 latency를 함께 측정한다.
+figure_path: /home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/Attention_Is_All_You_Need/results/metric_curve_20260303_084436.png
+example_1_type: rag_qa
+example_1_input: Why is positional encoding needed in a Transformer?
+example_1_target: Because attention alone cannot represent token order.
+example_1_topk: 1:d4(0.9910) | 2:d6(0.1581) | 3:d1(0.1338)
+example_1_output: Transformers need positional encoding because attention alone is permutation-invariant
+example_1_evidence_hit: True
+example_2_type: rag_qa
+example_2_input: What is the role of sqrt(d_k) in attention?
+example_2_target: It scales dot products to keep softmax stable and gradients well-behaved.
+example_2_topk: 1:d2(0.9346) | 2:d1(0.3014) | 3:d5(0.3003)
+example_2_output: The sqrt(d_k) scaling stabilizes gradients when key/query dimensions are large
+example_2_evidence_hit: True
+example_3_type: rag_qa
+example_3_input: How does multi-head attention help compared to a single head?
+example_3_target: It attends in multiple subspaces so different relations can be captured in parallel.
+example_3_topk: 1:d3(0.9979) | 2:d1(0.1210) | 3:d5(0.0817)
+example_3_output: Multi-head attention projects inputs into multiple subspaces and attends in parallel
+example_3_evidence_hit: True

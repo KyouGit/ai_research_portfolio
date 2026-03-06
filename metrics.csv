@@ -1,0 +1,2 @@
+paper_name,run_at_utc,score,note,result_path,log_path
+BERT,2026-03-03T08:57:24Z,1.000000,mlm_score=1.000000_gain=0.903448,/home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/BERT/results/result_20260303_085706.txt,/home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/BERT/logs/run_20260303_085706.log

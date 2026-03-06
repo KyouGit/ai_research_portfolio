@@ -1,0 +1,159 @@
+<h2>Optimizer 전체 흐름 — SGD에서 AdamW까지</h2>
+<p>딥러닝 학습의 핵심 알고리즘인 optimizer의 발전 흐름을 순서대로 설명한다. 각 optimizer가 왜 나왔는지, 어떤 문제를 해결했는지를 중심으로 읽는다.</p>
+
+<!-- deep_context:start -->
+<h3>한 줄 요약</h3>
+<p>optimizer는 gradient를 이용해 파라미터를 어떻게 업데이트할지 결정한다. optimizer가 바뀌면 학습 속도, 안정성, 최종 성능이 달라진다.</p>
+
+<h3>발전 흐름 한눈에 보기</h3>
+<pre><code>SGD → Momentum → AdaGrad → RMSProp → Adam → AdamW → (LAMB, Lion)</code></pre>
+<p>각 단계는 이전 optimizer의 단점을 해결하며 나왔다.</p>
+
+<h3>이 문서를 읽고 설명할 수 있어야 하는 핵심 3가지</h3>
+<ul>
+  <li>Adam이 momentum + RMSProp의 결합인 이유</li>
+  <li>AdamW가 Adam과 다른 점, 그리고 왜 LLM 표준이 됐는지</li>
+  <li>learning rate schedule이 optimizer 선택보다 더 중요한 이유</li>
+</ul>
+<!-- deep_context:end -->
+
+<!-- beginner_block:start -->
+<h3>처음 보는 사람용 핵심 용어</h3>
+<ul>
+  <li><strong>Gradient</strong>: loss가 어느 방향으로 커지는지를 나타내는 벡터. 반대 방향으로 가면 loss가 줄어든다.</li>
+  <li><strong>Learning rate (η)</strong>: 한 번에 얼마나 이동할지 결정하는 보폭.</li>
+  <li><strong>Momentum</strong>: 이전 이동 방향을 기억해서 관성처럼 활용하는 기법.</li>
+  <li><strong>Weight decay</strong>: 파라미터를 0 방향으로 당기는 정규화. 과적합 방지에 쓰인다.</li>
+  <li><strong>Adaptive learning rate</strong>: 파라미터마다 다른 크기의 learning rate를 자동으로 적용하는 방식.</li>
+</ul>
+<!-- beginner_block:end -->
+
+<h3>1단. SGD — 가장 기본</h3>
+<pre><code class="language-python">w = w - η * ∇L(w)
+# η: learning rate, ∇L: gradient</code></pre>
+<p>gradient 반대 방향으로 조금씩 이동한다. 단순하고 빠르지만, learning rate에 민감하고 수렴이 느리다.</p>
+<p><strong>남겨진 문제</strong>: 방향이 들쭉날쭉하고, 모든 파라미터에 같은 learning rate를 쓴다.</p>
+
+<h3>2단. SGD + Momentum — 관성 추가</h3>
+<p>물리학의 관성에서 착안. 이전 이동 방향을 기억해서 같은 방향이면 가속, 다른 방향이면 감속한다.</p>
+<pre><code class="language-python">v_t = β * v_{t-1} + ∇L      # velocity: 이전 방향 기억
+w   = w - η * v_t            # velocity 방향으로 이동
+# β: momentum 계수 (보통 0.9)</code></pre>
+<p>진동이 줄고 수렴이 빨라진다. 이미지 분류(ResNet 등)에서 지금도 자주 쓰인다.</p>
+<p><strong>남겨진 문제</strong>: 파라미터마다 다른 learning rate는 여전히 없다.</p>
+
+<h3>3단. AdaGrad — 파라미터별 learning rate</h3>
+<p>자주 업데이트된 파라미터는 learning rate를 줄이고, 드물게 업데이트된 것은 키운다.</p>
+<pre><code class="language-python">G += ∇L ** 2                  # gradient 제곱 누적
+w  = w - (η / sqrt(G + ε)) * ∇L
+# G가 클수록 learning rate가 작아진다</code></pre>
+<p>sparse 데이터(NLP 임베딩)에 유리하다.</p>
+<p><strong>남겨진 문제</strong>: G가 단조증가해서 학습이 멈춘다. learning rate가 결국 0에 수렴한다.</p>
+
+<h3>4단. RMSProp — AdaGrad 개선</h3>
+<p>gradient를 누적하는 대신 최근 것에 더 가중치를 주는 지수이동평균을 사용한다.</p>
+<pre><code class="language-python">E_g2 = β * E_g2 + (1-β) * g**2   # 지수이동평균: 오래된 것은 잊힌다
+w    = w - (η / sqrt(E_g2 + ε)) * g</code></pre>
+<p>learning rate가 안정적으로 유지된다. RNN 학습에 적합해서 Hinton이 RNN 강의에서 소개했다.</p>
+<p><strong>남겨진 문제</strong>: momentum(방향 기억)이 없다.</p>
+
+<h3>5단. Adam — momentum + RMSProp 결합</h3>
+<p>딥러닝에서 가장 널리 쓰이는 optimizer. 방향(momentum)과 크기 조절(RMSProp)을 동시에 적용한다.</p>
+<pre><code class="language-python"># 1차 모멘트: gradient 방향 (momentum)
+m_t = β1 * m_{t-1} + (1 - β1) * g_t
+
+# 2차 모멘트: gradient 크기 (RMSProp)
+v_t = β2 * v_{t-1} + (1 - β2) * g_t**2
+
+# Bias correction: 초기 step에서 m, v가 0에 치우치는 문제 보정
+m_hat = m_t / (1 - β1**t)
+v_hat = v_t / (1 - β2**t)
+
+# 업데이트
+w = w - η * m_hat / (sqrt(v_hat) + ε)
+
+# 기본값: β1=0.9, β2=0.999, ε=1e-8</code></pre>
+<p>학습이 빠르고 hyperparameter 튜닝이 쉬워서 CNN, Transformer, Diffusion 모델 모두에서 쓰인다.</p>
+<p><strong>남겨진 문제</strong>: weight decay가 gradient와 섞여서 잘못 적용된다.</p>
+
+<h3>6단. AdamW — weight decay 분리 (LLM 표준)</h3>
+<p>Adam에서 weight decay가 gradient update에 섞여 있던 문제를 수정했다.</p>
+<pre><code class="language-python"># Adam의 weight decay (잘못된 방식)
+w = w - η * (m_hat / (sqrt(v_hat) + ε) + λ * w)  # gradient에 섞임
+
+# AdamW (올바른 분리)
+w = w - η * m_hat / (sqrt(v_hat) + ε) - η * λ * w
+#                                        ^^^^^^^^^^
+#                          weight decay를 gradient와 독립적으로 적용</code></pre>
+<p>정규화 효과가 제대로 작동하면서 generalization이 좋아진다. BERT, GPT, LLaMA 등 대부분의 LLM이 AdamW를 표준으로 사용한다.</p>
+
+<h3>7단. LAMB — large batch 안정화</h3>
+<p>Google BERT 사전학습에서 batch size를 64k 이상으로 키울 때 Adam이 불안정해지는 문제를 해결했다.</p>
+<pre><code class="language-python"># 레이어별 weight norm / gradient norm 비율로 learning rate 조절
+w_l = w_l - η * (||w_l|| / ||m_hat_l||) * m_hat_l</code></pre>
+<p>레이어마다 gradient 크기가 달라도 안정적으로 학습한다.</p>
+
+<h3>8단. Lion — gradient sign만 사용 (최근 연구)</h3>
+<p>gradient의 크기가 아닌 부호(sign)만 사용해서 업데이트 크기를 균일하게 만든다.</p>
+<pre><code class="language-python">update = sign(β1 * m_{t-1} + (1-β1) * g_t)
+w = w - η * update</code></pre>
+<p>Adam 대비 메모리가 적고 LLM 학습 효율이 좋다는 보고가 있다. 아직 AdamW가 주류이지만 연구가 활발하다.</p>
+
+<h3>핵심 수식 정리</h3>
+<table>
+  <tr><th>Optimizer</th><th>핵심 수식 (간략)</th><th>아이디어</th></tr>
+  <tr><td>SGD</td><td>w -= η·g</td><td>기본</td></tr>
+  <tr><td>Momentum</td><td>v = βv + g; w -= η·v</td><td>관성</td></tr>
+  <tr><td>AdaGrad</td><td>w -= η·g / √(G+ε)</td><td>파라미터별 lr</td></tr>
+  <tr><td>RMSProp</td><td>w -= η·g / √(E[g²]+ε)</td><td>moving avg</td></tr>
+  <tr><td>Adam</td><td>w -= η·m̂ / (√v̂+ε)</td><td>momentum + RMSProp</td></tr>
+  <tr><td>AdamW</td><td>w -= η·m̂/(√v̂+ε) + η·λ·w</td><td>weight decay 분리</td></tr>
+</table>
+
+<h3>실제 사용 가이드</h3>
+<table>
+  <tr><th>상황</th><th>추천 Optimizer</th></tr>
+  <tr><td>작은 모델, 범용</td><td>Adam</td></tr>
+  <tr><td>이미지 분류 (CNN)</td><td>SGD + momentum</td></tr>
+  <tr><td>Transformer / LLM</td><td>AdamW</td></tr>
+  <tr><td>대형 모델 (large batch)</td><td>AdamW + LAMB, Adafactor</td></tr>
+</table>
+
+<h3>그것보다 더 중요한 것 — learning rate schedule</h3>
+<p>실제로 연구자들이 optimizer보다 더 많이 고민하는 것이 learning rate schedule이다.</p>
+<pre><code class="language-python"># 대표 패턴: warmup → peak → cosine decay
+lr = warmup(step) → peak_lr → cosine_decay(step)</code></pre>
+<ul>
+  <li><strong>warmup</strong>: 초반에 lr을 천천히 올려서 초기 학습을 안정화</li>
+  <li><strong>cosine decay</strong>: 점점 줄여서 마지막에 정밀하게 수렴</li>
+</ul>
+<p>optimizer를 AdamW에서 Adam으로 바꿔도 성능 차이가 작을 수 있지만, schedule을 제거하면 성능이 크게 떨어지는 경우가 많다.</p>
+
+<h3>예상 질문 5개와 답변</h3>
+<ul>
+  <li><strong>Q1. Adam이 momentum과 RMSProp을 합쳤다는 게 무슨 의미인가?</strong><br>
+  m_t(1차 모멘트)가 momentum 역할(방향 유지), v_t(2차 모멘트)가 RMSProp 역할(크기 조절)을 한다. 이 둘을 동시에 적용한다.</li>
+
+  <li><strong>Q2. AdamW와 Adam의 차이는?</strong><br>
+  weight decay 적용 위치가 다르다. Adam은 gradient에 섞어서 적용, AdamW는 파라미터에 직접 독립적으로 적용한다. 정규화 효과가 AdamW가 더 정확하다.</li>
+
+  <li><strong>Q3. bias correction은 왜 필요한가?</strong><br>
+  m, v가 0으로 초기화되기 때문에 초반 step에서 실제 gradient보다 훨씬 작게 추정된다. 이를 1/(1-β^t)로 보정해서 초반 학습을 안정화한다.</li>
+
+  <li><strong>Q4. SGD+momentum이 Adam보다 좋은 경우는?</strong><br>
+  이미지 분류에서 SGD+momentum이 최종 test accuracy에서 Adam을 이기는 경우가 자주 보고된다. Adam이 초반 수렴은 빠르지만 sharp minimum에 빠질 수 있다.</li>
+
+  <li><strong>Q5. Adafactor는 언제 쓰나?</strong><br>
+  메모리가 부족한 대형 모델 학습에서. 2차 모멘트를 행렬 분해로 근사해서 Adam 대비 메모리를 크게 줄인다. Google T5 학습에서 사용됐다.</li>
+</ul>
+
+<h3>다음에 스스로 해볼 실습 2가지</h3>
+<ul>
+  <li>SGD / Adam / AdamW 세 가지로 같은 모델을 학습하고 loss curve를 한 그래프에 비교. learning rate는 각각 최적값으로 조정해서 공정하게 비교</li>
+  <li>AdamW + warmup + cosine decay 조합을 구현하고, schedule 없이 고정 lr만 쓴 경우와 최종 validation 성능을 비교</li>
+</ul>
+
+<h3>세부 문서</h3>
+<ul>
+  <li><a href="SGD_concept.html">SGD 상세 — Stochastic Gradient Descent</a></li>
+</ul>

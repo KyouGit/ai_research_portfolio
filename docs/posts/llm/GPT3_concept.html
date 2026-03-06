@@ -92,6 +92,35 @@
 <h3>논문 간 비교 포인트</h3>
 <p>BERT류는 fine-tuning 중심, GPT-3는 prompt-based adaptation 중심.</p>
 
+<h3>왜 요즘 LLM은 decoder-only(GPT형)가 대세인가?</h3>
+<p>Transformer 계열은 크게 3가지로 나눌 수 있습니다.</p>
+<ul>
+  <li><strong>Encoder-only</strong> (예: BERT): 양방향 이해에 강함, 생성에는 직접적이지 않음</li>
+  <li><strong>Decoder-only</strong> (예: GPT, LLaMA 계열): autoregressive 생성에 최적화</li>
+  <li><strong>Encoder-Decoder</strong> (예: T5): 입력-출력 변환(번역/요약)에서 강력</li>
+</ul>
+<p>최근 제품 요구가 "고품질 생성" 중심으로 이동하면서 decoder-only가 가장 널리 채택되었습니다.</p>
+
+<h3>BERT와 GPT를 학습목표로 비교하면</h3>
+<ul>
+  <li><strong>BERT(MLM)</strong>: <code>P(w_i | left + right)</code></li>
+  <li><strong>GPT(CLM)</strong>: <code>P(w_t | w_1...w_{t-1})</code></li>
+</ul>
+<p>BERT는 이해 태스크에 강하지만, GPT는 다음 토큰 예측을 반복해 자연스럽게 생성으로 이어집니다.</p>
+
+<h3>왜 GPT objective가 스케일에 유리했나</h3>
+<p>GPT는 "다음 단어 예측"이라는 단일 목적을 대규모 웹 텍스트에 직접 적용할 수 있어 데이터 파이프라인이 단순합니다.</p>
+<p>반면 BERT의 MLM은 [MASK]를 주입해 학습하므로 실제 추론 입력과의 간극(train-test mismatch) 이슈가 자주 언급됩니다.</p>
+<p>스케일링 연구(모델/데이터/연산 증가에 따른 성능 향상)와 결합되면서 autoregressive decoder-only 계열이 산업 표준으로 자리잡았습니다.</p>
+
+<h3>실무 구조를 한 줄로 쓰면</h3>
+<p><code>tokenize -> embedding -> decoder layers -> next-token probabilities -> iterative generation</code></p>
+<p>이 단순한 반복 구조가 챗봇, 코드 생성, 요약, 에이전트 워크플로우까지 확장됩니다.</p>
+
+<h3>다음으로 이어질 핵심 질문</h3>
+<p>그렇다면 모델의 "지식"은 어디 저장될까요? 최근 해석 연구는 attention만이 아니라 FFN(MLP) 블록이 사실 기억 저장에 중요한 역할을 한다는 증거를 제시합니다.</p>
+<p>이 질문은 hallucination, knowledge editing, 모델 신뢰성 분석으로 바로 이어집니다.</p>
+
 <h3>4단. 비용/리스크</h3>
 <p>추론 비용/지연, 환각, 프롬프트 민감도.</p>
 <ul>

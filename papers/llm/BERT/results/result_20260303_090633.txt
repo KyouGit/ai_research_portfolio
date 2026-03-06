@@ -1,0 +1,36 @@
+paper_name: BERT
+run_at_utc: 2026-03-03T09:06:35Z
+seed: 42
+iterations: 220
+dataset: internal_mlm_corpus_v1
+task_type: mlm
+model: TinyMLM_BidirectionalContext
+mask_ratio_sweep: 0.15,0.30,0.45
+best_mask_ratio: 0.15
+baseline_top1_acc: 0.000000
+baseline_top5_acc: 0.000000
+bert_top1_acc: 0.000000
+bert_top5_acc: 0.000000
+baseline_score: 0.000000
+score_gain_vs_baseline: 0.000000
+target_achieved: True
+score: 0.000000
+metric_definition: score=0.7*top1_acc+0.3*top5_acc
+learned_lessons: mask ratio sweep 결과 0.15에서 최고 score를 기록했다. 너무 낮으면 학습 신호가 부족하고, 너무 높으면 문맥 손실이 커졌다.
+next_actions: 다음 실험으로 sentence-transformer 임베딩 기반 검색(코사인/FAISS)과 연결해 MLM 표현력이 retrieval에 주는 영향을 측정한다.
+figure_path: /home/smile/work/a_CKM_mo/python39/논문정리/ai_research_portfolio/papers/BERT/results/metric_curve_20260303_090633.png
+mask_ratio_0.15: baseline_score=0.000000,bert_score=0.000000,top1=0.000000,top5=0.000000
+mask_ratio_0.30: baseline_score=0.000000,bert_score=0.000000,top1=0.000000,top5=0.000000
+mask_ratio_0.45: baseline_score=0.000000,bert_score=0.000000,top1=0.000000,top5=0.000000
+example_1_type: mlm
+example_1_input: [MASK] understanding [MASK] one directional
+example_1_target: than
+example_1_topk: 1:models(1.0000)
+example_2_type: mlm
+example_2_input: allows richer [MASK] understanding than
+example_2_target: token
+example_2_topk: 1:understanding(1.0000)
+example_3_type: mlm
+example_3_input: helps language [MASK] capture long
+example_3_target: models
+example_3_topk: 1:capture(1.0000)

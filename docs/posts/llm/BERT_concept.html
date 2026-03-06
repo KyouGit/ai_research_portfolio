@@ -34,6 +34,122 @@
 <h3>3단. 핵심 아이디어</h3>
 <p>BERT는 Transformer Encoder를 사용해 양방향 문맥을 동시에 봅니다. 학습은 MLM(Masked Language Modeling) 중심으로 진행해, 가려진 단어를 주변 문맥으로 복원하게 만듭니다.</p>
 
+<h3>BERT의 bidirectional은 어디서 나오나?</h3>
+<p>핵심: <strong>BERT에 별도의 "양방향 전용 레이어"가 있는 것이 아닙니다.</strong></p>
+<p>BERT 구조 자체는 Transformer encoder stack이고, 양방향성은 <strong>MLM 학습 방식</strong>으로 형성됩니다.</p>
+
+<h3>1) 입력 구조</h3>
+<p>예: <code>[CLS] I love machine learning [SEP]</code></p>
+<p>토큰화 예: <code>input_ids = [101, 1045, 2293, 3698, 4083, 102]</code></p>
+<p>입력 임베딩은 보통 다음 합으로 구성됩니다.</p>
+<p><code>embedding = token_embedding + position_embedding + segment_embedding</code></p>
+<p>최종 입력 텐서 shape 예: <code>(sequence_length, hidden_size) = (6, 768)</code></p>
+
+<h3>2) Transformer encoder stack (구조 자체는 단순)</h3>
+<pre><code>for layer in layers:
+    X = self_attention(X)
+    X = feed_forward(X)</code></pre>
+<p>즉 <code>embedding -> attention -> ffn -> attention -> ffn -> ...</code> 반복입니다.</p>
+
+<h3>3) GPT와 BERT의 핵심 차이</h3>
+<p><strong>GPT(Decoder LM)</strong>는 미래 토큰을 보지 못하도록 causal mask를 씁니다.</p>
+<pre><code>1 0 0 0
+1 1 0 0
+1 1 1 0
+1 1 1 1</code></pre>
+<p>반면 <strong>BERT(Encoder MLM)</strong>는 self-attention에서 좌/우 문맥을 함께 보며, 입력 일부를 [MASK]로 가려 복원하도록 학습합니다.</p>
+<p>정리: <strong>구조 차이보다 "attention 가시성 + 학습 목표" 차이가 bidirectional/unidirectional 성격을 만든다</strong>고 보는 것이 정확합니다.</p>
+
+<h3>GPT vs BERT를 확률식으로 보면</h3>
+<ul>
+  <li><strong>GPT</strong>: <code>P(w_t | w_1 ... w_{t-1})</code> (왼쪽 문맥 기반)</li>
+  <li><strong>BERT</strong>: <code>P(w_i | left + right context)</code> (양쪽 문맥 기반)</li>
+</ul>
+<p>즉 GPT는 <code>word3 -> word1, word2</code>만 보지만, BERT는 <code>word3 -> word1, word2, word4, word5</code>까지 함께 참고할 수 있습니다.</p>
+
+<h3>4) 왜 그냥 양방향으로 두면 안 되나? (information leakage)</h3>
+<p>문장을 그대로 넣고 같은 위치 단어를 예측하면, 정답 토큰이 입력에 이미 존재해 복사만 해도 되는 문제가 생깁니다.</p>
+<p>예: <code>I love machine learning</code>에서 <code>machine</code> 예측 시, 입력에 machine이 그대로 있으면 학습이 무의미해집니다. 이것이 information leakage입니다.</p>
+
+<h3>5) 그래서 MLM이 필요하다</h3>
+<p>BERT는 토큰 일부를 [MASK]로 가려 누수를 막습니다.</p>
+<p>예: <code>I love [MASK] learning</code> -> 정답: <code>machine</code></p>
+<p>모델은 왼쪽(<code>love</code>)과 오른쪽(<code>learning</code>) 문맥을 동시에 사용해 마스크 토큰을 복원해야 하므로, bidirectional 학습이 성립합니다.</p>
+
+<h3>6) 구조를 코드로 보면</h3>
+<pre><code>class BertModel(nn.Module):
+    def __init__(self):
+        self.embeddings = BertEmbedding()
+        self.encoder = TransformerEncoder()
+
+    def forward(self, input_ids):
+        x = self.embeddings(input_ids)
+        for layer in self.encoder:
+            x = layer(x)
+        return x
+
+class TransformerLayer(nn.Module):
+    def forward(self, x):
+        attn = self.self_attention(x)
+        x = x + attn
+        ff = self.feed_forward(x)
+        x = x + ff
+        return x
+
+scores = Q @ K.T / sqrt(d)
+weights = softmax(scores)
+output = weights @ V</code></pre>
+<p>BERT encoder self-attention에서는 causal mask를 쓰지 않으므로, 토큰들이 서로 전역적으로 참조할 수 있습니다.</p>
+
+<h3>7) MLM loss는 어디에 걸리나</h3>
+<p>핵심은 <strong>마스크된 위치에만 loss를 계산</strong>한다는 점입니다.</p>
+<pre><code>logits = linear(hidden_states)
+loss = cross_entropy(
+    logits[mask_positions],
+    target_tokens
+)</code></pre>
+<p>즉 모든 토큰이 아니라 mask_positions만 학습 신호를 받습니다.</p>
+
+<h3>8) 최종 정리</h3>
+<ul>
+  <li>Transformer encoder: 모든 토큰 상호참조</li>
+  <li>MLM objective: 정보 누수 차단 + 양방향 문맥 복원 강제</li>
+</ul>
+<p>그래서 BERT의 bidirectional은 "특수 레이어"가 아니라 <strong>encoder 가시성 + MLM 학습목표</strong> 조합으로 구현됩니다.</p>
+
+<h3>왜 GPT는 BERT처럼 bidirectional을 쓰지 않고 autoregressive를 쓰나?</h3>
+<p>핵심 차이는 <strong>목표 태스크</strong>입니다.</p>
+<ul>
+  <li><strong>BERT</strong>: 문장 이해 중심 (분류/판별/추출)</li>
+  <li><strong>GPT</strong>: 문장 생성 중심 (다음 토큰 생성)</li>
+</ul>
+
+<h3>BERT가 강한 것과 약한 것</h3>
+<p>BERT는 <code>P(w_i | left + right context)</code>를 학습합니다. 예: <code>I love [MASK] learning</code>에서 좌/우 문맥을 동시에 보고 마스크를 복원합니다.</p>
+<p>이 방식은 이해 태스크에는 강력하지만, 빈 입력에서 자유 생성을 직접 수행하는 구조는 아닙니다.</p>
+
+<h3>GPT가 생성 가능한 이유</h3>
+<p>GPT는 <code>P(w_t | w_1...w_{t-1})</code> 형태의 autoregressive LM입니다. 즉 "지금까지 생성한 토큰"만 보고 다음 토큰을 예측합니다.</p>
+<p>예: <code>I love machine</code> -> 다음 후보 <code>learning</code>, <code>models</code>, ...</p>
+<p>이 예측을 반복해 문장을 한 토큰씩 생성합니다.</p>
+<p>이를 위해 decoder self-attention에서 causal mask를 사용합니다.</p>
+<pre><code>1 0 0 0
+1 1 0 0
+1 1 1 0
+1 1 1 1</code></pre>
+<p>즉 token3는 token1, token2까지만 보고 미래 토큰은 보지 못합니다.</p>
+
+<h3>구조 비교 한눈에</h3>
+<ul>
+  <li><strong>BERT</strong>: encoder + MLM + bidirectional attention</li>
+  <li><strong>GPT</strong>: decoder-only + autoregressive + causal attention</li>
+</ul>
+<p>그래서 BERT는 "문장 이해 모델", GPT는 "문장 생성 모델"로 역할이 갈립니다.</p>
+
+<h3>왜 요즘 LLM은 decoder-only가 주류인가</h3>
+<p>최근 제품/서비스의 핵심 요구가 고품질 생성(대화, 작성, 코드, 에이전트)이기 때문입니다. autoregressive 학습-추론 경로가 이 목적에 직접 맞습니다.</p>
+<p>실무적으로도 GPT/LLaMA/Claude 계열처럼 decoder-only Transformer가 대규모 생태계의 표준이 되었습니다.</p>
+
 <h3>모델 구조/구성요소 역할</h3>
 <p><img src="../assets/BERT_mlm_architecture_diagram.png" alt="BERT MLM architecture" /></p>
 <ul>
@@ -63,6 +179,17 @@
 </ul>
 <p>이렇게 보면 BERT는 \"문장 전체 표현\"과 \"토큰 단위 복원\"을 같은 백본에서 동시에 지원하는 구조라는 점이 명확해집니다.</p>
 
+<h3>CLS 토큰은 정확히 무엇인가?</h3>
+<p>BERT 입력은 보통 <code>[CLS] ...tokens... [SEP]</code> 형태입니다. 여기서 <code>[CLS]</code>는 실제 단어가 아니라 문장 단위 태스크를 위한 특수 토큰입니다.</p>
+<p>예: <code>[CLS] I love machine learning [SEP]</code></p>
+<p>Self-attention에서는 모든 토큰이 서로를 보므로, <code>[CLS]</code>도 전체 토큰과 상호작용합니다. 층을 거치며 <code>[CLS]</code> 벡터에 문장 전역 정보가 누적됩니다.</p>
+<p>그래서 분류 태스크에서는 마지막 층의 <code>h_CLS</code>를 바로 분류기에 넣습니다.</p>
+<p><code>y = softmax(W · h_CLS)</code></p>
+
+<h3>왜 앞에 [CLS]를 넣으면 문장 요약 벡터가 되나?</h3>
+<p>직관적으로 <code>[CLS]</code>는 빈 메모장 토큰입니다. 각 attention 층에서 다른 토큰 정보를 가중합으로 받아 업데이트되기 때문에, 깊어질수록 문장 요약 성격이 강해집니다.</p>
+<p>즉 [CLS]의 의미는 고정된 것이 아니라 학습으로 형성됩니다. "문장 단위 목표를 잘 맞추도록" 최적화되면서 문장 대표 벡터 역할을 하게 됩니다.</p>
+
 <h3>연산 과정 상세</h3>
 <ol>
   <li>문장을 토큰화하고 일부 토큰을 [MASK]로 치환</li>
@@ -75,6 +202,38 @@
 <p>NSP(Next Sentence Prediction)는 "문장 B가 문장 A의 실제 다음 문장인가"를 맞히는 보조 과제입니다. BERT는 NSP를 포함했지만, RoBERTa는 NSP를 제거하고도 성능이 좋아질 수 있음을 보였습니다.</p>
 <p>핵심 교훈은 "모든 보조 과제가 항상 도움되는 것은 아니다"입니다. 실무에서는 태스크에 실제로 기여하는 목표만 남기는 것이 중요합니다.</p>
 
+<h3>요즘도 CLS를 쓰나? (실무 답변)</h3>
+<p>결론: <strong>분류에서는 여전히 자주 쓰지만, 임베딩 검색에서는 항상 최선이 아닙니다.</strong></p>
+<ul>
+  <li><strong>분류/판별</strong>: CLS 사용이 여전히 일반적</li>
+  <li><strong>Semantic search/유사도</strong>: mean pooling 또는 전용 임베딩 모델이 더 좋은 경우가 많음</li>
+</ul>
+<p>이유는 BERT pretraining 목표(MLM/NSP)가 "문장 거리 최적화" 자체를 직접 목표로 하지 않기 때문입니다.</p>
+<p>그래서 문장 임베딩 실무에서는 보통 아래를 더 많이 씁니다.</p>
+<ul>
+  <li>Mean pooling (패딩 제외 토큰 평균)</li>
+  <li>Sentence-BERT 계열(contrastive/siamese 학습)</li>
+  <li>최신 embedding 모델(e5, bge, text-embedding 계열)</li>
+</ul>
+<p>현업 규칙으로는 "CLS는 strong baseline, 검색은 전용 임베딩 우선 검증"이 안전합니다.</p>
+
+<h3>핵심 요약 (딱 4줄)</h3>
+<ul>
+  <li>BERT 원래 설계: <code>sentence vector = CLS</code></li>
+  <li>요즘 임베딩 실무: <code>sentence vector = mean pooling</code>이 더 흔함</li>
+  <li>CLS는 문장 분류에는 강력하지만, 문장 유사도에서는 항상 최선이 아님</li>
+  <li>그래서 mean pooling + contrastive training 조합을 많이 사용</li>
+</ul>
+
+<h3>왜 mean pooling만 해도 문장 의미 벡터가 되나?</h3>
+<p>겉보기엔 "단어 벡터 평균"이라 단순해 보이지만, 평균 대상이 이미 <strong>문맥화된 토큰 벡터</strong>라는 점이 핵심입니다.</p>
+<ul>
+  <li>Transformer 층을 지난 토큰 벡터는 주변 단어 정보를 이미 포함</li>
+  <li>즉 각 토큰이 문장 문맥의 요약을 부분적으로 들고 있음</li>
+  <li>평균을 취하면 이런 부분 요약들이 안정적으로 합쳐져 문장 전반 의미를 반영</li>
+</ul>
+<p>그래서 표면 단어가 조금 달라도 의미가 비슷한 문장은 가까운 벡터가 될 수 있습니다. contrastive 학습을 추가하면 이 정렬이 더 강해집니다.</p>
+
 <h3>핵심 수식/기호 설명</h3>
 <ul>
   <li><code>L_MLM = -sum_t log P(x_t | x_masked)</code></li>
@@ -82,6 +241,18 @@
 </ul>
 <p><strong>기호</strong>: x_t(정답 토큰), x_masked(마스킹 입력), z_i(토큰 i 로짓).</p>
 <p><strong>직관</strong>: "문맥이 맞으면 정답 단어 확률을 높이고, 틀리면 낮춘다"를 반복해 단어 의미를 정교화합니다.</p>
+
+<h3>BERT 벡터는 어떻게 만들어지나?</h3>
+<p>처음 단어는 텍스트일 뿐입니다. 컴퓨터가 계산하려면 숫자로 바꿔야 하므로 임베딩 벡터를 사용합니다.</p>
+<p>핵심은 이 벡터가 고정 사전이 아니라 <strong>학습 중에 계속 업데이트</strong>된다는 점입니다.</p>
+<ul>
+  <li>초기값: 랜덤에 가까운 임베딩</li>
+  <li>학습: MLM 예측 오차(loss) 발생</li>
+  <li>역전파: gradient descent로 임베딩 행렬 포함 파라미터 업데이트</li>
+</ul>
+<p>임베딩 행렬은 보통 <code>[vocab_size, hidden_dim]</code> 형태입니다. 예: <code>30000 x 768</code>.</p>
+<p>학습이 진행되면 비슷한 단어는 가까운 벡터로 정렬되고, BERT에서는 같은 단어도 문맥에 따라 다른 표현으로 바뀝니다.</p>
+<p>예: <code>bank</code>는 금융 문맥과 강둑 문맥에서 다른 contextual vector를 가집니다.</p>
 
 <h3>4단. 비용/리스크</h3>
 <ul>

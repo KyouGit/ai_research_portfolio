@@ -1,0 +1,2 @@
+2026-03-03 08:44:36,884 | INFO | task=rag_qa docs=6 qa=6
+2026-03-03 08:44:37,021 | INFO | done baseline_score=0.4444 transformer_score=0.4444 gain=0.0000

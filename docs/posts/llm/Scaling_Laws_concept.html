@@ -74,6 +74,131 @@
 <li><code>compute-optimal frontier</code>: 같은 compute에서 최적 N,D 조합 추정</li>
 </ul>
 
+<h3>Scaling Law 한 줄 정의 (직관)</h3>
+<p>모델/데이터/연산을 키우면 성능이 좋아지는데, 그 개선이 랜덤이 아니라 power-law 형태로 예측 가능하다는 법칙입니다.</p>
+<p>대표 형태: <code>L(N)=A N^-alpha + B</code></p>
+<p>즉 파라미터가 커질수록 loss가 줄고, log-log 그래프에서 거의 직선 패턴이 나타납니다.</p>
+
+<h3>세 가지 scaling 축</h3>
+<ul>
+  <li><strong>Model size scaling</strong>: <code>L(N) ∝ N^-alpha</code></li>
+  <li><strong>Dataset scaling</strong>: <code>L(D) ∝ D^-beta</code></li>
+  <li><strong>Compute scaling</strong>: <code>L(C) ∝ C^-gamma</code></li>
+</ul>
+<p>핵심 메시지: N, D, C를 함께 봐야 하며, 어느 하나만 극단적으로 키우면 비효율이 생깁니다.</p>
+
+<h3>왜 Scaling Law는 power-law 형태로 나타나나?</h3>
+<p>핵심 결론: <strong>현실 데이터의 long-tail 분포 + 모델의 점진적 근사 과정</strong>이 결합되면 오차 감소가 power-law로 나타나기 쉽습니다.</p>
+
+<h3>1) 데이터 자체가 long-tail (Zipf)</h3>
+<p>자연어/이미지/코드 데이터는 상위 빈도 패턴이 대부분 질량을 차지하고, 희귀 패턴이 긴 꼬리를 이루는 분포를 가집니다.</p>
+<p>텍스트에선 Zipf 법칙으로 자주 표현합니다.</p>
+<p><code>P(rank = k) ∝ k^-s</code></p>
+<p>즉 고빈도 패턴은 빨리 학습되지만, tail 패턴은 매우 천천히 커버됩니다.</p>
+
+<h3>2) 모델은 분포를 단계적으로 근사한다</h3>
+<p>모델은 학습을 통해 <code>p_theta(x)</code>가 실제 분포 <code>p_data(x)</code>를 점점 잘 근사하도록 파라미터를 조정합니다.</p>
+<p>초기에는 쉬운(고빈도) 구조를 먼저 맞추고, 이후 예산이 늘어날수록 희귀/복잡 패턴까지 근사합니다.</p>
+<p>이때 남은 오차가 "한 번에 급락"하기보다 점진적으로 줄어들어 power-law 꼴이 나타납니다.</p>
+
+<h3>학습 관점으로 쓰면</h3>
+<p>생성모델 학습은 결국 <code>p_theta(x) ≈ p_data(x)</code>를 만들려는 과정입니다. 모델이 커질수록 더 많은 패턴/긴 문맥/복잡 구조를 표현할 수 있어 error가 점차 감소합니다.</p>
+
+<h3>왜 error 감소가 power-law가 되기 쉬운가</h3>
+<p>long-tail 데이터에서는 학습 순서가 대체로 head -> mid -> tail로 진행됩니다.</p>
+<ul>
+  <li>쉬운 패턴: 적은 용량으로 빠르게 학습</li>
+  <li>중간 패턴: 추가 용량 필요</li>
+  <li>희귀 패턴: 매우 많고 커버 비용이 큼</li>
+</ul>
+<p>그래서 모델 확장에 따라 tail을 "조금씩 계속" 커버하게 되고, 결과적으로 <code>error ~ N^-alpha</code> 형태가 관측됩니다.</p>
+
+<h3>정보이론 관점</h3>
+<p>LLM 학습 loss는 보통 cross-entropy입니다.</p>
+<p><code>L = - E_{x~p_data}[log p_theta(x)]</code></p>
+<p>모델 규모가 커지면 근사 품질은 좋아지지만, 자연 데이터의 본질적 불확실성 때문에 loss가 0으로 가지는 않습니다. 그래서 다음처럼 쓰는 경우가 많습니다.</p>
+<p><code>L(N) = A N^-alpha + L_inf</code></p>
+<p>여기서 <code>L_inf</code>는 irreducible entropy(데이터 자체의 예측 불가능성)입니다.</p>
+
+<h3>함수 근사 관점</h3>
+<p>신경망은 함수 근사기이며, 용량(capacity: 파라미터/폭/깊이)이 커질수록 근사 오차가 완만하게 감소합니다.</p>
+<p>이 패턴은 종종 <code>error ~ capacity^-k</code> 형태로 근사되고, 스케일링 법칙의 경험식과 맞물립니다.</p>
+
+<h3>실무에서 보는 exponent 의미</h3>
+<p>LLM 스케일링 지수는 작은 값(문헌/설정에 따라 다르지만 대체로 0.0x대)인 경우가 많아, 성능을 조금 더 올리려면 자원 증분이 매우 크게 필요합니다.</p>
+<p>즉 "개선은 꾸준하지만 비싸다"가 실무 해석입니다. 이것이 대규모 GPU/데이터 투자와 직결됩니다.</p>
+
+<h3>Scaling law는 언제 깨질 수 있나</h3>
+<ul>
+  <li>데이터 고갈/품질 한계</li>
+  <li>연산 예산/시스템 한계</li>
+  <li>아키텍처 병목</li>
+  <li>최적화 안정성 한계</li>
+</ul>
+<p>그럼에도 현재까지 언어/비전/생성 모델에서 스케일링 경향은 다양한 범위에서 반복 관측되고 있어, "scale + algorithm" 병행 전략이 유지되고 있습니다.</p>
+
+<h3>한 줄 결론</h3>
+<p>Scaling law는 단순 경험칙을 넘어, <strong>데이터 분포 구조 + 정보량 한계 + 함수 근사 동역학</strong>이 합쳐져 나타나는 통계적 현상으로 보는 게 가장 정확합니다.</p>
+
+<h3>3) 그래서 log-log에서 직선이 보인다</h3>
+<p><code>L(N)=A N^-alpha + B</code> 같은 형태는 log-log 축에서 거의 직선으로 보입니다. 실험자 입장에선 "규모를 키울 때 성능 개선률이 일정한 규칙을 따른다"는 의미입니다.</p>
+
+<h3>직관 정리</h3>
+<ul>
+  <li>데이터: head는 쉽고 tail은 어렵다</li>
+  <li>모델 확장: head -> mid -> tail 순서로 점진 커버</li>
+  <li>결과: 오차 감소가 완만한 power-law 패턴</li>
+</ul>
+<p>즉 power-law는 우연한 curve fitting이 아니라, 데이터 분포 구조와 함수근사 동역학이 함께 만든 현상으로 해석할 수 있습니다.</p>
+
+<h3>OpenAI Scaling Laws 핵심 해석</h3>
+<ul>
+  <li>성능 개선은 power-law 경향을 보임</li>
+  <li>당시 관측 구간에서 뚜렷한 saturation 신호가 약했음</li>
+  <li>그래서 "크게 키우면 예측 가능하게 좋아진다"는 전략이 강화됨</li>
+</ul>
+<p>이 관찰이 거대모델 시대의 투자 논리를 강하게 뒷받침했습니다.</p>
+
+<h3>Compute-optimal scaling: 균형이 핵심</h3>
+<p>GPU/예산이 제한된 상황에서는 모델만 키우거나 데이터만 늘리는 전략이 비효율적일 수 있습니다.</p>
+<ul>
+  <li>큰 모델 + 적은 데이터: 과소학습/비효율</li>
+  <li>작은 모델 + 과도한 데이터: 용량 한계</li>
+  <li>균형 잡힌 N:D:steps: 같은 compute에서 더 높은 성능</li>
+</ul>
+
+<h3>Chinchilla 수정점 (2022)</h3>
+<p>핵심 메시지: GPT-3 계열 설정은 상대적으로 "모델이 크고 데이터가 부족"했을 수 있으며, compute-optimal 관점에선 더 많은 토큰 학습이 유리하다는 결과였습니다.</p>
+<p>실무 요약으로 자주 인용되는 비율은 대략 <code>모델 1 파라미터당 약 20 토큰</code> 수준입니다.</p>
+<p>대표 비교(논문 맥락): GPT-3(175B/300B tokens) 대비 Chinchilla(70B/1.4T tokens)가 여러 벤치에서 우세.</p>
+
+<h3>왜 이 법칙이 연구 방향을 바꿨나</h3>
+<p>과거에는 새 아키텍처 아이디어 탐색 비중이 컸지만, 이후에는 "스케일이 가장 재현성 높은 성능 향상 수단"이라는 인식이 강해졌습니다.</p>
+<p>그래서 주요 계열(GPT, Gemini, Claude, LLaMA 등)도 스케일링 전략을 중심축으로 가져갔습니다.</p>
+
+<h3>Scaling의 현실적 한계</h3>
+<ul>
+  <li><strong>비용 폭증</strong>: 대규모 학습 비용/인프라 요구 급증 (수치 추정치는 출처마다 편차 큼)</li>
+  <li><strong>데이터 제약</strong>: 고품질 공개 텍스트의 한계 -> synthetic data, self-play, RL 활용 증가</li>
+  <li><strong>diminishing returns</strong>: 규모가 커질수록 단위 투자 대비 개선폭 감소</li>
+</ul>
+
+<h3>Post-scaling 흐름: inference scaling</h3>
+<p>최근에는 training scaling만이 아니라, 추론 시 계산량을 늘려 성능을 끌어올리는 접근이 강화되고 있습니다.</p>
+<ul>
+  <li>Chain-of-Thought, tree search, reasoning-oriented decoding</li>
+  <li>핵심 아이디어: <strong>training scaling + test-time compute</strong>의 결합</li>
+</ul>
+
+<h3>직관 비유</h3>
+<p>AI 모델을 학생으로 보면:</p>
+<ul>
+  <li>모델 크기 = 뇌 크기</li>
+  <li>데이터 = 공부량</li>
+  <li>compute = 공부 시간</li>
+</ul>
+<p>결론은 "더 큰 뇌 + 더 많은 공부 + 더 긴 공부시간"이 성적을 올리지만, 결국 효율적인 공부 전략(알고리즘/추론법)도 함께 필요하다는 것입니다.</p>
+
 <h3>용어/기호 빠른 사전 (뉴비용)</h3>
 <ul>
   <li><strong>baseline</strong>: 비교 기준이 되는 가장 단순한 방법</li>
