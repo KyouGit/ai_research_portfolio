@@ -1,0 +1,234 @@
+<h2>주제: 8-5 Diffusion Sampling (DDIM과 DDPM 비교)</h2>
+<p><strong>분류:</strong> generative</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중상</p>
+<p><strong>선수지식:</strong> 있음 — DDPM, 확률분포, Noise Prediction</p>
+
+<h3>문제 설정</h3>
+<p>DDPM(Denoising Diffusion Probabilistic Model)은 고품질 이미지를 생성하지만 <strong>sampling 속도가 매우 느립니다.</strong></p>
+
+<p>이유:</p>
+
+<pre><code>
+x_T → x_T-1 → x_T-2 → ... → x_0
+</code></pre>
+
+<p>보통 <strong>1000 step</strong> 정도의 reverse diffusion을 수행해야 합니다.</p>
+
+<p>이 문제를 해결하기 위해 제안된 방법이 <strong>DDIM (Denoising Diffusion Implicit Models)</strong>입니다.</p>
+
+<h2>1. DDPM Sampling</h2>
+
+<p>DDPM의 reverse step:</p>
+
+<p><code>x_{t-1} = (1/√α_t)(x_t - (1-α_t)/√(1-ᾱ_t) ε_θ(x_t,t)) + σ_t z</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>x_t : timestep t의 noisy sample</li>
+<li>ε_θ : 모델이 예측한 noise</li>
+<li>σ_t z : random Gaussian noise</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>노이즈를 제거하며 데이터를 복원합니다.</p>
+
+<h3>주의점</h3>
+
+<p>각 step마다 랜덤 노이즈가 추가되므로 sampling이 stochastic합니다.</p>
+
+<h2>2. DDPM 문제</h2>
+
+<ul>
+<li>1000 step sampling 필요</li>
+<li>inference 매우 느림</li>
+</ul>
+
+<p>sampling complexity:</p>
+
+<p><code>O(T)</code></p>
+
+<h2>3. DDIM 핵심 아이디어</h2>
+
+<p>DDIM은 reverse process를 <strong>deterministic trajectory</strong>로 바꿉니다.</p>
+
+<p>즉:</p>
+
+<ul>
+<li>noise injection 제거</li>
+<li>sampling step 감소</li>
+</ul>
+
+<h2>4. DDIM Sampling Equation</h2>
+
+<p>DDIM update:</p>
+
+<p><code>x_{t-1} = √ᾱ_{t-1} x_0 + √(1-ᾱ_{t-1}) ε_θ(x_t,t)</code></p>
+
+<p>여기서</p>
+
+<p><code>x_0 = (x_t - √(1-ᾱ_t) ε_θ(x_t,t)) / √ᾱ_t</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>x_0 : 예측된 원본 이미지</li>
+<li>ᾱ_t : cumulative noise schedule</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+
+<p>noise를 추가하지 않고 deterministic하게 sampling 가능합니다.</p>
+
+<h3>주의점</h3>
+
+<p>DDIM은 DDPM과 같은 모델을 사용하지만 sampling 방식만 다릅니다.</p>
+
+<h2>5. Sampling Step Reduction</h2>
+
+<p>DDPM:</p>
+
+<pre><code>
+1000 steps
+</code></pre>
+
+<p>DDIM:</p>
+
+<pre><code>
+20 ~ 100 steps
+</code></pre>
+
+<p>즉 sampling이 크게 가속됩니다.</p>
+
+<h2>6. Deterministic Sampling</h2>
+
+<p>DDIM에서는 다음과 같이 동작합니다.</p>
+
+<pre><code>
+x_t → predict x_0
+   → compute x_{t-1}
+</code></pre>
+
+<p>random noise가 제거됩니다.</p>
+
+<h2>7. DDIM 직관</h2>
+
+<p>DDPM:</p>
+
+<ul>
+<li>random walk sampling</li>
+</ul>
+
+<p>DDIM:</p>
+
+<ul>
+<li>deterministic path</li>
+</ul>
+
+<p>즉 동일 noise에서 항상 같은 결과가 나옵니다.</p>
+
+<h2>8. DDPM vs DDIM</h2>
+
+<table>
+<thead>
+<tr>
+<th>특징</th>
+<th>DDPM</th>
+<th>DDIM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sampling</td>
+<td>stochastic</td>
+<td>deterministic</td>
+</tr>
+<tr>
+<td>step 수</td>
+<td>~1000</td>
+<td>20~100</td>
+</tr>
+<tr>
+<td>속도</td>
+<td>느림</td>
+<td>빠름</td>
+</tr>
+</tbody>
+</table>
+
+<h2>9. DDIM Sampling 절차</h2>
+
+<pre><code>
+x_T ~ N(0,I)
+   ↓
+predict noise
+   ↓
+estimate x_0
+   ↓
+compute x_{t-1}
+   ↓
+repeat
+</code></pre>
+
+<h2>10. 왜 같은 모델로 가능할까?</h2>
+
+<p>DDIM은 DDPM의 forward process와 동일한 marginal distribution을 유지합니다.</p>
+
+<p>즉:</p>
+
+<p><code>q(x_t | x_0)</code></p>
+
+<p>분포는 동일하지만 sampling path가 달라집니다.</p>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>noise prediction</td>
+<td><code>eps = model(x_t,t)</code></td>
+<td>noise estimation</td>
+</tr>
+<tr>
+<td>x0 reconstruction</td>
+<td><code>x0 = (x_t - sqrt_beta * eps)/sqrt_alpha</code></td>
+<td>original sample estimate</td>
+</tr>
+<tr>
+<td>DDIM step</td>
+<td><code>x_prev = alpha_prev*x0 + sigma*eps</code></td>
+<td>deterministic sampling</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>DDIM은 새로운 diffusion 모델이라고 생각한다</li>
+<li>DDIM은 학습이 필요하다고 생각한다</li>
+<li>DDIM은 항상 품질이 더 좋다고 생각한다</li>
+<li>DDPM과 완전히 다른 구조라고 생각한다</li>
+<li>deterministic sampling이 항상 좋은 결과를 만든다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>DDPM sampling이 느린 이유는 무엇인가?</li>
+<li>DDIM은 어떤 방식으로 sampling을 가속하는가?</li>
+<li>DDPM과 DDIM의 sampling 차이는 무엇인가?</li>
+<li>왜 DDIM은 같은 모델을 사용할 수 있는가?</li>
+<li>deterministic sampling의 장점은 무엇인가?</li>
+</ul>
+
+<!-- save_as: docs/posts/generative/diffusion_sampling_ddim_acceleration_concept.html -->

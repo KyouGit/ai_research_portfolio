@@ -1,0 +1,302 @@
+<h2>주제: 6.5-4 Model Serving (Online Serving vs Batch Inference)</h2>
+<p><strong>분류:</strong> rag_agent</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중급</p>
+<p><strong>선수지식:</strong> 있음 — ML Pipeline, Model Registry</p>
+
+<h3>문제 설정</h3>
+<p>모델이 학습된 이후 실제 시스템에서 사용하려면 <strong>Model Serving</strong>이 필요합니다.</p>
+
+<p>즉 학습된 모델을 사용자 요청에 대해 실행하는 시스템입니다.</p>
+
+<p>예측 함수:</p>
+
+<p><code>y = f(x; w)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>x : 입력 데이터</li>
+<li>w : 모델 파라미터</li>
+<li>y : 예측 결과</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>모델을 실제 서비스에서 사용할 수 있도록 합니다.</p>
+
+<h3>주의점</h3>
+
+<p>Serving 시스템은 latency, throughput, scalability를 고려해야 합니다.</p>
+
+<h2>1. Model Serving 구조</h2>
+
+<pre><code>
+Client Request
+     ↓
+API Server
+     ↓
+Model Inference
+     ↓
+Response
+</code></pre>
+
+<p>서빙 방식은 크게 두 가지로 나뉩니다.</p>
+
+<ul>
+<li>Online Serving</li>
+<li>Batch Inference</li>
+</ul>
+
+<h2>2. Online Serving</h2>
+
+<p>Online Serving은 실시간 요청을 처리하는 방식입니다.</p>
+
+<p>예:</p>
+
+<pre><code>
+User request → model prediction → response
+</code></pre>
+
+<h3>특징</h3>
+
+<ul>
+<li>low latency 필요</li>
+<li>request-response 구조</li>
+<li>API 기반</li>
+</ul>
+
+<h3>통신 프로토콜</h3>
+
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>REST</td>
+<td>HTTP 기반 API</td>
+</tr>
+<tr>
+<td>gRPC</td>
+<td>고성능 RPC</td>
+</tr>
+</tbody>
+</table>
+
+<h3>예</h3>
+
+<pre><code>
+POST /predict
+{
+  "input": "text"
+}
+</code></pre>
+
+<h3>왜 중요한가</h3>
+
+<p>사용자 인터랙션이 필요한 서비스에 필수입니다.</p>
+
+<h2>3. Latency 개념</h2>
+
+<p>Online serving에서 중요한 지표는 latency입니다.</p>
+
+<p><code>Latency = T_request + T_inference + T_response</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>T_request : 요청 전달 시간</li>
+<li>T_inference : 모델 실행 시간</li>
+<li>T_response : 응답 전달 시간</li>
+</ul>
+
+<h3>주의점</h3>
+
+<p>사용자 경험에 직접적인 영향을 줍니다.</p>
+
+<h2>4. Batch Inference</h2>
+
+<p>Batch inference는 여러 데이터를 한 번에 처리하는 방식입니다.</p>
+
+<pre><code>
+Dataset
+   ↓
+Batch processing
+   ↓
+Predictions
+</code></pre>
+
+<p>수식:</p>
+
+<p><code>Y = f(X; w)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>X : 데이터 집합</li>
+<li>Y : 예측 결과 집합</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>대량 데이터 처리에 효율적입니다.</p>
+
+<h3>주의점</h3>
+
+<p>실시간 응답은 불가능합니다.</p>
+
+<h2>5. Online vs Batch</h2>
+
+<table>
+<thead>
+<tr>
+<th>특징</th>
+<th>Online Serving</th>
+<th>Batch Inference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency</td>
+<td>낮음 필요</td>
+<td>높아도 가능</td>
+</tr>
+<tr>
+<td>처리 방식</td>
+<td>실시간</td>
+<td>주기적 처리</td>
+</tr>
+<tr>
+<td>사용 사례</td>
+<td>추천 시스템</td>
+<td>데이터 분석</td>
+</tr>
+</tbody>
+</table>
+
+<h2>6. Triton Inference Server</h2>
+
+<p>NVIDIA Triton은 GPU 기반 모델 서빙 시스템입니다.</p>
+
+<p>특징:</p>
+
+<ul>
+<li>dynamic batching</li>
+<li>multi-framework 지원</li>
+<li>GPU 최적화</li>
+</ul>
+
+<p>구조:</p>
+
+<pre><code>
+Client
+ ↓
+Triton Server
+ ↓
+Model Backend
+</code></pre>
+
+<h2>7. TorchServe</h2>
+
+<p>TorchServe는 PyTorch 모델 서빙 시스템입니다.</p>
+
+<p>특징:</p>
+
+<ul>
+<li>REST API 지원</li>
+<li>model version 관리</li>
+<li>batch inference 지원</li>
+</ul>
+
+<h2>8. FastAPI Serving</h2>
+
+<p>FastAPI는 Python 기반 API 서버입니다.</p>
+
+<pre><code>
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.post("/predict")
+def predict(input):
+    return model(input)
+</code></pre>
+
+<h3>왜 사용되는가</h3>
+
+<p>간단한 ML 서비스에 많이 사용됩니다.</p>
+
+<h2>9. Serving 아키텍처</h2>
+
+<pre><code>
+Load Balancer
+      ↓
+API Server
+      ↓
+Model Server
+      ↓
+GPU
+</code></pre>
+
+<h3>핵심 목표</h3>
+
+<ul>
+<li>scalability</li>
+<li>low latency</li>
+<li>high throughput</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API 요청</td>
+<td><code>@app.post("/predict")</code></td>
+<td>REST endpoint</td>
+</tr>
+<tr>
+<td>모델 실행</td>
+<td><code>model(input)</code></td>
+<td>inference</td>
+</tr>
+<tr>
+<td>batch 처리</td>
+<td><code>model(batch)</code></td>
+<td>batch inference</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>모델 학습과 serving은 동일한 환경이라고 생각한다</li>
+<li>batch inference는 항상 느리다고 생각한다</li>
+<li>REST API만 serving 방식이라고 생각한다</li>
+<li>모델 하나만 서버에 배포한다고 생각한다</li>
+<li>serving 시스템은 확장이 필요 없다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>Model serving은 어떤 역할을 하는가?</li>
+<li>Online serving과 batch inference의 차이는 무엇인가?</li>
+<li>Latency는 어떤 요소로 구성되는가?</li>
+<li>Triton과 TorchServe는 어떤 역할을 하는가?</li>
+<li>ML 서비스 아키텍처는 어떻게 구성되는가?</li>
+</ul>
+
+<!-- save_as: docs/posts/rag_agent/model_serving_online_batch_triton_torchserve_concept.html -->

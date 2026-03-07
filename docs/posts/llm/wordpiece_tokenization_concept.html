@@ -1,0 +1,176 @@
+<h2>주제: TK-2 WordPiece Tokenization</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 입문</p>
+<p class="meta"><strong>선수지식:</strong> 없음</p>
+
+<h3>문제 설정</h3>
+<p>언어 모델은 텍스트를 토큰 단위로 처리합니다. 단어 단위 토큰화(word-level)는 다음 문제를 발생시킵니다.</p>
+<ul>
+<li>어휘 크기(vocabulary)가 매우 커짐</li>
+<li>새로운 단어(OOV, out-of-vocabulary) 처리 어려움</li>
+</ul>
+<p>이를 해결하기 위해 <strong>subword tokenization</strong>이 사용됩니다. WordPiece는 이러한 subword 방식 중 하나이며 BERT에서 사용된 토큰화 방법입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>단어 -> 여러 조각(subword)</li>
+<li>자주 등장하는 조각은 하나의 토큰으로 유지</li>
+<li>덜 중요한 조합은 분해</li>
+</ul>
+<p>핵심 아이디어:</p>
+<p><strong>언어 모델의 likelihood를 최대화하는 토큰을 선택</strong></p>
+
+<h2>1. 기본 아이디어</h2>
+<p>WordPiece는 다음 목표를 가집니다.</p>
+<p><code>maximize P(text)</code></p>
+<p>즉 선택한 토큰 집합이 전체 텍스트 확률을 가장 높게 만들도록 합니다.</p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>P(text) : 전체 문장의 확률</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>단순 빈도 기반(BPE)보다 더 좋은 언어 모델을 만들 수 있습니다.</p>
+
+<h3>주의점</h3>
+<p>직접 확률을 계산하기 어렵기 때문에 근사 방법을 사용합니다.</p>
+
+<h2>2. WordPiece Merge 기준</h2>
+<p>BPE는 단순히 가장 자주 등장하는 pair를 merge합니다.</p>
+<p>하지만 WordPiece는 다음 점수를 사용합니다.</p>
+<p><code>score = count(pair) / (count(token1) x count(token2))</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>count(pair) : 두 토큰이 함께 등장한 횟수</li>
+<li>count(token1) : 첫 번째 토큰 빈도</li>
+<li>count(token2) : 두 번째 토큰 빈도</li>
+</ul>
+
+<h3>직관 설명</h3>
+<ul>
+<li>두 토큰이 서로 강하게 결합될수록 score가 높아짐</li>
+<li>우연한 빈도 결합은 score가 낮음</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>더 의미 있는 subword를 선택할 수 있습니다.</p>
+
+<h2>3. WordPiece 알고리즘</h2>
+<pre><code>1. 모든 단어를 문자 단위로 시작
+2. token pair score 계산
+3. 가장 높은 score pair merge
+4. vocabulary 업데이트
+5. 반복</code></pre>
+
+<h3>수식 표현</h3>
+<p><code>pair* = argmax score(pair)</code></p>
+<p>merge:</p>
+<p><code>token_new = concat(token_i, token_j)</code></p>
+
+<h3>주의점</h3>
+<p>vocabulary 크기 제한에 도달하면 merge 종료</p>
+
+<h2>4. Tokenization 예시</h2>
+<p>단어:</p>
+<pre><code>playing</code></pre>
+<p>WordPiece 토큰:</p>
+<pre><code>play ##ing</code></pre>
+
+<h3>특징</h3>
+<ul>
+<li>## 는 subword continuation 표시</li>
+<li>단어 중간 토큰을 의미</li>
+</ul>
+
+<h2>5. WordPiece Tokenization 과정</h2>
+<p>텍스트 입력:</p>
+<pre><code>unbelievable</code></pre>
+<p>토큰 분해:</p>
+<pre><code>un ##bel ##iev ##able</code></pre>
+<p>이 토큰들은 ID로 변환됩니다.</p>
+<p><code>x = [t1, t2, ..., t_n]</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>t_i : token id</li>
+<li>n : 토큰 길이</li>
+</ul>
+
+<h2>6. WordPiece vs BPE</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>Merge 기준</th>
+<th>사용 모델</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BPE</td>
+<td>빈도</td>
+<td>GPT 계열</td>
+</tr>
+<tr>
+<td>WordPiece</td>
+<td>likelihood 기반 score</td>
+<td>BERT</td>
+</tr>
+</tbody>
+</table>
+
+<h2>7. WordPiece 장점</h2>
+<ul>
+<li>OOV 문제 해결</li>
+<li>효율적인 vocabulary 구성</li>
+<li>언어 모델 확률 고려</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>라이브러리 코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WordPiece tokenizer</td>
+<td><code>BertTokenizer</code></td>
+<td>BERT 토크나이저</td>
+</tr>
+<tr>
+<td>tokenize</td>
+<td><code>tokenizer.tokenize(text)</code></td>
+<td>텍스트 -> subword</td>
+</tr>
+<tr>
+<td>encode</td>
+<td><code>tokenizer.encode(text)</code></td>
+<td>token id 변환</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>WordPiece는 BPE와 완전히 동일하다고 생각한다</li>
+<li>subword는 항상 의미 단위라고 생각한다</li>
+<li>## 기호는 모델 입력에 그대로 사용된다고 생각한다</li>
+<li>WordPiece는 단어 기반 tokenizer라고 생각한다</li>
+<li>tokenization은 모델 성능에 큰 영향을 주지 않는다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>WordPiece tokenization의 핵심 아이디어는 무엇인가?</li>
+<li>BPE와 WordPiece의 merge 기준 차이는 무엇인가?</li>
+<li>WordPiece에서 score는 어떻게 계산되는가?</li>
+<li>## 토큰의 의미는 무엇인가?</li>
+<li>WordPiece가 OOV 문제를 어떻게 해결하는가?</li>
+</ul>

@@ -1,0 +1,193 @@
+<h2>주제: 6-1 RAG 파이프라인 (Retrieval → Rerank → Generation)</h2>
+<p class="meta"><strong>분류:</strong> rag_agent</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Embedding, Transformer, Similarity Search</p>
+
+<h3>문제 설정</h3>
+<p>LLM은 학습 데이터 이후의 정보를 알 수 없습니다. 또한 내부 파라미터만으로는 최신 정보나 기업 내부 데이터를 활용하기 어렵습니다.</p>
+<p>이를 해결하기 위해 사용하는 구조가 <strong>RAG (Retrieval-Augmented Generation)</strong>입니다.</p>
+<p>핵심 아이디어:</p>
+<ul>
+<li>모델 내부 지식 + 외부 지식 결합</li>
+</ul>
+<p>RAG 시스템은 보통 다음 3단계로 구성됩니다.</p>
+<pre><code>Query
+ ↓
+Retrieval
+ ↓
+Rerank
+ ↓
+Generation</code></pre>
+
+<h2>1. Retrieval 단계</h2>
+<p>사용자 질문과 가장 관련 있는 문서를 검색합니다.</p>
+<p>문서와 질문을 embedding 공간으로 변환합니다.</p>
+<p>수식:</p>
+<p><code>q = f(query)</code></p>
+<p><code>d_i = f(document_i)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>f : embedding model</li>
+<li>q : query embedding</li>
+<li>d_i : document embedding</li>
+</ul>
+
+<h3>유사도 계산</h3>
+<p>보통 cosine similarity를 사용합니다.</p>
+<p><code>sim(q,d_i) = (q · d_i) / (||q|| ||d_i||)</code></p>
+
+<h3>왜 필요한가</h3>
+<p>수많은 문서 중 관련 문서 후보를 찾기 위함입니다.</p>
+
+<h3>주의점</h3>
+<p>retrieval은 정확도가 완벽하지 않습니다.</p>
+
+<h2>2. Rerank 단계</h2>
+<p>retrieval 결과 중 더 정확한 문서를 선택합니다.</p>
+<p>일반적으로 cross-encoder 모델을 사용합니다.</p>
+<p>score 계산:</p>
+<p><code>s_i = CrossEncoder(query, doc_i)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>s_i : relevance score</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>embedding retrieval은 approximate search이기 때문에 noise가 존재합니다.</p>
+
+<h3>주의점</h3>
+<p>rerank는 계산 비용이 높습니다.</p>
+
+<h2>3. Generation 단계</h2>
+<p>최종 문서를 LLM에 입력하여 답을 생성합니다.</p>
+<pre><code>Prompt = Query + Retrieved Context</code></pre>
+<p>LLM 목표:</p>
+<p><code>P(answer | query, context)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>context : retrieved documents</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>외부 지식을 기반으로 답을 생성합니다.</p>
+
+<h2>4. 전체 파이프라인</h2>
+<pre><code>User Query
+   ↓
+Embedding
+   ↓
+Vector DB Search
+   ↓
+Top-k Documents
+   ↓
+Reranker
+   ↓
+Top-n Documents
+   ↓
+LLM Generation</code></pre>
+
+<h2>5. Vector Search</h2>
+<p>retrieval 단계는 보통 vector database를 사용합니다.</p>
+<p>대표 알고리즘:</p>
+<ul>
+<li>HNSW</li>
+<li>FAISS</li>
+<li>IVF</li>
+</ul>
+<p>목표:</p>
+<p><code>argmax_i sim(q,d_i)</code></p>
+
+<h3>왜 중요한가</h3>
+<p>대규모 문서 검색을 빠르게 수행합니다.</p>
+
+<h2>6. Retrieval vs Rerank</h2>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>목표</th>
+<th>모델</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Retrieval</td>
+<td>빠른 후보 검색</td>
+<td>embedding</td>
+</tr>
+<tr>
+<td>Rerank</td>
+<td>정확한 정렬</td>
+<td>cross encoder</td>
+</tr>
+</tbody>
+</table>
+
+<h2>7. RAG의 장점</h2>
+<ul>
+<li>최신 정보 활용 가능</li>
+<li>기업 내부 데이터 활용</li>
+<li>hallucination 감소</li>
+</ul>
+
+<h2>8. RAG의 한계</h2>
+<ul>
+<li>retrieval 오류 가능</li>
+<li>context window 제한</li>
+<li>latency 증가</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>embedding</td>
+<td><code>model.encode(query)</code></td>
+<td>query vector 생성</td>
+</tr>
+<tr>
+<td>vector search</td>
+<td><code>faiss.search()</code></td>
+<td>유사 문서 검색</td>
+</tr>
+<tr>
+<td>rerank</td>
+<td><code>cross_encoder.predict()</code></td>
+<td>문서 재정렬</td>
+</tr>
+<tr>
+<td>generation</td>
+<td><code>llm.generate()</code></td>
+<td>답 생성</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>RAG는 모델을 재학습한다고 생각한다</li>
+<li>retrieval만 있으면 정확한 답이 나온다고 생각한다</li>
+<li>vector search는 항상 정확하다고 생각한다</li>
+<li>RAG는 hallucination을 완전히 제거한다고 생각한다</li>
+<li>rerank 단계는 선택 사항이라고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>RAG 시스템은 어떤 문제를 해결하는가?</li>
+<li>retrieval 단계에서 embedding은 어떻게 사용되는가?</li>
+<li>왜 rerank 단계가 필요한가?</li>
+<li>LLM generation 단계에서 context는 어떤 역할을 하는가?</li>
+<li>vector search는 어떤 방식으로 동작하는가?</li>
+</ul>

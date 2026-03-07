@@ -1,0 +1,267 @@
+<h2>주제: 8-1 GAN (Generative Adversarial Network와 Min-Max 학습)</h2>
+<p><strong>분류:</strong> generative</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중급</p>
+<p><strong>선수지식:</strong> 있음 — 확률분포, Cross-Entropy, Gradient Descent</p>
+
+<h3>문제 설정</h3>
+<p>생성 모델의 목표는 실제 데이터와 비슷한 데이터를 생성하는 것입니다.</p>
+
+<p>목표:</p>
+
+<p><code>x ~ P_data(x)</code></p>
+
+<p>즉 모델이 실제 데이터 분포를 학습해야 합니다.</p>
+
+<p>하지만 직접 분포를 모델링하는 것은 어렵습니다.</p>
+
+<p>GAN은 이 문제를 <strong>게임 구조</strong>로 해결합니다.</p>
+
+<h2>1. GAN 핵심 아이디어</h2>
+
+<p>GAN은 두 모델이 경쟁하면서 학습합니다.</p>
+
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generator (G)</td>
+<td>가짜 데이터 생성</td>
+</tr>
+<tr>
+<td>Discriminator (D)</td>
+<td>진짜/가짜 판별</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>
+Noise z → Generator → Fake Image
+                   ↓
+           Discriminator
+            /         \
+         Real       Fake
+</code></pre>
+
+<p>이 구조는 <strong>적대적 학습(adversarial learning)</strong>이라고 합니다.</p>
+
+<h2>2. Generator</h2>
+
+<p>Generator는 노이즈에서 데이터를 생성합니다.</p>
+
+<p><code>x_fake = G(z)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>z : latent noise</li>
+<li>G : generator network</li>
+<li>x_fake : 생성 데이터</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>랜덤 노이즈를 실제 데이터처럼 변환합니다.</p>
+
+<h3>주의점</h3>
+
+<p>초기에는 생성 데이터 품질이 매우 낮습니다.</p>
+
+<h2>3. Discriminator</h2>
+
+<p>Discriminator는 입력이 진짜인지 가짜인지 판별합니다.</p>
+
+<p><code>D(x) = P(real | x)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>D(x) : 진짜일 확률</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>Generator가 더 좋은 데이터를 만들도록 압박합니다.</p>
+
+<h2>4. GAN Min-Max Objective</h2>
+
+<p>GAN의 핵심 수식:</p>
+
+<p><code>min_G max_D V(D,G)</code></p>
+
+<p>objective:</p>
+
+<p><code>V(D,G) = E_{x~P_data}[log D(x)] + E_{z~P_z}[log(1 - D(G(z)))]</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>P_data : 실제 데이터 분포</li>
+<li>P_z : noise 분포</li>
+<li>G(z) : 생성 데이터</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<ul>
+<li>D는 real을 맞추고 fake를 구분하려고 함</li>
+<li>G는 D를 속이려고 함</li>
+</ul>
+
+<h3>주의점</h3>
+
+<p>학습이 불안정할 수 있습니다.</p>
+
+<h2>5. Min-Max 게임 직관</h2>
+
+<p>GAN은 다음 게임을 수행합니다.</p>
+
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>목표</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D 업데이트</td>
+<td>real vs fake 구분</td>
+</tr>
+<tr>
+<td>G 업데이트</td>
+<td>D 속이기</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>
+1 Train D
+2 Train G
+3 반복
+</code></pre>
+
+<h2>6. Generator Loss</h2>
+
+<p>Generator는 다음 목표를 가집니다.</p>
+
+<p><code>L_G = - log D(G(z))</code></p>
+
+<h3>왜 필요한가</h3>
+
+<p>Discriminator가 fake를 real로 판단하도록 유도합니다.</p>
+
+<h2>7. Discriminator Loss</h2>
+
+<p>Discriminator 손실:</p>
+
+<p><code>L_D = - log D(x) - log(1 - D(G(z)))</code></p>
+
+<h3>왜 필요한가</h3>
+
+<p>real과 fake를 정확히 구분하도록 학습합니다.</p>
+
+<h2>8. GAN 학습 과정</h2>
+
+<pre><code>
+z ~ noise
+x_fake = G(z)
+
+D(x_real) → real
+D(x_fake) → fake
+
+Update D
+Update G
+</code></pre>
+
+<h2>9. GAN 학습 문제</h2>
+
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mode Collapse</td>
+<td>같은 샘플만 생성</td>
+</tr>
+<tr>
+<td>Training Instability</td>
+<td>loss 불안정</td>
+</tr>
+<tr>
+<td>Gradient Vanishing</td>
+<td>generator 학습 어려움</td>
+</tr>
+</tbody>
+</table>
+
+<h2>10. GAN 직관 비유</h2>
+
+<ul>
+<li>Generator → 위조 지폐 제작자</li>
+<li>Discriminator → 경찰</li>
+</ul>
+
+<p>경찰이 발전하면 위조범도 발전합니다.</p>
+
+<p>결과적으로 더 현실적인 데이터가 생성됩니다.</p>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>noise 생성</td>
+<td><code>torch.randn(batch, latent_dim)</code></td>
+<td>latent vector</td>
+</tr>
+<tr>
+<td>generator</td>
+<td><code>fake = G(z)</code></td>
+<td>가짜 데이터 생성</td>
+</tr>
+<tr>
+<td>discriminator</td>
+<td><code>D(x)</code></td>
+<td>real/fake 판별</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>GAN은 단일 모델이라고 생각한다</li>
+<li>generator만 학습한다고 생각한다</li>
+<li>GAN loss는 항상 안정적이라고 생각한다</li>
+<li>GAN은 확률 모델이라고 생각한다</li>
+<li>GAN은 항상 고품질 이미지를 생성한다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>GAN에서 generator와 discriminator의 역할은 무엇인가?</li>
+<li>GAN의 min-max objective는 어떤 의미인가?</li>
+<li>discriminator loss는 무엇을 학습하는가?</li>
+<li>generator는 어떤 방식으로 discriminator를 속이려고 하는가?</li>
+<li>GAN 학습에서 발생하는 대표적인 문제는 무엇인가?</li>
+</ul>
+
+<!-- save_as: docs/posts/generative/gan_minmax_generator_discriminator_concept.html -->

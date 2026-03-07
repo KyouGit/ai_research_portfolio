@@ -1,0 +1,222 @@
+<h2>주제: 4-1 BERT (Encoder + Masked Language Model Pretraining)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Self-Attention, Transformer Encoder</p>
+
+<h3>문제 설정</h3>
+<p>기존 언어 모델(GPT 이전)은 대부분 <strong>단방향 언어 모델</strong>이었습니다.</p>
+<p>예:</p>
+<p><code>P(w_t | w_1, ..., w_{t-1})</code></p>
+<p>즉 이전 단어만 보고 다음 단어를 예측합니다.</p>
+<p>하지만 자연어 이해(NLU)에서는 <strong>양방향 문맥</strong>이 중요합니다.</p>
+<p>BERT는 이를 해결하기 위해 <strong>bidirectional Transformer Encoder</strong>를 사용합니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>단방향 모델 -> 왼쪽 문맥만 읽음</li>
+<li>BERT -> 문장 전체를 동시에 읽음</li>
+</ul>
+<p>즉 문장의 앞뒤 정보를 모두 활용합니다.</p>
+
+<h2>1. BERT 구조</h2>
+<p>BERT는 Transformer <strong>Encoder stack</strong>으로 구성됩니다.</p>
+<pre><code>Input Tokens
+↓
+Embedding Layer
+↓
+Transformer Encoder × N
+↓
+Contextual Representation</code></pre>
+<p>각 Encoder는 다음 구조를 가집니다.</p>
+<pre><code>Self-Attention
+↓
+Feed Forward Network</code></pre>
+
+<h3>수식</h3>
+<p><code>H = Encoder(X)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>X : 입력 토큰 임베딩</li>
+<li>H : contextual embedding</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>각 토큰이 문장 전체 문맥을 반영한 표현을 갖게 됩니다.</p>
+
+<h2>2. BERT 입력 구성</h2>
+<p>BERT 입력은 세 가지 embedding을 합쳐 생성됩니다.</p>
+<p><code>X = E_token + E_segment + E_position</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>E_token : token embedding</li>
+<li>E_segment : sentence A/B 구분</li>
+<li>E_position : positional encoding</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>문장 구분과 위치 정보를 모델에 제공합니다.</p>
+
+<h2>3. Masked Language Model (MLM)</h2>
+<p>BERT의 핵심 pretraining 방법은 <strong>Masked Language Model</strong>입니다.</p>
+<p>입력 문장에서 일부 단어를 가립니다.</p>
+<p>예:</p>
+<pre><code>The cat sits on the [MASK]</code></pre>
+<p>모델 목표:</p>
+<p><code>P(w_mask | context)</code></p>
+
+<h3>수식</h3>
+<p><code>L = - log P(w_mask | context)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>w_mask : 마스크된 단어</li>
+<li>context : 주변 단어</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>양방향 문맥을 이용해 단어 의미를 학습합니다.</p>
+
+<h3>주의점</h3>
+<p>전체 토큰의 약 15%만 mask합니다.</p>
+
+<h2>4. MLM Mask 전략</h2>
+<table>
+<thead>
+<tr>
+<th>전략</th>
+<th>확률</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[MASK] 토큰</td>
+<td>80%</td>
+</tr>
+<tr>
+<td>랜덤 단어</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>그대로 유지</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table>
+
+<h3>왜 필요한가</h3>
+<p>모델이 [MASK] 토큰에만 의존하지 않도록 합니다.</p>
+
+<h2>5. Next Sentence Prediction (NSP)</h2>
+<p>BERT는 또 하나의 pretraining task를 사용합니다.</p>
+<p><strong>Next Sentence Prediction</strong></p>
+<p>목표:</p>
+<p><code>P(IsNext | sentence_A, sentence_B)</code></p>
+
+<h3>입력</h3>
+<pre><code>[CLS] sentence A [SEP] sentence B [SEP]</code></pre>
+
+<h3>출력</h3>
+<ul>
+<li>IsNext</li>
+<li>NotNext</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>문장 간 관계를 학습합니다.</p>
+
+<h3>주의점</h3>
+<p>이후 모델(RoBERTa)은 NSP를 제거했습니다.</p>
+
+<h2>6. BERT Pretraining Loss</h2>
+<p>BERT는 두 loss를 함께 학습합니다.</p>
+<p><code>L = L_MLM + L_NSP</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>L_MLM : masked language modeling loss</li>
+<li>L_NSP : next sentence prediction loss</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>단어 의미와 문장 관계를 동시에 학습합니다.</p>
+
+<h2>7. BERT 특징</h2>
+<table>
+<thead>
+<tr>
+<th>특징</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bidirectional</td>
+<td>양방향 문맥 사용</td>
+</tr>
+<tr>
+<td>Transformer Encoder</td>
+<td>Self-attention 기반</td>
+</tr>
+<tr>
+<td>MLM Pretraining</td>
+<td>마스크 단어 예측</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. BERT 한계</h2>
+<ul>
+<li>pretrain / finetune mismatch</li>
+<li>generation task에 부적합</li>
+<li>MLM 효율 낮음</li>
+</ul>
+<p>그래서 이후 GPT 같은 autoregressive 모델이 발전했습니다.</p>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BERT 모델</td>
+<td><code>transformers.BertModel</code></td>
+<td>BERT encoder</td>
+</tr>
+<tr>
+<td>MLM</td>
+<td><code>BertForMaskedLM</code></td>
+<td>mask prediction</td>
+</tr>
+<tr>
+<td>tokenize</td>
+<td><code>BertTokenizer</code></td>
+<td>WordPiece tokenizer</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>BERT는 문장을 생성할 수 있다고 생각한다</li>
+<li>BERT는 GPT와 같은 구조라고 생각한다</li>
+<li>[MASK] 토큰이 실제 입력에서도 사용된다고 생각한다</li>
+<li>BERT는 단어 임베딩만 학습한다고 생각한다</li>
+<li>NSP가 모든 BERT 계열 모델에서 사용된다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>BERT가 bidirectional이라고 하는 이유는 무엇인가?</li>
+<li>BERT의 MLM pretraining 목표는 무엇인가?</li>
+<li>BERT 입력 구조는 어떤 embedding으로 구성되는가?</li>
+<li>NSP task의 목적은 무엇인가?</li>
+<li>BERT가 generation task에 부적합한 이유는 무엇인가?</li>
+</ul>

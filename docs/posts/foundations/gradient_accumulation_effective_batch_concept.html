@@ -1,0 +1,191 @@
+<h2>주제: DT-5 Gradient Accumulation (Effective Batch Size 증가)</h2>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — SGD, batch 학습, 역전파</p>
+
+<h3>문제 설정</h3>
+<p>딥러닝 학습에서는 큰 batch size가 더 안정적인 gradient를 제공하는 경우가 많습니다.</p>
+<p>하지만 GPU 메모리 제한 때문에 큰 batch를 한 번에 처리할 수 없는 경우가 많습니다.</p>
+<p>이 문제를 해결하기 위해 사용하는 방법이 <strong>Gradient Accumulation</strong>입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>큰 batch -> 많은 데이터를 한 번에 학습</li>
+<li>GPU 메모리 제한 -> 작은 batch만 처리 가능</li>
+<li>Gradient accumulation -> 여러 번 계산 후 한 번 업데이트</li>
+</ul>
+<p>즉 <strong>여러 mini-batch의 gradient를 누적한 뒤 한 번에 업데이트</strong>합니다.</p>
+
+<h2>1. 일반적인 SGD 업데이트</h2>
+<p>일반적인 학습 과정:</p>
+<pre><code>for batch in data:
+    loss = model(batch)
+    loss.backward()
+    optimizer.step()</code></pre>
+<p>수식:</p>
+<p><code>w <- w - eta ∇L_batch</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>w : 모델 파라미터</li>
+<li>eta : learning rate</li>
+<li>∇L_batch : batch gradient</li>
+</ul>
+
+<h3>주의점</h3>
+<p>batch가 작으면 gradient noise가 커질 수 있습니다.</p>
+
+<h2>2. Gradient Accumulation</h2>
+<p>Gradient accumulation은 여러 mini-batch의 gradient를 누적합니다.</p>
+<pre><code>for i, batch in enumerate(data):
+    loss = model(batch)
+    loss.backward()
+
+    if (i+1) % k == 0:
+        optimizer.step()
+        optimizer.zero_grad()</code></pre>
+<p>즉 k개의 mini-batch gradient를 합칩니다.</p>
+
+<h3>수식</h3>
+<p><code>g = Σ ∇L_i</code></p>
+<p>업데이트:</p>
+<p><code>w <- w - eta g</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>k : accumulation step</li>
+<li>g : 누적 gradient</li>
+</ul>
+
+<h2>3. Effective Batch Size</h2>
+<p>Gradient accumulation을 사용하면 실제 batch size가 증가한 것과 같은 효과를 얻습니다.</p>
+<p><code>B_eff = B x k</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>B : 실제 mini-batch size</li>
+<li>k : accumulation steps</li>
+<li>B_eff : effective batch size</li>
+</ul>
+
+<h3>예시</h3>
+<table>
+<thead>
+<tr>
+<th>mini-batch</th>
+<th>accumulation</th>
+<th>effective batch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>4</td>
+<td>64</td>
+</tr>
+<tr>
+<td>32</td>
+<td>8</td>
+<td>256</td>
+</tr>
+</tbody>
+</table>
+
+<h2>4. 왜 필요한가</h2>
+<ul>
+<li>GPU 메모리 제한 해결</li>
+<li>큰 batch 학습 효과</li>
+<li>gradient 안정성 증가</li>
+</ul>
+
+<h3>직관 설명</h3>
+<p>여러 작은 batch를 모아 하나의 큰 batch처럼 학습합니다.</p>
+
+<h2>5. Gradient 평균</h2>
+<p>실제 구현에서는 gradient 평균을 사용하는 경우가 많습니다.</p>
+<p><code>g = (1/k) Σ ∇L_i</code></p>
+<p>이 경우 learning rate 조정이 필요 없습니다.</p>
+
+<h3>주의점</h3>
+<p>평균을 사용하지 않으면 learning rate scaling이 필요합니다.</p>
+
+<h2>6. DDP와 Gradient Accumulation</h2>
+<p>DDP에서도 gradient accumulation을 사용할 수 있습니다.</p>
+<p>방법:</p>
+<ul>
+<li>여러 step 동안 gradient 누적</li>
+<li>all-reduce는 업데이트 시점에 수행</li>
+</ul>
+
+<h3>효과</h3>
+<p>통신 횟수를 줄일 수 있습니다.</p>
+
+<h2>7. 메모리와 계산 비용</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>GPU 메모리</th>
+<th>batch 효과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>큰 batch</td>
+<td>높음</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>gradient accumulation</td>
+<td>낮음</td>
+<td>높음</td>
+</tr>
+</tbody>
+</table>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>PyTorch 코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gradient 계산</td>
+<td><code>loss.backward()</code></td>
+<td>gradient 누적</td>
+</tr>
+<tr>
+<td>gradient reset</td>
+<td><code>optimizer.zero_grad()</code></td>
+<td>gradient 초기화</td>
+</tr>
+<tr>
+<td>파라미터 업데이트</td>
+<td><code>optimizer.step()</code></td>
+<td>누적 후 업데이트</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>gradient accumulation은 계산 속도를 줄인다고 생각한다</li>
+<li>큰 batch와 완전히 동일한 결과를 항상 만든다고 생각한다</li>
+<li>learning rate 조정이 필요 없다고 생각한다</li>
+<li>DDP에서는 사용할 수 없다고 생각한다</li>
+<li>gradient가 자동으로 평균된다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>gradient accumulation의 기본 아이디어는 무엇인가?</li>
+<li>effective batch size는 어떻게 계산되는가?</li>
+<li>왜 GPU 메모리 문제를 해결할 수 있는가?</li>
+<li>gradient 평균과 합의 차이는 무엇인가?</li>
+<li>DDP와 함께 사용할 때 어떤 장점이 있는가?</li>
+</ul>

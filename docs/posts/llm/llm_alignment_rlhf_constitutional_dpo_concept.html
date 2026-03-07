@@ -1,0 +1,223 @@
+<h2>주제: 5-1 LLM 정렬 (InstructGPT / Constitutional AI / DPO)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중상</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Language Modeling, Reinforcement Learning, Cross-Entropy</p>
+
+<h3>문제 설정</h3>
+<p>대형 언어 모델은 기본적으로 다음 목적함수로 학습됩니다.</p>
+<p><code>L = - Σ log P(x_t | x_1,...,x_{t-1})</code></p>
+<p>이 목표는 단순히 <strong>다음 토큰 예측</strong>을 잘하도록 만드는 것입니다.</p>
+<p>하지만 실제 서비스에서는 다음 문제가 발생합니다.</p>
+<ul>
+<li>사용자 의도와 다른 답변</li>
+<li>유해한 내용 생성</li>
+<li>지시(instruction) 이해 부족</li>
+</ul>
+<p>이를 해결하기 위해 사용하는 방법이 <strong>LLM Alignment</strong>입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>Pretraining -> 언어 지식 학습</li>
+<li>Alignment -> 사람 기준에 맞게 행동 조정</li>
+</ul>
+
+<h2>1. InstructGPT</h2>
+<p>InstructGPT는 <strong>RLHF (Reinforcement Learning from Human Feedback)</strong> 기반 정렬 방법입니다.</p>
+
+<h3>단계</h3>
+<pre><code>1. Pretrained LM
+2. Supervised Fine-tuning (SFT)
+3. Reward Model 학습
+4. PPO로 정책 업데이트</code></pre>
+
+<h3>1단계: SFT</h3>
+<p>사람이 작성한 답변으로 모델을 fine-tune 합니다.</p>
+<p><code>L = - log P(answer | prompt)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>prompt : 사용자 입력</li>
+<li>answer : human response</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>instruction-following 능력을 학습합니다.</p>
+
+<h3>주의점</h3>
+<p>데이터 수집 비용이 큽니다.</p>
+
+<h3>2단계: Reward Model</h3>
+<p>사람이 여러 답변을 비교하여 선호도를 제공합니다.</p>
+<p>예:</p>
+<pre><code>Answer A > Answer B</code></pre>
+<p>reward 모델 목표:</p>
+<p><code>R(x,y)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>x : prompt</li>
+<li>y : answer</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>사람 선호를 수치로 표현합니다.</p>
+
+<h3>3단계: PPO</h3>
+<p>RL 알고리즘으로 모델을 업데이트합니다.</p>
+<p><code>maximize E[R(x,y)]</code></p>
+
+<h3>주의점</h3>
+<p>RL 학습은 불안정할 수 있습니다.</p>
+
+<h2>2. Constitutional AI</h2>
+<p>Anthropic이 제안한 정렬 방법입니다.</p>
+<p>핵심 아이디어:</p>
+<p><strong>AI가 스스로 답변을 평가하도록 한다.</strong></p>
+
+<h3>구조</h3>
+<pre><code>Initial response
+↓
+AI critique
+↓
+Revised response</code></pre>
+
+<h3>수식 관점</h3>
+<p><code>y' = revise(y, critique)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>y : 초기 답변</li>
+<li>y' : 수정된 답변</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>인간 피드백 의존도를 줄입니다.</p>
+
+<h3>주의점</h3>
+<p>헌법(constitution) 규칙이 필요합니다.</p>
+
+<h2>3. Direct Preference Optimization (DPO)</h2>
+<p>DPO는 RLHF를 단순화한 방법입니다.</p>
+<p>핵심 아이디어:</p>
+<p><strong>Reward 모델 없이 preference 데이터를 직접 학습</strong></p>
+
+<h3>데이터 형태</h3>
+<pre><code>prompt
+↓
+chosen answer
+rejected answer</code></pre>
+
+<h3>목표 함수</h3>
+<p><code>L = log σ(β(log π(y_w) - log π(y_l)))</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>y_w : preferred answer</li>
+<li>y_l : rejected answer</li>
+<li>π : 모델 정책</li>
+<li>β : scaling parameter</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>PPO 없이 preference 학습이 가능합니다.</p>
+
+<h3>주의점</h3>
+<p>reward 모델을 명시적으로 학습하지 않습니다.</p>
+
+<h2>4. RLHF vs DPO</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>구성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RLHF</td>
+<td>SFT + Reward Model + PPO</td>
+</tr>
+<tr>
+<td>DPO</td>
+<td>Preference loss 직접 최적화</td>
+</tr>
+</tbody>
+</table>
+
+<h2>5. Alignment 방법 비교</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>InstructGPT</td>
+<td>RLHF 기반</td>
+</tr>
+<tr>
+<td>Constitutional AI</td>
+<td>AI self critique</td>
+</tr>
+<tr>
+<td>DPO</td>
+<td>RL 없이 preference 학습</td>
+</tr>
+</tbody>
+</table>
+
+<h2>6. Alignment 목적</h2>
+<ul>
+<li>instruction following 개선</li>
+<li>유해 출력 감소</li>
+<li>사람 선호 반영</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SFT</td>
+<td><code>trainer.train()</code></td>
+<td>supervised fine-tuning</td>
+</tr>
+<tr>
+<td>PPO</td>
+<td><code>trl.PPOTrainer</code></td>
+<td>RLHF training</td>
+</tr>
+<tr>
+<td>DPO</td>
+<td><code>trl.DPOTrainer</code></td>
+<td>preference optimization</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>Alignment는 모델 성능을 항상 증가시킨다고 생각한다</li>
+<li>RLHF는 필수 단계라고 생각한다</li>
+<li>DPO는 RLHF와 완전히 동일한 방법이라고 생각한다</li>
+<li>Alignment는 안전성만 위한 것이라고 생각한다</li>
+<li>Pretraining만으로 instruction-following이 가능하다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>왜 LLM에는 alignment가 필요한가?</li>
+<li>InstructGPT의 RLHF 파이프라인은 어떻게 구성되는가?</li>
+<li>Constitutional AI의 self critique 방식은 무엇인가?</li>
+<li>DPO는 RLHF와 어떤 차이가 있는가?</li>
+<li>왜 reward model이 RLHF에서 필요한가?</li>
+</ul>

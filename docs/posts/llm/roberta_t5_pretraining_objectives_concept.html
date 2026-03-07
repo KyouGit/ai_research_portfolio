@@ -1,0 +1,204 @@
+<h2>주제: 4-2 RoBERTa / T5 (Pretraining Recipe와 Objective 차이)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — BERT, Transformer Encoder/Decoder, MLM</p>
+
+<h3>문제 설정</h3>
+<p>BERT는 매우 강력한 언어 이해 모델이지만 이후 연구에서 다음 문제가 발견되었습니다.</p>
+<ul>
+<li>pretraining 데이터 부족</li>
+<li>학습 step 부족</li>
+<li>Next Sentence Prediction(NSP)의 효과 불확실</li>
+</ul>
+<p>이 문제를 해결하기 위해 등장한 모델이 <strong>RoBERTa</strong>와 <strong>T5</strong>입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>BERT -> 기본 Transformer Encoder 모델</li>
+<li>RoBERTa -> BERT를 더 잘 학습시킨 버전</li>
+<li>T5 -> 모든 NLP task를 text-to-text 문제로 변환</li>
+</ul>
+
+<h2>1. RoBERTa</h2>
+<p>RoBERTa는 BERT 구조를 유지하면서 <strong>pretraining 전략</strong>을 개선한 모델입니다.</p>
+
+<h3>핵심 변화</h3>
+<ul>
+<li>더 많은 데이터 사용</li>
+<li>더 긴 학습</li>
+<li>NSP 제거</li>
+<li>dynamic masking</li>
+</ul>
+
+<h3>구조</h3>
+<p>RoBERTa 구조는 BERT와 동일합니다.</p>
+<p><code>H = Encoder(X)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>X : 입력 토큰</li>
+<li>H : contextual representation</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>BERT의 성능 향상이 구조 때문이 아니라 <strong>학습 레시피</strong> 때문임을 보여줬습니다.</p>
+
+<h2>2. Dynamic Masking</h2>
+<p>BERT는 동일한 mask 패턴을 사용합니다.</p>
+<p>RoBERTa는 학습마다 mask 위치를 변경합니다.</p>
+<p>목표:</p>
+<p><code>P(w_mask | context)</code></p>
+
+<h3>왜 필요한가</h3>
+<p>더 다양한 학습 데이터를 생성할 수 있습니다.</p>
+
+<h3>주의점</h3>
+<p>MLM objective 자체는 동일합니다.</p>
+
+<h2>3. RoBERTa Objective</h2>
+<p>RoBERTa는 NSP를 제거하고 MLM만 사용합니다.</p>
+<p><code>L = L_MLM</code></p>
+
+<h3>왜 중요한가</h3>
+<p>NSP가 성능에 큰 영향을 주지 않는다는 것을 확인했습니다.</p>
+
+<h2>4. T5 모델</h2>
+<p>T5(Text-to-Text Transfer Transformer)는 모든 NLP task를 <strong>text-to-text</strong> 문제로 정의합니다.</p>
+
+<h3>구조</h3>
+<pre><code>Input text
+↓
+Encoder
+↓
+Decoder
+↓
+Output text</code></pre>
+<p>수식:</p>
+<p><code>y = Decoder(Encoder(x))</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>x : 입력 텍스트</li>
+<li>y : 출력 텍스트</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>모든 NLP 문제를 동일한 방식으로 해결할 수 있습니다.</p>
+
+<h2>5. T5 Pretraining Objective</h2>
+<p>T5는 <strong>span corruption</strong>을 사용합니다.</p>
+<p>예:</p>
+<pre><code>Input:  The &lt;extra_id_0&gt; sat on the &lt;extra_id_1&gt;
+Target: &lt;extra_id_0&gt; cat &lt;extra_id_1&gt; mat</code></pre>
+<p>수식:</p>
+<p><code>L = - log P(target | input)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>input : masked 문장</li>
+<li>target : 제거된 span</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>여러 토큰을 동시에 예측할 수 있습니다.</p>
+
+<h2>6. MLM vs Span Corruption</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>예측 단위</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLM (BERT)</td>
+<td>개별 토큰</td>
+</tr>
+<tr>
+<td>Span corruption (T5)</td>
+<td>연속 토큰</td>
+</tr>
+</tbody>
+</table>
+
+<h2>7. RoBERTa vs T5</h2>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>구조</th>
+<th>목적함수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BERT</td>
+<td>Encoder</td>
+<td>MLM + NSP</td>
+</tr>
+<tr>
+<td>RoBERTa</td>
+<td>Encoder</td>
+<td>MLM</td>
+</tr>
+<tr>
+<td>T5</td>
+<td>Encoder-Decoder</td>
+<td>Span corruption</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. 핵심 차이 요약</h2>
+<ul>
+<li>RoBERTa -> BERT 학습 전략 개선</li>
+<li>T5 -> text-to-text unified framework</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RoBERTa</td>
+<td><code>transformers.RobertaModel</code></td>
+<td>BERT 기반 encoder</td>
+</tr>
+<tr>
+<td>T5</td>
+<td><code>transformers.T5ForConditionalGeneration</code></td>
+<td>encoder-decoder 모델</td>
+</tr>
+<tr>
+<td>tokenization</td>
+<td><code>T5Tokenizer</code></td>
+<td>SentencePiece tokenizer</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>RoBERTa는 완전히 새로운 구조라고 생각한다</li>
+<li>T5는 BERT와 동일한 모델이라고 생각한다</li>
+<li>MLM과 span corruption이 같은 objective라고 생각한다</li>
+<li>RoBERTa는 generation 모델이라고 생각한다</li>
+<li>T5는 encoder 모델이라고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>RoBERTa가 BERT와 다른 점은 무엇인가?</li>
+<li>왜 NSP가 제거되었는가?</li>
+<li>T5의 text-to-text framework는 무엇인가?</li>
+<li>MLM과 span corruption의 차이는 무엇인가?</li>
+<li>RoBERTa와 T5 구조 차이는 무엇인가?</li>
+</ul>

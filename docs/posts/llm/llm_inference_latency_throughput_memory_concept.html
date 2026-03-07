@@ -1,0 +1,196 @@
+<h2>주제: IO-1 LLM Inference (지연시간 / 처리량 / 메모리 Tradeoff)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Transformer, Attention, GPU 병렬화</p>
+
+<h3>문제 설정</h3>
+<p>LLM을 실제 서비스에서 사용할 때 가장 중요한 문제는 <strong>추론(inference) 성능</strong>입니다.</p>
+<p>서비스 시스템에서는 다음 세 가지 지표가 핵심입니다.</p>
+<ul>
+<li>Latency (지연시간)</li>
+<li>Throughput (처리량)</li>
+<li>Memory (메모리 사용량)</li>
+</ul>
+<p>이 세 지표는 서로 강한 <strong>tradeoff 관계</strong>를 가집니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>Latency -> 한 요청이 완료되는 속도</li>
+<li>Throughput -> 초당 처리 가능한 요청 수</li>
+<li>Memory -> 모델이 사용하는 GPU 자원</li>
+</ul>
+<p>LLM 서빙에서는 이 세 가지를 균형 있게 최적화해야 합니다.</p>
+
+<h2>1. Latency (지연시간)</h2>
+<p>Latency는 요청이 완료될 때까지 걸리는 시간입니다.</p>
+<p><code>Latency = T_prefill + T_decode</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>T_prefill : prompt 처리 시간</li>
+<li>T_decode : 토큰 생성 시간</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>사용자가 체감하는 응답 속도를 결정합니다.</p>
+
+<h3>주의점</h3>
+<p>LLM 생성 과정은 토큰을 <strong>순차적으로</strong> 생성합니다.</p>
+
+<h2>2. Prefill 단계</h2>
+<p>Prefill 단계에서는 전체 prompt를 한 번에 처리합니다.</p>
+<p>Self-attention 계산:</p>
+<p><code>Cost ∝ n²</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>n : prompt token length</li>
+</ul>
+
+<h3>직관 설명</h3>
+<p>긴 prompt는 prefill latency를 크게 증가시킵니다.</p>
+
+<h3>주의점</h3>
+<p>prefill은 GPU 병렬화가 가능합니다.</p>
+
+<h2>3. Decode 단계</h2>
+<p>decode 단계에서는 토큰을 하나씩 생성합니다.</p>
+<p>목표:</p>
+<p><code>P(x_t | x_1,...,x_{t-1})</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>x_t : 생성 토큰</li>
+</ul>
+
+<h3>직관 설명</h3>
+<p>각 토큰 생성은 이전 토큰에 의존합니다.</p>
+
+<h3>주의점</h3>
+<p>decode는 완전 병렬화가 어렵습니다.</p>
+
+<h2>4. Throughput (처리량)</h2>
+<p>Throughput은 일정 시간 동안 처리 가능한 요청 수입니다.</p>
+<p><code>Throughput = requests / second</code></p>
+
+<h3>왜 중요한가</h3>
+<p>서비스 비용과 직결됩니다.</p>
+
+<h3>주의점</h3>
+<p>높은 throughput은 latency 증가를 유발할 수 있습니다.</p>
+
+<h2>5. Memory 사용량</h2>
+<p>LLM inference에서 메모리는 다음 요소로 구성됩니다.</p>
+<p><code>Memory = model + KV cache + activation</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>model : 파라미터 메모리</li>
+<li>KV cache : attention key/value 저장</li>
+<li>activation : 중간 계산</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>GPU 메모리가 inference batch 크기를 제한합니다.</p>
+
+<h2>6. KV Cache</h2>
+<p>Transformer decode 단계에서는 이전 attention을 저장합니다.</p>
+<p><code>KV_cache ∝ n × d × layers</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>n : sequence length</li>
+<li>d : hidden dimension</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>매 토큰마다 attention을 다시 계산하지 않도록 합니다.</p>
+
+<h3>주의점</h3>
+<p>긴 context는 KV cache 메모리를 증가시킵니다.</p>
+
+<h2>7. Latency vs Throughput Tradeoff</h2>
+<table>
+<thead>
+<tr>
+<th>전략</th>
+<th>Latency</th>
+<th>Throughput</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>batch size 증가</td>
+<td>증가</td>
+<td>증가</td>
+</tr>
+<tr>
+<td>작은 batch</td>
+<td>감소</td>
+<td>감소</td>
+</tr>
+</tbody>
+</table>
+<p>즉 batch 크기 조절이 핵심입니다.</p>
+
+<h2>8. Inference 최적화 전략</h2>
+<ul>
+<li>Continuous batching</li>
+<li>KV cache reuse</li>
+<li>quantization</li>
+<li>speculative decoding</li>
+</ul>
+
+<h3>예</h3>
+<pre><code>Request queue
+↓
+Batch scheduler
+↓
+GPU inference</code></pre>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generation</td>
+<td><code>model.generate()</code></td>
+<td>토큰 생성</td>
+</tr>
+<tr>
+<td>batch</td>
+<td><code>batch_size</code></td>
+<td>동시 요청 처리</td>
+</tr>
+<tr>
+<td>KV cache</td>
+<td><code>past_key_values</code></td>
+<td>attention cache</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>Throughput이 높으면 latency도 항상 낮다고 생각한다</li>
+<li>decode 단계는 완전히 병렬화 가능하다고 생각한다</li>
+<li>context 길이는 메모리에 영향을 주지 않는다고 생각한다</li>
+<li>KV cache는 선택 사항이라고 생각한다</li>
+<li>batch size는 항상 크게 하는 것이 좋다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>LLM inference latency는 어떤 단계로 구성되는가?</li>
+<li>prefill과 decode의 차이는 무엇인가?</li>
+<li>왜 decode 단계는 병렬화가 어려운가?</li>
+<li>KV cache는 무엇이며 왜 필요한가?</li>
+<li>latency와 throughput은 어떤 tradeoff 관계를 가지는가?</li>
+</ul>

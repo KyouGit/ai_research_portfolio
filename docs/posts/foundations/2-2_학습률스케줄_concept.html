@@ -1,7 +1,13 @@
 <h2>Learning Rate Schedule — 학습률을 어떻게 조절할까</h2>
 <p class="meta"><strong>난이도:</strong> 초중급</p>
 <p class="meta"><strong>태그:</strong> 기초수학,최적화,딥러닝기초</p>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — 경사하강법, optimizer, learning rate</p>
 <p>optimizer를 결정했다면, 다음으로 중요한 것이 learning rate schedule이다. 실제로 optimizer 선택보다 성능에 더 큰 영향을 주는 경우가 많다.</p>
+
+<h3>문제 설정</h3>
+<p>learning rate η는 업데이트 크기를 직접 결정한다. 실제 학습에서는 고정값 대신 warmup과 cosine decay 같은 schedule을 사용해 초기 안정성과 후반 수렴 품질을 함께 확보한다.</p>
 
 <!-- deep_context:start -->
 <h3>한 줄 요약</h3>

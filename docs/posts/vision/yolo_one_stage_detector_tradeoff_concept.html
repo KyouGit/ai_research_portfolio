@@ -1,0 +1,282 @@
+<h2>주제: 7-2 YOLO (One-Stage Object Detector와 속도/정확도 Tradeoff)</h2>
+<p><strong>분류:</strong> vision</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중급</p>
+<p><strong>선수지식:</strong> 있음 — CNN, Bounding Box, Classification</p>
+
+<h3>문제 설정</h3>
+<p>Object Detection의 목표는 이미지에서 <strong>객체 위치와 클래스</strong>를 동시에 찾는 것입니다.</p>
+
+<p>예측 결과:</p>
+
+<p><code>y = (class, bbox)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>class : 객체 종류 (car, person 등)</li>
+<li>bbox : bounding box 위치</li>
+</ul>
+
+<p>기존 detection 모델은 두 단계 구조였습니다.</p>
+
+<pre><code>
+Region Proposal
+      ↓
+Object Classification
+</code></pre>
+
+<p>YOLO는 이를 <strong>한 번의 네트워크 실행으로 처리</strong>합니다.</p>
+
+<p>이 구조를 <strong>One-Stage Detector</strong>라고 합니다.</p>
+
+<h2>1. YOLO 핵심 아이디어</h2>
+
+<p>YOLO는 이미지를 grid로 나누고 각 grid가 객체를 예측합니다.</p>
+
+<pre><code>
+Image
+ ↓
+Grid Split
+ ↓
+Bounding Box Prediction
+ ↓
+Class Prediction
+</code></pre>
+
+<p>즉 detection을 하나의 regression 문제로 처리합니다.</p>
+
+<h2>2. Grid 기반 예측</h2>
+
+<p>이미지를 S × S grid로 나눕니다.</p>
+
+<p><code>S × S grid</code></p>
+
+<p>각 grid는 다음 값을 예측합니다.</p>
+
+<p><code>(x, y, w, h, confidence)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>x, y : bounding box 중심 좌표</li>
+<li>w, h : bounding box 크기</li>
+<li>confidence : 객체 존재 확률</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>모든 detection을 하나의 forward pass로 처리합니다.</p>
+
+<h2>3. Bounding Box 표현</h2>
+
+<p>YOLO는 bounding box를 다음과 같이 표현합니다.</p>
+
+<p><code>bbox = (x, y, w, h)</code></p>
+
+<p>좌표는 grid 기준으로 정규화됩니다.</p>
+
+<h3>왜 중요한가</h3>
+
+<p>모델이 위치 정보를 학습할 수 있습니다.</p>
+
+<h2>4. Confidence Score</h2>
+
+<p>confidence는 다음 확률을 의미합니다.</p>
+
+<p><code>confidence = P(object) × IoU</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>P(object) : 객체 존재 확률</li>
+<li>IoU : Intersection over Union</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>bounding box의 신뢰도를 평가합니다.</p>
+
+<h2>5. IoU (Intersection over Union)</h2>
+
+<p>IoU는 두 bounding box의 겹침 정도를 측정합니다.</p>
+
+<p><code>IoU = Area(overlap) / Area(union)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>overlap : 두 box 교집합 영역</li>
+<li>union : 두 box 합집합 영역</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+
+<p>예측 box의 정확도를 평가합니다.</p>
+
+<h2>6. YOLO Loss</h2>
+
+<p>YOLO는 다음 요소를 함께 학습합니다.</p>
+
+<ul>
+<li>bounding box 위치</li>
+<li>objectness</li>
+<li>class prediction</li>
+</ul>
+
+<p>손실 함수 구조:</p>
+
+<p><code>L = L_bbox + L_obj + L_class</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>L_bbox : 위치 손실</li>
+<li>L_obj : 객체 존재 손실</li>
+<li>L_class : 클래스 분류 손실</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>위치와 클래스 정보를 동시에 학습합니다.</p>
+
+<h2>7. One-Stage vs Two-Stage Detector</h2>
+
+<table>
+<thead>
+<tr>
+<th>구조</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two-Stage</td>
+<td>Region proposal 후 classification</td>
+</tr>
+<tr>
+<td>One-Stage</td>
+<td>한 번에 detection</td>
+</tr>
+</tbody>
+</table>
+
+<p>대표 모델:</p>
+
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two-Stage</td>
+<td>Faster R-CNN</td>
+</tr>
+<tr>
+<td>One-Stage</td>
+<td>YOLO, SSD</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. 속도 vs 정확도 Tradeoff</h2>
+
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>속도</th>
+<th>정확도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YOLO</td>
+<td>매우 빠름</td>
+<td>중간</td>
+</tr>
+<tr>
+<td>Faster R-CNN</td>
+<td>느림</td>
+<td>높음</td>
+</tr>
+</tbody>
+</table>
+
+<h3>왜 이런 tradeoff가 발생하는가</h3>
+
+<ul>
+<li>two-stage는 proposal refinement 가능</li>
+<li>one-stage는 빠른 inference 중심</li>
+</ul>
+
+<h2>9. Non-Maximum Suppression (NMS)</h2>
+
+<p>YOLO는 여러 중복 bounding box를 제거해야 합니다.</p>
+
+<pre><code>
+1 높은 confidence box 선택
+2 IoU 높은 box 제거
+3 반복
+</code></pre>
+
+<p>조건:</p>
+
+<p><code>IoU > threshold → remove</code></p>
+
+<h3>왜 필요한가</h3>
+
+<p>중복 detection을 제거합니다.</p>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bbox 예측</td>
+<td><code>model(image)</code></td>
+<td>bounding box 예측</td>
+</tr>
+<tr>
+<td>IoU 계산</td>
+<td><code>torchvision.ops.box_iou()</code></td>
+<td>box overlap 계산</td>
+</tr>
+<tr>
+<td>NMS</td>
+<td><code>torchvision.ops.nms()</code></td>
+<td>중복 box 제거</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>YOLO는 항상 가장 정확한 detector라고 생각한다</li>
+<li>one-stage detector는 항상 성능이 낮다고 생각한다</li>
+<li>grid 하나는 하나의 객체만 예측한다고 생각한다</li>
+<li>confidence score는 단순 확률이라고 생각한다</li>
+<li>NMS는 모델 학습 과정이라고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>YOLO는 object detection을 어떻게 하나의 문제로 변환하는가?</li>
+<li>grid 기반 detection 구조는 어떻게 동작하는가?</li>
+<li>confidence score는 무엇을 의미하는가?</li>
+<li>IoU는 어떤 역할을 하는가?</li>
+<li>one-stage detector와 two-stage detector의 차이는 무엇인가?</li>
+</ul>
+
+<!-- save_as: docs/posts/vision/yolo_one_stage_detector_tradeoff_concept.html -->

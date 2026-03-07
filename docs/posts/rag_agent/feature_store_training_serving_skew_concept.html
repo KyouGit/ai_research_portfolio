@@ -1,0 +1,275 @@
+<h2>주제: 6.5-6 Feature Store (Training-Serving Skew와 해결 전략)</h2>
+<p><strong>분류:</strong> rag_agent</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중급</p>
+<p><strong>선수지식:</strong> 있음 — ML Pipeline, Model Serving</p>
+
+<h3>문제 설정</h3>
+<p>ML 시스템에서는 학습(training)과 서비스(serving) 단계에서 동일한 feature가 사용되어야 합니다.</p>
+
+<p>하지만 실제 시스템에서는 두 환경이 다르기 때문에 다음 문제가 발생합니다.</p>
+
+<ul>
+<li>feature 계산 방식 불일치</li>
+<li>데이터 지연(latency) 차이</li>
+<li>데이터 pipeline 차이</li>
+</ul>
+
+<p>이 문제를 <strong>Training-Serving Skew</strong>라고 합니다.</p>
+
+<p>모델 예측:</p>
+
+<p><code>y = f(x; w)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>x : feature vector</li>
+<li>w : 모델 파라미터</li>
+<li>y : 예측 결과</li>
+</ul>
+
+<p>문제는 학습과 서비스에서 사용되는 feature가 달라질 수 있다는 점입니다.</p>
+
+<p><code>x_train ≠ x_serving</code></p>
+
+<h3>왜 중요한가</h3>
+
+<p>동일 모델이라도 feature가 다르면 예측 성능이 크게 떨어질 수 있습니다.</p>
+
+<h2>1. Training-Serving Skew</h2>
+
+<p>Training-Serving Skew는 다음과 같이 표현할 수 있습니다.</p>
+
+<p><code>P_train(x) ≠ P_serving(x)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>P_train(x) : 학습 데이터 분포</li>
+<li>P_serving(x) : 서비스 feature 분포</li>
+</ul>
+
+<h3>대표 원인</h3>
+
+<ul>
+<li>feature 계산 코드 차이</li>
+<li>데이터 timestamp mismatch</li>
+<li>aggregation window 차이</li>
+</ul>
+
+<h2>2. Feature Engineering 문제</h2>
+
+<p>예를 들어 다음 feature를 생각해 봅니다.</p>
+
+<pre><code>
+user_avg_purchase_last_7_days
+</code></pre>
+
+<p>training에서는 batch 처리로 계산됩니다.</p>
+
+<pre><code>
+SQL batch job
+</code></pre>
+
+<p>serving에서는 실시간 계산이 필요합니다.</p>
+
+<pre><code>
+real-time feature service
+</code></pre>
+
+<p>이 과정에서 계산 방식이 달라질 수 있습니다.</p>
+
+<h2>3. Feature Store 개념</h2>
+
+<p>Feature Store는 feature를 중앙에서 관리하는 시스템입니다.</p>
+
+<pre><code>
+Raw Data
+   ↓
+Feature Engineering
+   ↓
+Feature Store
+   ↓
+Training / Serving
+</code></pre>
+
+<p>feature 정의:</p>
+
+<p><code>f = φ(x)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>x : raw data</li>
+<li>φ : feature transformation</li>
+<li>f : feature vector</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>training과 serving에서 동일 feature를 사용하도록 보장합니다.</p>
+
+<h2>4. Offline vs Online Feature Store</h2>
+
+<table>
+<thead>
+<tr>
+<th>구성</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Offline Store</td>
+<td>training 데이터 저장</td>
+</tr>
+<tr>
+<td>Online Store</td>
+<td>실시간 inference feature 제공</td>
+</tr>
+</tbody>
+</table>
+
+<p>구조:</p>
+
+<pre><code>
+Data Lake
+   ↓
+Offline Feature Store
+   ↓
+Training
+
+Online Feature Store
+   ↓
+Model Serving
+</code></pre>
+
+<h2>5. Point-in-Time Correctness</h2>
+
+<p>Feature store에서 중요한 개념은 <strong>Point-in-Time Correctness</strong>입니다.</p>
+
+<p>즉 training feature는 과거 시점 기준으로 계산되어야 합니다.</p>
+
+<p><code>feature(t) = φ(data ≤ t)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>t : 이벤트 시점</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>future data leakage를 방지합니다.</p>
+
+<h2>6. Feature Store 기능</h2>
+
+<table>
+<thead>
+<tr>
+<th>기능</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature reuse</td>
+<td>feature 재사용</td>
+</tr>
+<tr>
+<td>versioning</td>
+<td>feature 버전 관리</td>
+</tr>
+<tr>
+<td>consistency</td>
+<td>training/serving 동일성 보장</td>
+</tr>
+<tr>
+<td>lineage</td>
+<td>feature 데이터 추적</td>
+</tr>
+</tbody>
+</table>
+
+<h2>7. Feast</h2>
+
+<p>Feast는 오픈소스 feature store입니다.</p>
+
+<p>구성:</p>
+
+<ul>
+<li>offline store</li>
+<li>online store</li>
+<li>feature registry</li>
+</ul>
+
+<p>예:</p>
+
+<pre><code>
+feast apply
+feast materialize
+</code></pre>
+
+<h2>8. Tecton</h2>
+
+<p>Tecton은 production feature platform입니다.</p>
+
+<p>특징:</p>
+
+<ul>
+<li>real-time feature pipeline</li>
+<li>feature monitoring</li>
+<li>ML pipeline integration</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature 정의</td>
+<td><code>@feature_view</code></td>
+<td>feature pipeline 정의</td>
+</tr>
+<tr>
+<td>feature 조회</td>
+<td><code>store.get_online_features()</code></td>
+<td>online feature 조회</td>
+</tr>
+<tr>
+<td>feature materialize</td>
+<td><code>feast materialize</code></td>
+<td>offline → online sync</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>feature engineering은 training에서만 필요하다고 생각한다</li>
+<li>training 데이터와 serving 데이터는 항상 동일하다고 생각한다</li>
+<li>feature store는 데이터베이스와 동일하다고 생각한다</li>
+<li>training-serving skew는 드물게 발생한다고 생각한다</li>
+<li>feature versioning은 필요 없다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>Training-Serving Skew는 왜 발생하는가?</li>
+<li>Feature Store는 어떤 문제를 해결하는가?</li>
+<li>Offline Store와 Online Store의 역할은 무엇인가?</li>
+<li>Point-in-Time Correctness는 왜 중요한가?</li>
+<li>Feast와 Tecton은 어떤 역할을 하는가?</li>
+</ul>
+
+<!-- save_as: docs/posts/rag_agent/feature_store_training_serving_skew_concept.html -->

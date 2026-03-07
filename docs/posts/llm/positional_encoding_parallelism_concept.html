@@ -1,0 +1,182 @@
+<h2>주제: 3-3 Positional Encoding / Transformer 병렬화</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Self-Attention, 행렬곱</p>
+
+<h3>문제 설정</h3>
+<p>Transformer의 Self-Attention은 입력 토큰을 동시에 처리합니다. 하지만 이 방식에는 한 가지 문제가 있습니다.</p>
+<p><strong>토큰의 순서 정보가 사라집니다.</strong></p>
+<p>예:</p>
+<pre><code>I love you
+you love I</code></pre>
+<p>Self-Attention만 사용하면 두 문장은 동일한 토큰 집합으로 처리됩니다.</p>
+<p>이를 해결하기 위해 사용하는 방법이 <strong>Positional Encoding</strong>입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>단어 embedding -> 단어 의미</li>
+<li>positional encoding -> 단어 위치</li>
+<li>두 정보를 합쳐 모델 입력 생성</li>
+</ul>
+
+<h2>1. Transformer 입력</h2>
+<p>Transformer 입력은 다음 두 정보를 결합합니다.</p>
+<p><code>X = E + P</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>E : token embedding</li>
+<li>P : positional encoding</li>
+<li>X : 최종 입력 벡터</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>토큰의 순서를 모델이 이해할 수 있도록 합니다.</p>
+
+<h3>주의점</h3>
+<p>positional encoding은 embedding 차원과 동일해야 합니다.</p>
+
+<h2>2. Sinusoidal Positional Encoding</h2>
+<p>Transformer 논문에서는 사인/코사인 함수를 사용했습니다.</p>
+<p><code>PE(pos,2i) = sin(pos / 10000^(2i/d))</code></p>
+<p><code>PE(pos,2i+1) = cos(pos / 10000^(2i/d))</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>pos : 토큰 위치</li>
+<li>i : embedding 차원 index</li>
+<li>d : embedding dimension</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>각 위치가 고유한 벡터를 갖도록 합니다.</p>
+
+<h3>주의점</h3>
+<p>positional encoding은 학습 파라미터가 아닙니다.</p>
+
+<h2>3. 위치 정보 직관</h2>
+<p>예:</p>
+<pre><code>token1 -> pos 1
+token2 -> pos 2
+token3 -> pos 3</code></pre>
+<p>각 위치에 고유한 encoding 벡터가 추가됩니다.</p>
+<pre><code>embedding + position</code></pre>
+<p>결과적으로 모델은 단어 순서를 학습할 수 있습니다.</p>
+
+<h2>4. Relative Position 정보</h2>
+<p>sin/cos encoding의 중요한 특징:</p>
+<p>두 위치 간 관계를 계산할 수 있습니다.</p>
+<p><code>PE(pos+k)</code></p>
+<p>-> 상대 위치 정보 표현 가능</p>
+
+<h3>왜 중요한가</h3>
+<p>문장에서 단어 간 거리 정보를 모델이 학습할 수 있습니다.</p>
+
+<h2>5. Transformer 병렬화</h2>
+<p>Transformer의 큰 장점은 <strong>완전 병렬 계산</strong>입니다.</p>
+<p>Self-attention 연산:</p>
+<p><code>Attention(Q,K,V) = softmax(QKᵀ/√d_k)V</code></p>
+<p>이 연산은 모든 토큰에 대해 동시에 계산됩니다.</p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>Q,K,V : query, key, value 행렬</li>
+<li>n : 토큰 길이</li>
+</ul>
+
+<h3>왜 가능한가</h3>
+<p>RNN처럼 이전 토큰 계산을 기다릴 필요가 없습니다.</p>
+
+<h2>6. RNN vs Transformer</h2>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>연산 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RNN</td>
+<td>순차 계산</td>
+</tr>
+<tr>
+<td>Transformer</td>
+<td>병렬 계산</td>
+</tr>
+</tbody>
+</table>
+<p>예:</p>
+<pre><code>RNN
+x1 -> x2 -> x3 -> x4
+
+Transformer
+x1 x2 x3 x4 (동시 계산)</code></pre>
+
+<h2>7. 병렬화 장점</h2>
+<ul>
+<li>GPU 활용 극대화</li>
+<li>학습 속도 증가</li>
+<li>긴 문장 처리 가능</li>
+</ul>
+
+<h3>주의점</h3>
+<p>Self-Attention 계산량은 O(n²)입니다.</p>
+
+<h2>8. 전체 Transformer 입력 흐름</h2>
+<pre><code>텍스트
+↓
+Tokenization
+↓
+Token Embedding
+↓
+Positional Encoding
+↓
+Self-Attention</code></pre>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>수식</th>
+<th>PyTorch 코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X = E + P</td>
+<td><code>x = embedding + position</code></td>
+<td>위치 정보 결합</td>
+</tr>
+<tr>
+<td>sin(pos/...)</td>
+<td><code>torch.sin()</code></td>
+<td>sin positional encoding</td>
+</tr>
+<tr>
+<td>cos(pos/...)</td>
+<td><code>torch.cos()</code></td>
+<td>cos positional encoding</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>Transformer는 위치 정보를 자동으로 이해한다고 생각한다</li>
+<li>positional encoding은 optional이라고 생각한다</li>
+<li>positional encoding은 학습되는 파라미터라고 생각한다</li>
+<li>Transformer는 항상 RNN보다 계산량이 적다고 생각한다</li>
+<li>token 순서는 attention에서 자동 반영된다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>Self-Attention만 사용하면 위치 정보가 왜 사라지는가?</li>
+<li>Positional Encoding의 목적은 무엇인가?</li>
+<li>sin/cos positional encoding 식의 의미는 무엇인가?</li>
+<li>Transformer가 병렬 계산이 가능한 이유는 무엇인가?</li>
+<li>RNN과 Transformer의 계산 방식 차이는 무엇인가?</li>
+</ul>

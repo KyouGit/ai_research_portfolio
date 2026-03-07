@@ -1,0 +1,181 @@
+<h2>주제: IO-2 KV Cache (Transformer 디코딩 최적화)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Self-Attention, Transformer Decoder</p>
+
+<h3>문제 설정</h3>
+<p>LLM은 텍스트를 생성할 때 토큰을 하나씩 생성합니다.</p>
+<p>언어 모델 목표:</p>
+<p><code>P(x_t | x_1,...,x_{t-1})</code></p>
+<p>즉 새 토큰을 생성할 때마다 이전 토큰 전체를 다시 고려해야 합니다.</p>
+<p>문제는 naive 구현에서는 매 step마다 <strong>attention을 처음부터 다시 계산</strong>해야 한다는 점입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>매 토큰 생성 시 문장을 다시 읽는 것</li>
+<li>-> 매우 비효율적</li>
+</ul>
+<p>이를 해결하기 위해 사용하는 것이 <strong>KV Cache</strong>입니다.</p>
+
+<h2>1. Self-Attention 계산</h2>
+<p>Transformer attention:</p>
+<p><code>Attention(Q,K,V) = softmax(QK<sup>T</sup>/√d_k)V</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>Q : query</li>
+<li>K : key</li>
+<li>V : value</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>디코딩 단계에서는 매 토큰마다 attention을 계산해야 합니다.</p>
+
+<h2>2. Naive 디코딩</h2>
+<p>토큰을 순차적으로 생성한다고 가정합니다.</p>
+<pre><code>Step1: x1
+Step2: x1 x2
+Step3: x1 x2 x3
+Step4: x1 x2 x3 x4</code></pre>
+<p>각 step에서 attention 계산:</p>
+<p><code>Cost ∝ t²</code></p>
+<p>전체 비용:</p>
+<p><code>O(T³)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>T : 생성 토큰 길이</li>
+</ul>
+
+<h3>주의점</h3>
+<p>긴 생성에서는 매우 비효율적입니다.</p>
+
+<h2>3. KV Cache 아이디어</h2>
+<p>각 토큰의 key/value를 미리 저장합니다.</p>
+<p><code>K_cache = [K1,K2,...,K_{t-1}]</code></p>
+<p><code>V_cache = [V1,V2,...,V_{t-1}]</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>K_i : 토큰 i의 key</li>
+<li>V_i : 토큰 i의 value</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>이전 토큰의 attention 정보를 재사용할 수 있습니다.</p>
+
+<h2>4. KV Cache 디코딩</h2>
+<p>새 토큰 t에서 계산되는 값:</p>
+<p><code>Q_t = x_t W_Q</code></p>
+<p>attention 계산:</p>
+<p><code>Attention(Q_t, K_cache, V_cache)</code></p>
+
+<h3>직관 설명</h3>
+<ul>
+<li>이전 토큰의 K,V는 재사용</li>
+<li>새 토큰의 Q만 계산</li>
+</ul>
+
+<h3>주의점</h3>
+<p>K,V는 계속 cache에 추가됩니다.</p>
+
+<h2>5. 계산 복잡도 비교</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>계산 비용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive decoding</td>
+<td>O(T³)</td>
+</tr>
+<tr>
+<td>KV cache</td>
+<td>O(T²)</td>
+</tr>
+</tbody>
+</table>
+<p>KV cache는 계산량을 크게 줄입니다.</p>
+
+<h2>6. KV Cache 메모리</h2>
+<p>KV cache 메모리는 다음과 같이 증가합니다.</p>
+<p><code>Memory ∝ layers × heads × sequence × d_head</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>layers : Transformer layer 수</li>
+<li>sequence : 토큰 길이</li>
+<li>d_head : head dimension</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>긴 context는 KV cache 메모리를 증가시킵니다.</p>
+
+<h2>7. KV Cache 업데이트</h2>
+<p>디코딩 과정:</p>
+<pre><code>Step1
+K_cache = [K1]
+
+Step2
+K_cache = [K1,K2]
+
+Step3
+K_cache = [K1,K2,K3]</code></pre>
+<p>V cache도 동일하게 확장됩니다.</p>
+
+<h2>8. KV Cache 효과</h2>
+<ul>
+<li>디코딩 속도 증가</li>
+<li>중복 attention 계산 제거</li>
+<li>LLM inference 필수 기술</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KV cache</td>
+<td><code>past_key_values</code></td>
+<td>attention cache</td>
+</tr>
+<tr>
+<td>attention 계산</td>
+<td><code>model(..., past_key_values=cache)</code></td>
+<td>cache 재사용</td>
+</tr>
+<tr>
+<td>token 생성</td>
+<td><code>model.generate()</code></td>
+<td>자동 decode loop</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>KV cache는 training에서도 사용된다고 생각한다</li>
+<li>KV cache는 선택 사항이라고 생각한다</li>
+<li>KV cache가 latency에 영향을 주지 않는다고 생각한다</li>
+<li>attention을 완전히 제거한다고 생각한다</li>
+<li>KV cache는 메모리를 사용하지 않는다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>KV cache는 어떤 문제를 해결하는가?</li>
+<li>왜 naive decoding은 비효율적인가?</li>
+<li>KV cache는 어떤 값을 저장하는가?</li>
+<li>KV cache 사용 시 계산량은 어떻게 감소하는가?</li>
+<li>KV cache가 메모리에 미치는 영향은 무엇인가?</li>
+</ul>

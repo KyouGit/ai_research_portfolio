@@ -1,0 +1,220 @@
+<h2>주제: IO-4 FlashAttention (Memory IO 최적화 기반 Attention 가속)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중상</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Self-Attention, GPU 메모리 구조, 행렬곱</p>
+
+<h3>문제 설정</h3>
+<p>Transformer의 Self-Attention은 계산 자체보다 <strong>GPU 메모리 접근(IO)</strong>이 병목이 되는 경우가 많습니다.</p>
+<p>기본 attention 식:</p>
+<p><code>Attention(Q,K,V) = softmax(QK<sup>T</sup>/√d_k)V</code></p>
+<p>문제는 attention 계산 과정에서 큰 행렬이 여러 번 GPU 메모리(HBM)로 이동한다는 점입니다.</p>
+<ul>
+<li>QKᵀ 계산</li>
+<li>softmax 계산</li>
+<li>V 곱</li>
+</ul>
+<p>이 과정에서 <strong>메모리 IO 비용</strong>이 매우 큽니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>일반 attention -> 데이터를 계속 창고(HBM)에서 꺼내 사용</li>
+<li>FlashAttention -> 작은 작업 단위로 나눠 창고 접근 최소화</li>
+</ul>
+<p>핵심 아이디어:</p>
+<p><strong>Attention 계산을 타일(block) 단위로 수행하여 메모리 접근을 최소화</strong></p>
+
+<h2>1. Standard Attention 메모리 흐름</h2>
+<p>일반적인 attention 계산 과정:</p>
+<pre><code>1. S = QKᵀ
+2. P = softmax(S)
+3. O = PV</code></pre>
+
+<h3>수식</h3>
+<p><code>S = QK<sup>T</sup></code></p>
+<p><code>P = softmax(S)</code></p>
+<p><code>O = PV</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>Q : query matrix</li>
+<li>K : key matrix</li>
+<li>V : value matrix</li>
+<li>S : attention score</li>
+<li>P : attention weight</li>
+</ul>
+
+<h3>주의점</h3>
+<p>행렬 S는 크기가 매우 큽니다.</p>
+<p><code>S ∈ R^{n × n}</code></p>
+
+<h3>문제</h3>
+<p>S를 GPU 메모리에 저장하고 다시 읽어야 합니다.</p>
+
+<h2>2. Memory IO 병목</h2>
+<p>GPU 성능은 다음 두 요소에 의해 제한됩니다.</p>
+<ul>
+<li>compute throughput</li>
+<li>memory bandwidth</li>
+</ul>
+<p>attention은 종종 다음 조건을 가집니다.</p>
+<p><strong>memory-bound workload</strong></p>
+<p>즉:</p>
+<p><code>Runtime ∝ Memory_IO</code></p>
+
+<h3>왜 중요한가</h3>
+<p>계산 자체보다 데이터 이동이 더 느립니다.</p>
+
+<h2>3. FlashAttention 핵심 아이디어</h2>
+<p>FlashAttention은 attention을 <strong>block 단위</strong>로 계산합니다.</p>
+<pre><code>Q block
+K block
+V block</code></pre>
+<p>작은 타일 단위로 계산하여 GPU의 <strong>SRAM(shared memory)</strong>을 활용합니다.</p>
+
+<h3>수식 관점</h3>
+<p>attention을 다음과 같이 분할합니다.</p>
+<p><code>O_i = Σ softmax(Q_i K_j<sup>T</sup>) V_j</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>i : query block</li>
+<li>j : key block</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>큰 행렬을 메모리에 저장하지 않아도 됩니다.</p>
+
+<h2>4. Online Softmax</h2>
+<p>FlashAttention은 softmax를 <strong>online 방식</strong>으로 계산합니다.</p>
+<p>softmax:</p>
+<p><code>softmax(x_i) = exp(x_i) / Σ exp(x_j)</code></p>
+<p>FlashAttention에서는 다음 값을 유지합니다.</p>
+<ul>
+<li>running max</li>
+<li>running sum</li>
+</ul>
+
+<h3>수식</h3>
+<p><code>m_i = max(score)</code></p>
+<p><code>l_i = Σ exp(score - m_i)</code></p>
+
+<h3>왜 필요한가</h3>
+<p>전체 attention matrix를 저장하지 않고도 softmax 계산이 가능합니다.</p>
+
+<h2>5. 메모리 복잡도</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>메모리 사용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard attention</td>
+<td>O(n²)</td>
+</tr>
+<tr>
+<td>FlashAttention</td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table>
+
+<h3>기호 의미</h3>
+<ul>
+<li>n : sequence length</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>긴 context에서도 메모리 사용을 크게 줄입니다.</p>
+
+<h2>6. 속도 향상</h2>
+<p>FlashAttention은 다음 효과를 가집니다.</p>
+<ul>
+<li>HBM 접근 감소</li>
+<li>SRAM 활용</li>
+<li>GPU 효율 증가</li>
+</ul>
+<p>실제 시스템에서:</p>
+<p><strong>2~4배 속도 향상</strong></p>
+
+<h2>7. FlashAttention 특징</h2>
+<table>
+<thead>
+<tr>
+<th>특징</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exact attention</td>
+<td>근사 아님</td>
+</tr>
+<tr>
+<td>IO-aware</td>
+<td>메모리 접근 최적화</td>
+</tr>
+<tr>
+<td>block algorithm</td>
+<td>tile 기반 계산</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. 실제 적용</h2>
+<p>FlashAttention은 다음 시스템에서 사용됩니다.</p>
+<ul>
+<li>GPT 계열 모델</li>
+<li>LLaMA</li>
+<li>LLM inference frameworks</li>
+</ul>
+<p>특히 긴 context 모델에서 중요합니다.</p>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>flash attention</td>
+<td><code>flash_attn.flash_attn_func</code></td>
+<td>FlashAttention 구현</td>
+</tr>
+<tr>
+<td>scaled dot-product</td>
+<td><code>torch.nn.functional.scaled_dot_product_attention</code></td>
+<td>attention 계산</td>
+</tr>
+<tr>
+<td>softmax</td>
+<td><code>torch.softmax()</code></td>
+<td>attention weight 계산</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>FlashAttention은 근사 attention이라고 생각한다</li>
+<li>FlashAttention은 계산 복잡도를 줄인다고 생각한다</li>
+<li>GPU compute가 병목이라고 생각한다</li>
+<li>attention matrix가 완전히 사라진다고 생각한다</li>
+<li>FlashAttention은 inference에서만 사용된다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>Transformer attention에서 병목이 되는 요소는 무엇인가?</li>
+<li>FlashAttention이 해결하는 문제는 무엇인가?</li>
+<li>왜 attention 계산은 memory-bound workload인가?</li>
+<li>FlashAttention의 block algorithm은 어떤 원리인가?</li>
+<li>FlashAttention이 메모리 사용을 줄이는 이유는 무엇인가?</li>
+</ul>

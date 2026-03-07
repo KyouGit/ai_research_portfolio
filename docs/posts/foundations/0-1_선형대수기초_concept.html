@@ -1,7 +1,15 @@
 <h2>[기본기 0-1] 딥러닝을 위한 선형대수 기초</h2>
 <p class="meta"><strong>난이도:</strong> 기초</p>
 <p class="meta"><strong>태그:</strong> 기초수학,최적화,딥러닝기초</p>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>선수지식:</strong> 없음</p>
 <p>딥러닝 모델은 결국 벡터와 행렬을 반복 계산하는 구조입니다. 이 문서는 입문자가 수식을 읽고 코드와 연결할 수 있도록 선형대수 핵심만 압축 정리합니다.</p>
+
+<h3>문제 설정</h3>
+<p>딥러닝의 거의 모든 레이어는 아래 한 줄로 표현됩니다.</p>
+<p><code>y = Wx + b</code></p>
+<p>이 식을 정확히 이해하려면 벡터, 행렬곱, 차원, 노름 개념이 필요합니다.</p>
 
 <h3>왜 선형대수가 딥러닝의 시작인가</h3>
 <p>신경망 레이어의 기본 연산은 아래 한 줄입니다.</p>
@@ -10,8 +18,9 @@
 
 <h3>직관 비유</h3>
 <ul>
-  <li>벡터: 숫자가 들어있는 화살표</li>
+  <li>벡터: 입력 정보 묶음(특징 벡터)</li>
   <li>행렬: 벡터를 다른 벡터로 바꾸는 변환 기계</li>
+  <li>bias(b): 결과를 미세하게 이동시키는 보정값</li>
   <li>행렬곱: 입력을 새로운 특징 공간으로 이동시키는 과정</li>
   <li>내적: 두 벡터가 얼마나 같은 방향인지 측정</li>
   <li>노름: 벡터의 길이</li>
@@ -56,6 +65,20 @@ y = W @ x = [17, 39]</code></pre>
 
 <p>주의점: 행렬곱은 차원 규칙을 만족해야 합니다.</p>
 <p><code>(m × n) · (n × k)</code>에서 중간 차원 <code>n</code>이 같아야 합니다.</p>
+
+<h3>차원 관계 빠른표</h3>
+<table>
+  <thead>
+    <tr><th>변수</th><th>차원</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>x</td><td>d</td></tr>
+    <tr><td>W</td><td>k × d</td></tr>
+    <tr><td>b</td><td>k</td></tr>
+    <tr><td>y</td><td>k</td></tr>
+  </tbody>
+</table>
+<p><code>(k × d)(d × 1) → (k × 1)</code></p>
 
 <h3>4) 전치(Transpose)</h3>
 <p>전치는 행과 열을 바꾸는 연산입니다.</p>
@@ -122,7 +145,10 @@ x · y = 1*4 + 2*5 + 3*6 = 32</code></pre>
 <ul>
   <li>왜 딥러닝 레이어는 <code>y = Wx + b</code> 형태인가?</li>
   <li>행렬곱 차원 규칙 <code>(m×n)(n×k)</code>를 예시로 설명할 수 있는가?</li>
+  <li>왜 <code>W</code>의 shape은 <code>(k × d)</code>인가?</li>
+  <li>행렬곱에서 중간 차원이 왜 같아야 하는가?</li>
   <li>내적이 왜 유사도 신호로 쓰이는가?</li>
   <li>L2 노름은 무엇을 측정하며 어디에 쓰이는가?</li>
+  <li>벡터와 행렬의 차이를 한 문단으로 설명할 수 있는가?</li>
   <li>Attention에서 <code>QK^T/sqrt(d_k)</code>가 필요한 이유는 무엇인가?</li>
 </ul>

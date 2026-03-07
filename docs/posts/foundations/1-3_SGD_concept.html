@@ -1,7 +1,15 @@
 <h2>SGD — Stochastic Gradient Descent</h2>
 <p class="meta"><strong>난이도:</strong> 초중급</p>
 <p class="meta"><strong>태그:</strong> 기초수학,최적화,딥러닝기초</p>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — 미분, gradient, 손실함수</p>
 <p>딥러닝 모델 학습의 가장 기본이 되는 알고리즘. 이것을 이해하면 Adam, AdamW 같은 모든 optimizer의 기반을 이해한 것이다.</p>
+
+<h3>문제 설정</h3>
+<p>신경망 학습의 목표는 손실함수(loss)를 최소화하는 파라미터를 찾는 것입니다.</p>
+<p><code>w ← w - η ∇<sub>w</sub>L</code></p>
+<p>즉 gradient가 가리키는 상승 방향의 반대로 이동해 loss를 줄입니다.</p>
 
 <!-- deep_context:start -->
 <h3>한 줄 요약</h3>

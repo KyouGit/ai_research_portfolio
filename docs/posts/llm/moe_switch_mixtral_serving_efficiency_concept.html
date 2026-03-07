@@ -1,0 +1,219 @@
+<h2>주제: 5-3 효율화/서빙 (MoE: Switch Transformer / Mixtral)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 상</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Transformer, Feed Forward Network, Distributed Training</p>
+
+<h3>문제 설정</h3>
+<p>LLM 성능을 높이기 위해 일반적으로 모델 크기를 증가시킵니다.</p>
+<p>하지만 dense Transformer는 다음 문제가 있습니다.</p>
+<ul>
+<li>모든 파라미터가 매 토큰마다 계산됨</li>
+<li>compute 비용 매우 큼</li>
+<li>추론 비용 증가</li>
+</ul>
+<p>이를 해결하기 위해 등장한 구조가 <strong>Mixture of Experts (MoE)</strong>입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>Dense 모델 -> 모든 전문가가 동시에 일함</li>
+<li>MoE -> 필요한 전문가만 선택</li>
+</ul>
+<p>즉 모델 파라미터는 크지만 <strong>활성 파라미터(active parameters)</strong>는 작습니다.</p>
+
+<h2>1. Dense Transformer FFN</h2>
+<p>일반 Transformer의 FFN:</p>
+<p><code>FFN(x) = W2 σ(W1 x)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>x : hidden representation</li>
+<li>W1,W2 : 파라미터</li>
+<li>σ : activation function</li>
+</ul>
+
+<h3>왜 문제인가</h3>
+<p>모든 토큰에 대해 동일 FFN이 계산됩니다.</p>
+
+<h2>2. MoE 구조</h2>
+<p>MoE는 여러 FFN expert를 사용합니다.</p>
+<pre><code>Input token
+↓
+Router
+↓
+Expert 선택
+↓
+Expert FFN</code></pre>
+<p>수식:</p>
+<p><code>y = Σ g_i(x) Expert_i(x)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>Expert_i : i번째 expert network</li>
+<li>g_i(x) : routing weight</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>모델 capacity를 크게 늘릴 수 있습니다.</p>
+
+<h2>3. Switch Transformer</h2>
+<p>Switch Transformer는 가장 단순한 MoE 구조입니다.</p>
+<p>각 토큰은 <strong>1개의 expert만 선택</strong>합니다.</p>
+<p>수식:</p>
+<p><code>expert = argmax g(x)</code></p>
+<p>출력:</p>
+<p><code>y = Expert_selected(x)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>g(x) : router network</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>계산 비용을 크게 줄입니다.</p>
+
+<h3>주의점</h3>
+<p>expert imbalance 문제가 발생할 수 있습니다.</p>
+
+<h2>4. Router 함수</h2>
+<p>router는 softmax 기반 gating을 사용합니다.</p>
+<p><code>g(x) = softmax(W_r x)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>W_r : router parameter</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>어떤 expert가 적합한지 결정합니다.</p>
+
+<h2>5. Load Balancing 문제</h2>
+<p>MoE에서는 일부 expert에 트래픽이 집중될 수 있습니다.</p>
+<p>이를 방지하기 위해 auxiliary loss를 사용합니다.</p>
+<p><code>L_total = L_task + λ L_balance</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>L_balance : load balancing loss</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>expert utilization을 균등하게 유지합니다.</p>
+
+<h2>6. Mixtral 구조</h2>
+<p>Mixtral은 MoE 구조의 개선된 모델입니다.</p>
+<p>특징:</p>
+<ul>
+<li>Top-2 routing</li>
+<li>8 experts</li>
+</ul>
+<p>수식:</p>
+<p><code>y = g_i Expert_i(x) + g_j Expert_j(x)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>i,j : top-2 experts</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>Switch보다 안정적인 학습이 가능합니다.</p>
+
+<h2>7. Dense vs MoE</h2>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>계산 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dense</td>
+<td>모든 파라미터 사용</td>
+</tr>
+<tr>
+<td>MoE</td>
+<td>선택된 expert만 사용</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. MoE 장점</h2>
+<ul>
+<li>모델 capacity 증가</li>
+<li>compute 효율 향상</li>
+<li>대형 모델 확장 가능</li>
+</ul>
+
+<h2>9. MoE 단점</h2>
+<ul>
+<li>router 학습 어려움</li>
+<li>load imbalance 문제</li>
+<li>distributed communication 증가</li>
+</ul>
+
+<h2>10. 실제 모델 예</h2>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>구조</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Switch Transformer</td>
+<td>Top-1 MoE</td>
+</tr>
+<tr>
+<td>Mixtral 8x7B</td>
+<td>Top-2 MoE</td>
+</tr>
+</tbody>
+</table>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>router</td>
+<td><code>torch.nn.Linear()</code></td>
+<td>expert selection</td>
+</tr>
+<tr>
+<td>expert</td>
+<td><code>MLP()</code></td>
+<td>FFN expert</td>
+</tr>
+<tr>
+<td>top-k routing</td>
+<td><code>torch.topk()</code></td>
+<td>expert 선택</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>MoE는 항상 dense 모델보다 빠르다고 생각한다</li>
+<li>모든 expert가 항상 사용된다고 생각한다</li>
+<li>MoE는 모델 구조를 완전히 변경한다고 생각한다</li>
+<li>router는 학습되지 않는다고 생각한다</li>
+<li>MoE는 inference에서 항상 효율적이라고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>Mixture of Experts 구조의 핵심 아이디어는 무엇인가?</li>
+<li>Switch Transformer의 routing 방식은 무엇인가?</li>
+<li>Mixtral의 top-2 routing은 왜 필요한가?</li>
+<li>MoE에서 load balancing 문제가 발생하는 이유는 무엇인가?</li>
+<li>Dense 모델과 MoE 모델의 compute 차이는 무엇인가?</li>
+</ul>

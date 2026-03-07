@@ -1,0 +1,210 @@
+<h2>주제: 4-4 Scaling Laws / Chinchilla (Compute-Optimal Scaling)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중상</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — Language Modeling, Cross-Entropy Loss, Transformer</p>
+
+<h3>문제 설정</h3>
+<p>대형 언어 모델은 다음 세 가지 요소로 성능이 결정됩니다.</p>
+<ul>
+<li>모델 크기 (parameters)</li>
+<li>데이터 크기 (training tokens)</li>
+<li>연산량 (compute)</li>
+</ul>
+<p>Scaling Laws 연구의 질문은 다음입니다.</p>
+<p><strong>"같은 compute 예산에서 모델 크기와 데이터 크기를 어떻게 배분해야 성능이 가장 좋은가?"</strong></p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>큰 모델 + 적은 데이터 -> 과적합</li>
+<li>작은 모델 + 많은 데이터 -> 표현력 부족</li>
+<li>적절한 균형 -> 최적 성능</li>
+</ul>
+
+<h2>1. Language Model Loss</h2>
+<p>언어 모델은 다음 loss를 최소화합니다.</p>
+<p><code>L = - Σ log P(x_t | x_1,...,x_{t-1})</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>x_t : target token</li>
+<li>P(x_t | context) : 다음 토큰 확률</li>
+<li>L : cross-entropy loss</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>모델 성능은 일반적으로 이 loss 값으로 측정됩니다.</p>
+
+<h3>주의점</h3>
+<p>loss 감소는 모델 크기와 데이터 양에 따라 달라집니다.</p>
+
+<h2>2. Scaling Law</h2>
+<p>OpenAI 연구에서는 다음 관계를 발견했습니다.</p>
+<p><code>L(N) ≈ aN^{-α}</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>N : 모델 파라미터 수</li>
+<li>α : scaling exponent</li>
+<li>L : loss</li>
+</ul>
+
+<h3>직관 설명</h3>
+<p>모델이 커질수록 loss는 감소하지만 감소율은 점점 줄어듭니다.</p>
+
+<h3>주의점</h3>
+<p>무한히 모델을 키워도 성능 향상은 점점 작아집니다.</p>
+
+<h2>3. Compute Budget</h2>
+<p>훈련 compute는 다음 요소에 비례합니다.</p>
+<p><code>C ∝ N × D</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>C : training compute</li>
+<li>N : model parameters</li>
+<li>D : dataset tokens</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>compute가 고정된 상황에서 N과 D를 어떻게 선택할지가 핵심입니다.</p>
+
+<h2>4. GPT-3 Scaling 전략</h2>
+<p>GPT-3는 다음 전략을 사용했습니다.</p>
+<ul>
+<li>매우 큰 모델</li>
+<li>상대적으로 적은 데이터</li>
+</ul>
+<p>예:</p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>파라미터</th>
+<th>데이터</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-3</td>
+<td>175B</td>
+<td>~300B tokens</td>
+</tr>
+</tbody>
+</table>
+<p>하지만 연구 결과 이 전략은 compute-optimal이 아니었습니다.</p>
+
+<h2>5. Chinchilla Scaling</h2>
+<p>DeepMind의 Chinchilla 연구는 다음 결론을 제시했습니다.</p>
+<p><strong>모델 크기와 데이터 크기는 거의 같은 비율로 증가해야 한다.</strong></p>
+<p>즉:</p>
+<p><code>D ≈ 20N</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>D : training tokens</li>
+<li>N : model parameters</li>
+</ul>
+
+<h3>직관 설명</h3>
+<p>큰 모델은 더 많은 데이터를 필요로 합니다.</p>
+
+<h3>주의점</h3>
+<p>데이터 부족은 모델 성능을 제한합니다.</p>
+
+<h2>6. GPT-3 vs Chinchilla</h2>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>전략</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-3</td>
+<td>큰 모델</td>
+<td>데이터 부족</td>
+</tr>
+<tr>
+<td>Chinchilla</td>
+<td>균형 scaling</td>
+<td>compute optimal</td>
+</tr>
+</tbody>
+</table>
+<p>Chinchilla 모델:</p>
+<ul>
+<li>70B parameters</li>
+<li>1.4T tokens</li>
+</ul>
+<p>-> GPT-3보다 성능이 좋았습니다.</p>
+
+<h2>7. Compute-Optimal Scaling</h2>
+<p>compute budget C가 고정일 때:</p>
+<p><code>N ∝ C^{0.5}</code></p>
+<p><code>D ∝ C^{0.5}</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>N : 모델 크기</li>
+<li>D : 데이터 크기</li>
+<li>C : compute</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>효율적인 모델 학습 전략을 제공합니다.</p>
+
+<h2>8. Scaling Law 의미</h2>
+<ul>
+<li>LLM 성능 예측 가능</li>
+<li>훈련 전략 설계 가능</li>
+<li>compute 효율 향상</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cross entropy</td>
+<td><code>torch.nn.CrossEntropyLoss()</code></td>
+<td>LM training loss</td>
+</tr>
+<tr>
+<td>training tokens</td>
+<td><code>dataset_size</code></td>
+<td>데이터 크기</td>
+</tr>
+<tr>
+<td>parameters</td>
+<td><code>model.num_parameters()</code></td>
+<td>모델 크기</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>모델이 클수록 항상 좋은 성능을 낸다고 생각한다</li>
+<li>데이터 크기는 모델 성능에 큰 영향을 주지 않는다고 생각한다</li>
+<li>Scaling law는 모든 모델에 동일하게 적용된다고 생각한다</li>
+<li>compute budget은 무한하다고 생각한다</li>
+<li>LLM 성능은 단순히 파라미터 수로 결정된다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>Scaling law는 무엇을 설명하는가?</li>
+<li>compute budget C는 어떤 요소로 구성되는가?</li>
+<li>GPT-3 scaling 전략의 한계는 무엇인가?</li>
+<li>Chinchilla scaling 법칙은 무엇인가?</li>
+<li>왜 모델 크기와 데이터 크기의 균형이 중요한가?</li>
+</ul>

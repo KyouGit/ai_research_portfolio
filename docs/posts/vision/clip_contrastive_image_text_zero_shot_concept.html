@@ -1,0 +1,253 @@
+<h2>주제: 7-4 CLIP (이미지-텍스트 대조학습과 Zero-Shot 전이)</h2>
+<p><strong>분류:</strong> vision</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중급</p>
+<p><strong>선수지식:</strong> 있음 — Contrastive Learning, Embedding, Transformer</p>
+
+<h3>문제 설정</h3>
+<p>기존 이미지 분류 모델은 다음 방식으로 학습됩니다.</p>
+
+<pre><code>
+Image → CNN → Classifier → Label
+</code></pre>
+
+<p>문제점:</p>
+
+<ul>
+<li>각 task마다 다시 학습 필요</li>
+<li>새 클래스에 일반화 어려움</li>
+</ul>
+
+<p><strong>CLIP (Contrastive Language–Image Pretraining)</strong>은 다음 질문에서 시작합니다.</p>
+
+<p><strong>"이미지와 텍스트를 같은 의미 공간에 놓을 수 있을까?"</strong></p>
+
+<p>목표:</p>
+
+<p><code>sim(image, text) ↑ if matched</code></p>
+
+<h2>1. CLIP 핵심 아이디어</h2>
+
+<p>CLIP은 이미지와 텍스트를 각각 인코딩합니다.</p>
+
+<pre><code>
+Image → Image Encoder → image embedding
+Text  → Text Encoder  → text embedding
+</code></pre>
+
+<p>그리고 두 embedding의 유사도를 학습합니다.</p>
+
+<h2>2. Dual Encoder 구조</h2>
+
+<p>CLIP은 두 개의 encoder를 사용합니다.</p>
+
+<table>
+<thead>
+<tr>
+<th>Encoder</th>
+<th>입력</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Image Encoder</td>
+<td>이미지</td>
+</tr>
+<tr>
+<td>Text Encoder</td>
+<td>텍스트</td>
+</tr>
+</tbody>
+</table>
+
+<p>embedding:</p>
+
+<p><code>v = f_img(image)</code></p>
+
+<p><code>t = f_txt(text)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>f_img : image encoder</li>
+<li>f_txt : text encoder</li>
+<li>v : image embedding</li>
+<li>t : text embedding</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>이미지와 텍스트를 같은 벡터 공간으로 변환합니다.</p>
+
+<h2>3. Similarity 계산</h2>
+
+<p>CLIP은 cosine similarity를 사용합니다.</p>
+
+<p><code>sim(v,t) = (v · t) / (||v|| ||t||)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>v · t : 벡터 내적</li>
+<li>||v|| : 벡터 노름</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+
+<p>이미지와 텍스트 의미 유사도를 측정합니다.</p>
+
+<h2>4. Contrastive Learning</h2>
+
+<p>CLIP은 이미지-텍스트 쌍을 사용해 학습합니다.</p>
+
+<pre><code>
+Positive pair:
+(image_i, text_i)
+
+Negative pair:
+(image_i, text_j)
+</code></pre>
+
+<p>손실 함수:</p>
+
+<p><code>L = - log exp(sim(v_i,t_i)/τ) / Σ exp(sim(v_i,t_j)/τ)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>τ : temperature</li>
+<li>v_i : image embedding</li>
+<li>t_i : matching text</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>정답 쌍은 가까워지고 다른 쌍은 멀어집니다.</p>
+
+<h2>5. Batch Contrastive Learning</h2>
+
+<p>CLIP은 batch 내 모든 pair를 negative로 사용합니다.</p>
+
+<pre><code>
+batch size = N
+N positive pairs
+N² possible pairs
+</code></pre>
+
+<p>목표:</p>
+
+<p><code>sim(v_i,t_i) &gt; sim(v_i,t_j)</code></p>
+
+<h2>6. Zero-Shot Classification</h2>
+
+<p>CLIP의 가장 큰 장점은 <strong>zero-shot classification</strong>입니다.</p>
+
+<p>예:</p>
+
+<pre><code>
+"a photo of a cat"
+"a photo of a dog"
+</code></pre>
+
+<p>classification:</p>
+
+<p><code>class = argmax sim(v, t_class)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>v : image embedding</li>
+<li>t_class : class text embedding</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+
+<p>새 클래스도 학습 없이 분류 가능합니다.</p>
+
+<h2>7. Zero-Shot 직관</h2>
+
+<pre><code>
+Image → embedding
+Text prompts → embeddings
+Similarity 비교 → class 선택
+</code></pre>
+
+<p>즉 classifier 대신 text prompt를 사용합니다.</p>
+
+<h2>8. CLIP 구조</h2>
+
+<pre><code>
+Image → Vision Transformer / ResNet
+Text → Transformer
+↓
+Embedding space
+↓
+Contrastive Loss
+</code></pre>
+
+<h2>9. CLIP 장점</h2>
+
+<ul>
+<li>멀티모달 표현 학습</li>
+<li>zero-shot generalization</li>
+<li>대규모 웹 데이터 활용 가능</li>
+</ul>
+
+<h2>10. CLIP 한계</h2>
+
+<ul>
+<li>fine-grained classification 어려움</li>
+<li>prompt engineering 영향</li>
+<li>bias 문제</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image encoding</td>
+<td><code>model.encode_image()</code></td>
+<td>이미지 embedding</td>
+</tr>
+<tr>
+<td>text encoding</td>
+<td><code>model.encode_text()</code></td>
+<td>텍스트 embedding</td>
+</tr>
+<tr>
+<td>similarity</td>
+<td><code>torch.cosine_similarity()</code></td>
+<td>유사도 계산</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>CLIP은 이미지 분류 모델이라고 생각한다</li>
+<li>CLIP은 supervised classification이라고 생각한다</li>
+<li>zero-shot은 항상 높은 정확도를 낸다고 생각한다</li>
+<li>CLIP은 텍스트를 생성한다고 생각한다</li>
+<li>image encoder와 text encoder는 동일 모델이라고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>CLIP은 이미지와 텍스트를 어떻게 같은 공간에 매핑하는가?</li>
+<li>contrastive learning은 어떤 방식으로 학습되는가?</li>
+<li>CLIP에서 cosine similarity는 어떤 역할을 하는가?</li>
+<li>zero-shot classification은 어떻게 가능한가?</li>
+<li>CLIP과 일반 이미지 분류 모델의 차이는 무엇인가?</li>
+</ul>
+
+<!-- save_as: docs/posts/vision/clip_contrastive_image_text_zero_shot_concept.html -->

@@ -1,0 +1,119 @@
+<h2>주제: 1-7 정규화와 학습 안정화</h2>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 입문</p>
+<p class="meta"><strong>선수지식:</strong> 있음 - gradient descent, 역전파</p>
+
+<h3>문제 설정</h3>
+<p>신경망이 깊어지면 gradient explosion, gradient vanishing, 학습 불안정 문제가 자주 발생합니다.</p>
+<p>대표 대응 방법은 입력 데이터 표준화, Layer Normalization, gradient clipping입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+  <li>데이터 분포: 신호의 크기</li>
+  <li>정규화: 신호의 스케일을 일정하게 유지</li>
+  <li>gradient 문제: 신호가 너무 작거나 너무 커짐</li>
+</ul>
+
+<h2>1. 데이터 표준화 (Standardization)</h2>
+<p><code>x' = (x - mu) / sigma</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+  <li>x: 원본 데이터</li>
+  <li>mu: 평균</li>
+  <li>sigma: 표준편차</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>입력 스케일을 맞추면 학습이 더 안정적이고 빠르게 진행됩니다.</p>
+
+<h3>주의점</h3>
+<p>학습 데이터에서 계산한 평균/표준편차를 검증·테스트에도 동일하게 사용해야 합니다.</p>
+
+<h2>2. Layer Normalization</h2>
+<p><code>LayerNorm(x) = (x - mu) / sqrt(sigma^2 + epsilon)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+  <li>x: 레이어 출력 벡터</li>
+  <li>mu: 평균</li>
+  <li>sigma^2: 분산</li>
+  <li>epsilon: 수치 안정성 상수</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>레이어 출력 분포를 안정적으로 유지해 학습을 안정화합니다.</p>
+
+<h3>주의점</h3>
+<p>BatchNorm과 달리 LayerNorm은 배치 크기에 덜 민감합니다.</p>
+
+<h2>3. Gradient Vanishing</h2>
+<p>역전파에서 gradient가 매우 작아져 초기 레이어가 거의 업데이트되지 않는 문제입니다.</p>
+<p><code>dL/dx = (dL/da)(da/dz)(dz/dx)</code></p>
+
+<h3>대응 방법</h3>
+<ul>
+  <li>ReLU 계열 활성함수 사용</li>
+  <li>Residual connection</li>
+  <li>LayerNorm</li>
+</ul>
+
+<h2>4. Gradient Explosion</h2>
+<p>gradient 값이 너무 커져 파라미터 업데이트가 불안정해지고 학습이 발산할 수 있는 문제입니다.</p>
+
+<h3>대응 방법</h3>
+<ul>
+  <li>gradient clipping</li>
+  <li>적절한 learning rate</li>
+  <li>정규화 기법</li>
+</ul>
+
+<h2>5. Gradient Clipping</h2>
+<p><code>g <- g * (tau / ||g||)</code> if <code>||g|| > tau</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+  <li>g: gradient</li>
+  <li>tau: 최대 gradient 크기</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>gradient explosion을 방지해 학습 안정성을 높입니다.</p>
+
+<h3>주의점</h3>
+<p>너무 강한 clipping은 학습 속도를 낮추거나 underfitting을 유발할 수 있습니다.</p>
+
+<h2>코드-수식 연결</h2>
+<table>
+  <thead>
+    <tr>
+      <th>수식</th>
+      <th>PyTorch 코드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>x' = (x-mu)/sigma</td><td><code>sklearn.preprocessing.StandardScaler</code></td><td>데이터 표준화</td></tr>
+    <tr><td>LayerNorm</td><td><code>torch.nn.LayerNorm()</code></td><td>레이어 정규화</td></tr>
+    <tr><td>gradient clipping</td><td><code>torch.nn.utils.clip_grad_norm_()</code></td><td>gradient 제한</td></tr>
+  </tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+  <li>정규화는 데이터 전처리만 의미한다고 생각한다</li>
+  <li>LayerNorm과 BatchNorm이 동일한 역할이라고 생각한다</li>
+  <li>gradient 문제는 깊은 네트워크에서만 발생한다고 생각한다</li>
+  <li>gradient clipping은 항상 필요하다고 생각한다</li>
+  <li>정규화가 항상 성능을 높인다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+  <li>데이터 표준화는 왜 필요한가?</li>
+  <li>LayerNorm은 어떤 문제를 해결하는가?</li>
+  <li>gradient vanishing은 왜 발생하는가?</li>
+  <li>gradient explosion은 어떻게 대응하는가?</li>
+  <li>LayerNorm과 BatchNorm의 차이는 무엇인가?</li>
+</ul>

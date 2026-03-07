@@ -1,0 +1,206 @@
+<h2>주제: TK-4 Token Length 문제 (Context Window / 비용 / 성능 Tradeoff)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 입문</p>
+<p class="meta"><strong>선수지식:</strong> 없음</p>
+
+<h3>문제 설정</h3>
+<p>LLM은 텍스트를 토큰(token) 단위로 처리하며 입력 길이에 제한이 있습니다. 이 제한을 <strong>context window</strong>라고 합니다.</p>
+<p>예:</p>
+<ul>
+<li>4K tokens</li>
+<li>32K tokens</li>
+<li>128K tokens</li>
+</ul>
+<p>토큰 길이가 증가하면 다음 세 가지 요소 사이에서 tradeoff가 발생합니다.</p>
+<ul>
+<li>context window</li>
+<li>연산 비용</li>
+<li>모델 성능</li>
+</ul>
+
+<h3>직관 비유</h3>
+<ul>
+<li>context window -> 모델의 기억력</li>
+<li>token 수 증가 -> 더 많은 정보를 기억</li>
+<li>하지만 계산 비용 증가</li>
+</ul>
+
+<h2>1. Token Sequence 표현</h2>
+<p>LLM 입력은 다음과 같은 토큰 시퀀스입니다.</p>
+<p><code>x = [t1, t2, ..., t_n]</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>t_i : token id</li>
+<li>n : sequence length</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>sequence length가 context window를 결정합니다.</p>
+
+<h3>주의점</h3>
+<p>n이 context window보다 크면 입력이 잘리거나(truncation) 분할됩니다.</p>
+
+<h2>2. Context Window</h2>
+<p>context window는 모델이 한 번에 처리할 수 있는 최대 토큰 수입니다.</p>
+<p><code>n <= C</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>n : 입력 토큰 길이</li>
+<li>C : context window</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>모델 메모리와 계산량을 제한합니다.</p>
+
+<h3>주의점</h3>
+<p>긴 문서는 여러 chunk로 분할해야 합니다.</p>
+
+<h2>3. Attention 계산 비용</h2>
+<p>Transformer의 self-attention 계산은 다음 복잡도를 가집니다.</p>
+<p><code>Cost ∝ n^2</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>n : 토큰 길이</li>
+</ul>
+
+<h3>직관 설명</h3>
+<p>모든 토큰이 서로를 attention하기 때문에 계산량이 급격히 증가합니다.</p>
+
+<h3>예시</h3>
+<table>
+<thead>
+<tr>
+<th>tokens</th>
+<th>attention pairs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1K</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>4K</td>
+<td>16M</td>
+</tr>
+<tr>
+<td>8K</td>
+<td>64M</td>
+</tr>
+</tbody>
+</table>
+
+<h3>주의점</h3>
+<p>token 수가 2배 증가하면 계산량은 4배 증가합니다.</p>
+
+<h2>4. Token 비용</h2>
+<p>API 기반 LLM에서는 token 수가 비용을 결정합니다.</p>
+<p><code>Cost ≈ price_per_token × tokens</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>tokens : 입력 + 출력 토큰 수</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+<p>긴 context는 비용 증가로 이어집니다.</p>
+
+<h2>5. 성능과 Token Length</h2>
+<p>긴 context는 더 많은 정보를 제공합니다.</p>
+<ul>
+<li>문서 이해</li>
+<li>대화 기억</li>
+<li>코드 분석</li>
+</ul>
+<p>하지만 다음 문제도 발생합니다.</p>
+<ul>
+<li>attention dilution</li>
+<li>long-range dependency 문제</li>
+</ul>
+<p>즉 너무 긴 context는 오히려 성능 저하를 일으킬 수 있습니다.</p>
+
+<h2>6. Tradeoff 요약</h2>
+<table>
+<thead>
+<tr>
+<th>요소</th>
+<th>효과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>큰 context window</td>
+<td>더 많은 정보 처리</td>
+</tr>
+<tr>
+<td>긴 token sequence</td>
+<td>계산 비용 증가</td>
+</tr>
+<tr>
+<td>긴 context</td>
+<td>attention 분산 가능</td>
+</tr>
+</tbody>
+</table>
+
+<h2>7. 실제 해결 전략</h2>
+<ul>
+<li>Chunking</li>
+<li>RAG retrieval</li>
+<li>Sliding window</li>
+</ul>
+<p>예:</p>
+<pre><code>문서 -> chunk1
+      -> chunk2
+      -> chunk3</code></pre>
+<p>필요한 chunk만 모델에 입력합니다.</p>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tokenize</td>
+<td><code>tokenizer.encode(text)</code></td>
+<td>텍스트 -> token</td>
+</tr>
+<tr>
+<td>sequence length</td>
+<td><code>len(tokens)</code></td>
+<td>토큰 길이</td>
+</tr>
+<tr>
+<td>max length</td>
+<td><code>max_length</code></td>
+<td>context window 제한</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>context window가 크면 항상 성능이 좋아진다고 생각한다</li>
+<li>token 길이는 모델 속도와 무관하다고 생각한다</li>
+<li>긴 문서를 그대로 넣는 것이 항상 좋다고 생각한다</li>
+<li>attention 비용이 선형이라고 생각한다</li>
+<li>tokenization 방식이 token 길이에 영향을 주지 않는다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>context window란 무엇인가?</li>
+<li>왜 attention 계산 비용은 O(n^2)인가?</li>
+<li>token length가 비용에 어떤 영향을 주는가?</li>
+<li>긴 context가 항상 좋은 이유가 아닌 이유는 무엇인가?</li>
+<li>긴 문서를 처리할 때 어떤 전략을 사용할 수 있는가?</li>
+</ul>

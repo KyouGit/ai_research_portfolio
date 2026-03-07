@@ -1,0 +1,232 @@
+<h2>주제: 8-4 Score-Based Models (Score Function 기반 생성 모델)</h2>
+<p><strong>분류:</strong> generative</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중상</p>
+<p><strong>선수지식:</strong> 있음 — 확률분포, DDPM, Gradient</p>
+
+<h3>문제 설정</h3>
+<p>생성 모델의 목표는 실제 데이터 분포를 학습하는 것입니다.</p>
+
+<p><code>x ~ p_data(x)</code></p>
+
+<p>하지만 실제 데이터 분포 <code>p(x)</code>는 보통 직접 계산하기 어렵습니다.</p>
+
+<p>Score-based 모델은 다음 아이디어를 사용합니다.</p>
+
+<p><strong>"분포 자체가 아니라 분포의 gradient를 학습하자"</strong></p>
+
+<h2>1. Score Function</h2>
+
+<p>Score function은 다음과 같이 정의됩니다.</p>
+
+<p><code>s(x) = ∇_x log p(x)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>p(x) : 데이터 확률분포</li>
+<li>log p(x) : 로그 확률</li>
+<li>∇_x : x에 대한 gradient</li>
+<li>s(x) : score function</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>확률 밀도의 방향 정보를 제공합니다.</p>
+
+<h3>직관</h3>
+
+<ul>
+<li>score는 "데이터 밀도가 증가하는 방향"</li>
+</ul>
+
+<h3>주의점</h3>
+
+<p>p(x)를 직접 계산하지 않고 gradient만 학습합니다.</p>
+
+<h2>2. Score Matching</h2>
+
+<p>모델은 score function을 근사합니다.</p>
+
+<p><code>s_θ(x) ≈ ∇_x log p(x)</code></p>
+
+<p>loss:</p>
+
+<p><code>L = E[ || s_θ(x) - ∇_x log p(x) ||² ]</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>s_θ(x) : 모델이 예측한 score</li>
+<li>θ : 모델 파라미터</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>데이터 분포의 gradient를 학습합니다.</p>
+
+<h2>3. Noise Perturbation</h2>
+
+<p>실제 데이터는 보통 노이즈를 추가하여 학습합니다.</p>
+
+<p><code>x̃ = x + σ ε</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>x : 원본 데이터</li>
+<li>ε : Gaussian noise</li>
+<li>σ : noise scale</li>
+</ul>
+
+<p>모델은 다음을 학습합니다.</p>
+
+<p><code>s_θ(x̃, σ)</code></p>
+
+<h3>왜 필요한가</h3>
+
+<p>다양한 noise 수준에서 score를 학습합니다.</p>
+
+<h2>4. Annealed Score Matching</h2>
+
+<p>여러 noise level을 사용합니다.</p>
+
+<p><code>σ₁ &gt; σ₂ &gt; ... &gt; σ_K</code></p>
+
+<p>loss:</p>
+
+<p><code>L = Σ λ_k E[ || s_θ(x̃_k) - score_k ||² ]</code></p>
+
+<h3>왜 중요한가</h3>
+
+<p>모델이 다양한 noise 수준에서 안정적으로 학습합니다.</p>
+
+<h2>5. Langevin Dynamics</h2>
+
+<p>score function을 사용하여 샘플을 생성합니다.</p>
+
+<p><code>x_{t+1} = x_t + η s_θ(x_t) + √(2η) z</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>η : step size</li>
+<li>z : Gaussian noise</li>
+<li>s_θ(x_t) : score estimate</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>score 방향으로 샘플을 이동시켜 데이터 분포로 수렴합니다.</p>
+
+<h3>직관</h3>
+
+<ul>
+<li>noise → 점점 데이터 분포로 이동</li>
+</ul>
+
+<h2>6. Diffusion과 Score-Based 관계</h2>
+
+<p>Score-based 모델과 diffusion 모델은 매우 밀접합니다.</p>
+
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>핵심 학습 대상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDPM</td>
+<td>noise ε</td>
+</tr>
+<tr>
+<td>Score-based</td>
+<td>score ∇ log p(x)</td>
+</tr>
+</tbody>
+</table>
+
+<p>두 모델은 사실상 같은 framework로 해석됩니다.</p>
+
+<h2>7. Sampling 과정</h2>
+
+<pre><code>
+Noise sample
+   ↓
+Score estimate
+   ↓
+Langevin update
+   ↓
+Iterate
+   ↓
+Generated sample
+</code></pre>
+
+<h2>8. Score-Based 모델 장점</h2>
+
+<ul>
+<li>stable training</li>
+<li>high-quality generation</li>
+<li>theoretical foundation strong</li>
+</ul>
+
+<h2>9. 한계</h2>
+
+<ul>
+<li>sampling 속도 느림</li>
+<li>많은 diffusion step 필요</li>
+<li>compute cost 높음</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>noise 추가</td>
+<td><code>x_t = x + sigma * noise</code></td>
+<td>perturbed sample</td>
+</tr>
+<tr>
+<td>score prediction</td>
+<td><code>score = model(x_t)</code></td>
+<td>score estimation</td>
+</tr>
+<tr>
+<td>Langevin update</td>
+<td><code>x = x + step * score + noise</code></td>
+<td>sampling step</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>score function은 확률 자체라고 생각한다</li>
+<li>score-based 모델은 GAN 변형이라고 생각한다</li>
+<li>noise perturbation은 학습에 필요 없다고 생각한다</li>
+<li>Langevin dynamics는 optimizer라고 생각한다</li>
+<li>score-based 모델과 diffusion은 완전히 다른 모델이라고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>Score function은 어떤 의미를 가지는가?</li>
+<li>왜 확률 대신 gradient를 학습하는가?</li>
+<li>Noise perturbation은 왜 필요한가?</li>
+<li>Langevin dynamics는 어떤 역할을 하는가?</li>
+<li>Score-based 모델과 diffusion 모델의 관계는 무엇인가?</li>
+</ul>
+
+<!-- save_as: docs/posts/generative/score_based_models_score_function_generation_concept.html -->

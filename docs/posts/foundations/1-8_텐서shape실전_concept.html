@@ -1,0 +1,118 @@
+<h2>주제: 1-8 텐서 Shape 실전 (Broadcasting, Batch/Seq/Hidden)</h2>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 입문</p>
+<p class="meta"><strong>선수지식:</strong> 있음 - 벡터, 행렬곱, y = Wx + b</p>
+
+<h3>문제 설정</h3>
+<p>딥러닝 코드에서 가장 흔한 오류 중 하나는 shape mismatch입니다. 모델 계산 과정을 이해하려면 텐서 차원을 정확히 추적할 수 있어야 합니다.</p>
+<p>핵심 차원은 batch, sequence, hidden입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+  <li>batch: 한 번에 처리하는 데이터 묶음</li>
+  <li>sequence: 데이터의 순서 길이</li>
+  <li>hidden: 모델 내부 표현 차원</li>
+</ul>
+
+<h2>1. Batch Dimension</h2>
+<p>여러 데이터를 동시에 처리할 때 배치 차원을 사용합니다.</p>
+<pre><code>batch = 4
+feature = 3
+X shape = (4, 3)</code></pre>
+<p><code>X ∈ R^(B x D)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+  <li>B: batch size</li>
+  <li>D: feature dimension</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>GPU 병렬 연산을 활용해 처리량을 높일 수 있습니다.</p>
+
+<h3>주의점</h3>
+<p>batch 차원은 보통 첫 번째 차원입니다.</p>
+
+<h2>2. Sequence Dimension</h2>
+<p>NLP에서는 순서 길이(토큰 길이) 차원이 중요합니다.</p>
+<p>임베딩 후 일반 shape은 <code>(B, S, H)</code>입니다.</p>
+<table>
+  <thead>
+    <tr><th>dimension</th><th>의미</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>B</td><td>batch size</td></tr>
+    <tr><td>S</td><td>sequence length</td></tr>
+    <tr><td>H</td><td>hidden size</td></tr>
+  </tbody>
+</table>
+<pre><code>B = 2, S = 5, H = 768
+shape = (2, 5, 768)</code></pre>
+
+<h2>3. Hidden Dimension</h2>
+<p>hidden dimension은 토큰 내부 표현 벡터의 크기입니다.</p>
+<p><code>embedding ∈ R^(S x H)</code></p>
+
+<h3>왜 필요한가</h3>
+<p>표현 가능한 특징 공간이 커집니다.</p>
+
+<h3>주의점</h3>
+<p>hidden 차원이 커질수록 계산량/메모리 사용량이 증가합니다.</p>
+
+<h2>4. Broadcasting</h2>
+<p>서로 다른 shape 텐서를 자동 확장해 연산하는 기능입니다.</p>
+<pre><code>X shape = (B, S, H)
+bias shape = (H)
+Y = X + bias</code></pre>
+<p><code>(H) -> (B, S, H)</code>로 맞춰져 연산됩니다.</p>
+
+<h3>수식 표현</h3>
+<p><code>y = x + b</code></p>
+
+<h3>왜 필요한가</h3>
+<p>불필요한 메모리 복사 없이 효율적으로 연산할 수 있습니다.</p>
+
+<h3>주의점</h3>
+<p>broadcast 규칙을 잘못 이해하면 shape 오류가 발생합니다.</p>
+
+<h2>5. Transformer 텐서 흐름 예</h2>
+<pre><code>input_ids: (B, S)
+embedding: (B, S, H)
+Q, K, V:   (B, S, H)
+QK^T:      (B, S, S)
+output:    (B, S, H)</code></pre>
+<p><code>Attention(Q,K,V) = softmax(QK^T / sqrt(d))V</code></p>
+
+<h3>주의점</h3>
+<p>attention에서는 sequence 간 상호작용으로 <code>S x S</code> 행렬이 만들어집니다.</p>
+
+<h2>코드-수식 연결</h2>
+<table>
+  <thead>
+    <tr><th>수식</th><th>PyTorch 코드</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>X ∈ R^(B,S,H)</td><td><code>x.shape</code></td><td>텐서 shape 확인</td></tr>
+    <tr><td>broadcast</td><td><code>x + bias</code></td><td>자동 확장 연산</td></tr>
+    <tr><td>QK^T</td><td><code>torch.matmul(Q, K.transpose(-1,-2))</code></td><td>attention score</td></tr>
+  </tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+  <li>batch 차원과 sequence 차원을 혼동한다</li>
+  <li>broadcasting이 실제 메모리 복사를 항상 만든다고 생각한다</li>
+  <li>hidden dimension은 항상 동일하다고 생각한다</li>
+  <li>attention 계산에서 shape 변화를 추적하지 않는다</li>
+  <li>shape 오류를 단순 오타로만 본다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+  <li>(B,S,H) 텐서의 각 차원은 무엇을 의미하는가?</li>
+  <li>broadcasting은 어떤 규칙으로 동작하는가?</li>
+  <li>bias가 hidden 차원에 어떻게 적용되는가?</li>
+  <li>Transformer attention에서 QK^T shape은 무엇인가?</li>
+  <li>sequence 길이가 길어지면 계산 비용은 어떻게 변하는가?</li>
+</ul>

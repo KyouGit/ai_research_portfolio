@@ -1,0 +1,192 @@
+<h2>주제: TK-3 SentencePiece (Language-Independent Tokenization)</h2>
+<p class="meta"><strong>분류:</strong> llm</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 입문</p>
+<p class="meta"><strong>선수지식:</strong> 없음</p>
+
+<h3>문제 설정</h3>
+<p>기존 토크나이저(BPE, WordPiece)는 대부분 <strong>공백 기반 단어 분리</strong>를 전제로 합니다. 하지만 일부 언어에서는 공백이 단어 경계를 정확히 나타내지 않습니다.</p>
+<ul>
+<li>중국어</li>
+<li>일본어</li>
+<li>한국어</li>
+</ul>
+<p>이 문제를 해결하기 위해 Google이 개발한 토크나이저가 <strong>SentencePiece</strong>입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+<li>기존 tokenizer -> 단어 먼저 자름</li>
+<li>SentencePiece -> 문자 스트림에서 바로 subword 학습</li>
+</ul>
+<p>핵심 아이디어:</p>
+<p><strong>공백을 포함한 문자열 전체를 하나의 sequence로 보고 subword를 학습</strong></p>
+
+<h2>1. Language-Independent Tokenization</h2>
+<p>SentencePiece는 입력 텍스트를 그대로 사용합니다.</p>
+<p>예:</p>
+<pre><code>Hello world</code></pre>
+<p>SentencePiece 내부 표현:</p>
+<pre><code>▁Hello ▁world</code></pre>
+
+<h3>기호 의미</h3>
+<ul>
+<li>▁ : 공백(space) 표시</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<ul>
+<li>언어별 전처리 필요 없음</li>
+<li>다국어 모델 학습 가능</li>
+</ul>
+
+<h3>주의점</h3>
+<p>공백 자체도 토큰의 일부가 됩니다.</p>
+
+<h2>2. SentencePiece 학습 목표</h2>
+<p>SentencePiece는 다음 확률 모델을 사용합니다.</p>
+<p><code>P(sentence) = Π P(token_i)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>token_i : subword 토큰</li>
+<li>P(token_i) : 토큰 확률</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>subword 분해가 문장의 확률을 잘 설명하도록 합니다.</p>
+
+<h3>주의점</h3>
+<p>실제 구현에서는 Unigram LM을 사용합니다.</p>
+
+<h2>3. Unigram Language Model</h2>
+<p>SentencePiece의 대표 알고리즘은 <strong>Unigram LM</strong>입니다.</p>
+<p>문장을 여러 방식으로 분해할 수 있습니다.</p>
+<p>예:</p>
+<pre><code>unbelievable
+
+un + believable
+unbel + iev + able
+un + bel + iev + able</code></pre>
+<p>각 분해의 확률:</p>
+<p><code>P(sentence) = Π P(token_i)</code></p>
+
+<h3>핵심 아이디어</h3>
+<p>확률이 가장 높은 token segmentation을 선택합니다.</p>
+
+<h3>주의점</h3>
+<p>token set은 반복적으로 pruning됩니다.</p>
+
+<h2>4. Normalization 전략</h2>
+<p>SentencePiece는 토큰화 전에 텍스트 정규화를 수행합니다.</p>
+<p>대표적인 정규화:</p>
+<ul>
+<li>Unicode normalization</li>
+<li>공백 처리</li>
+<li>대소문자 정규화</li>
+</ul>
+<p>수식 표현:</p>
+<p><code>x' = normalize(x)</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>x : 원본 텍스트</li>
+<li>x' : 정규화된 텍스트</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+<p>텍스트 표현의 변형을 줄여 안정적인 토큰화를 제공합니다.</p>
+
+<h2>5. SentencePiece Tokenization 예</h2>
+<p>입력:</p>
+<pre><code>Machine learning is powerful</code></pre>
+<p>토큰:</p>
+<pre><code>▁Machine ▁learn ing ▁is ▁power ful</code></pre>
+<p>이 토큰은 ID로 변환됩니다.</p>
+<p><code>x = [t1, t2, ..., t_n]</code></p>
+
+<h3>기호 의미</h3>
+<ul>
+<li>t_i : token id</li>
+<li>n : 토큰 길이</li>
+</ul>
+
+<h2>6. SentencePiece vs BPE</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>특징</th>
+<th>사용 모델</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BPE</td>
+<td>빈도 기반 merge</td>
+<td>GPT</td>
+</tr>
+<tr>
+<td>WordPiece</td>
+<td>likelihood 기반 merge</td>
+<td>BERT</td>
+</tr>
+<tr>
+<td>SentencePiece</td>
+<td>언어 독립 tokenizer</td>
+<td>T5, ALBERT</td>
+</tr>
+</tbody>
+</table>
+
+<h2>7. SentencePiece 장점</h2>
+<ul>
+<li>언어 독립 tokenization</li>
+<li>공백 기반 preprocessing 불필요</li>
+<li>다국어 모델에 적합</li>
+</ul>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>라이브러리 코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SentencePiece</td>
+<td><code>sentencepiece.SentencePieceProcessor()</code></td>
+<td>토크나이저 로드</td>
+</tr>
+<tr>
+<td>encode</td>
+<td><code>sp.encode(text)</code></td>
+<td>텍스트 -> 토큰</td>
+</tr>
+<tr>
+<td>train</td>
+<td><code>spm.SentencePieceTrainer</code></td>
+<td>tokenizer 학습</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>SentencePiece는 BPE와 동일한 알고리즘이라고 생각한다</li>
+<li>공백은 tokenizer에서 제거된다고 생각한다</li>
+<li>SentencePiece는 영어에만 적합하다고 생각한다</li>
+<li>토큰화 전에 반드시 단어 분리가 필요하다고 생각한다</li>
+<li>tokenization은 모델 성능에 큰 영향을 주지 않는다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>SentencePiece의 핵심 아이디어는 무엇인가?</li>
+<li>왜 SentencePiece는 언어 독립적이라고 하는가?</li>
+<li>▁ 기호는 무엇을 의미하는가?</li>
+<li>Unigram LM 기반 토큰 선택 방식은 무엇인가?</li>
+<li>SentencePiece가 다국어 모델에서 유리한 이유는 무엇인가?</li>
+</ul>

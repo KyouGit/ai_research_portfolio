@@ -1,0 +1,208 @@
+<h2>주제: DT-4 ZeRO / FSDP (Parameter, Gradient, Optimizer Sharding)</h2>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중상</p>
+<p class="meta"><strong>선수지식:</strong> 있음 — DDP, GPU 메모리 구조, optimizer</p>
+
+<h3>문제 설정</h3>
+<p>대형 모델 학습에서 가장 큰 문제는 <strong>GPU 메모리 사용량</strong>입니다. 일반적인 DDP에서는 각 GPU가 다음을 모두 복제합니다.</p>
+<ul>
+  <li>모델 파라미터 (parameters)</li>
+  <li>gradient</li>
+  <li>optimizer state</li>
+</ul>
+<p>즉 GPU마다 동일한 데이터가 저장됩니다.</p>
+<p><code>Memory ≈ parameters + gradients + optimizer_states</code></p>
+<p>대형 모델에서는 이 메모리 사용량이 매우 커집니다.</p>
+<p>이를 해결하기 위해 등장한 방법이 <strong>ZeRO (Zero Redundancy Optimizer)</strong>와 <strong>FSDP (Fully Sharded Data Parallel)</strong>입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+  <li>DDP -> 모든 사람이 같은 책을 모두 들고 있음</li>
+  <li>ZeRO/FSDP -> 책을 여러 사람에게 나눠서 들고 있음</li>
+</ul>
+
+<h2>1. DDP 메모리 구조</h2>
+<p>예: 4 GPU</p>
+<pre><code>GPU0 : parameters + gradients + optimizer
+GPU1 : parameters + gradients + optimizer
+GPU2 : parameters + gradients + optimizer
+GPU3 : parameters + gradients + optimizer</code></pre>
+<p>모든 GPU가 동일한 데이터를 복제합니다.</p>
+
+<h3>문제</h3>
+<p>메모리 사용량이 GPU 수와 무관하게 동일합니다.</p>
+
+<h2>2. ZeRO 기본 아이디어</h2>
+<p>ZeRO는 모델 상태를 여러 GPU에 분산 저장합니다.</p>
+<p>즉 <strong>redundancy 제거</strong>가 핵심입니다.</p>
+<p>모델 상태:</p>
+<ul>
+  <li>parameters</li>
+  <li>gradients</li>
+  <li>optimizer states</li>
+</ul>
+
+<h2>3. ZeRO Stage 1</h2>
+<p>optimizer state만 분산 저장합니다.</p>
+<pre><code>GPU0 : parameters + gradients + optimizer_part0
+GPU1 : parameters + gradients + optimizer_part1
+GPU2 : parameters + gradients + optimizer_part2
+GPU3 : parameters + gradients + optimizer_part3</code></pre>
+
+<h3>효과</h3>
+<p>optimizer 메모리 사용량 감소</p>
+
+<h3>주의점</h3>
+<p>parameters와 gradients는 여전히 복제됩니다.</p>
+
+<h2>4. ZeRO Stage 2</h2>
+<p>optimizer state와 gradient를 모두 분산 저장합니다.</p>
+<pre><code>GPU0 : parameters + gradient_part0 + optimizer_part0
+GPU1 : parameters + gradient_part1 + optimizer_part1
+GPU2 : parameters + gradient_part2 + optimizer_part2
+GPU3 : parameters + gradient_part3 + optimizer_part3</code></pre>
+
+<h3>효과</h3>
+<p>gradient 메모리 사용량 감소</p>
+
+<h3>주의점</h3>
+<p>forward/backward 시 gradient 통신이 필요합니다.</p>
+
+<h2>5. ZeRO Stage 3</h2>
+<p>parameters까지 분산 저장합니다.</p>
+<pre><code>GPU0 : parameter_part0 + gradient_part0 + optimizer_part0
+GPU1 : parameter_part1 + gradient_part1 + optimizer_part1
+GPU2 : parameter_part2 + gradient_part2 + optimizer_part2
+GPU3 : parameter_part3 + gradient_part3 + optimizer_part3</code></pre>
+
+<h3>효과</h3>
+<p>모델 파라미터 메모리도 분산됩니다.</p>
+
+<h3>주의점</h3>
+<p>forward 계산 전에 parameter gather가 필요합니다.</p>
+
+<h2>6. FSDP</h2>
+<p>FSDP는 PyTorch에서 제공하는 ZeRO Stage3와 유사한 방식입니다.</p>
+<p>핵심 개념:</p>
+<ul>
+  <li>parameter sharding</li>
+  <li>forward 시 parameter gather</li>
+  <li>backward 후 parameter shard 유지</li>
+</ul>
+<p>forward 과정:</p>
+<pre><code>1. parameter all-gather
+2. forward 계산
+3. backward
+4. gradient reduce-scatter</code></pre>
+
+<h3>수식 예</h3>
+<p><code>y = Wx</code></p>
+<p>W가 GPU마다 분할됩니다.</p>
+<p><code>W = concat(W1, W2, ..., W_n)</code></p>
+
+<h3>왜 필요한가</h3>
+<p>수백억~수천억 파라미터 모델 학습이 가능해집니다.</p>
+
+<h2>7. ZeRO Stage 비교</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>분산 대상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stage 1</td>
+<td>optimizer state</td>
+</tr>
+<tr>
+<td>Stage 2</td>
+<td>optimizer + gradient</td>
+</tr>
+<tr>
+<td>Stage 3</td>
+<td>optimizer + gradient + parameter</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. 메모리 절약 효과</h2>
+<table>
+<thead>
+<tr>
+<th>방법</th>
+<th>메모리 절약</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDP</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>ZeRO Stage1</td>
+<td>optimizer 절약</td>
+</tr>
+<tr>
+<td>ZeRO Stage2</td>
+<td>gradient 절약</td>
+</tr>
+<tr>
+<td>ZeRO Stage3 / FSDP</td>
+<td>parameter 절약</td>
+</tr>
+</tbody>
+</table>
+
+<h2>코드-수식 연결</h2>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>PyTorch 코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FSDP</td>
+<td><code>torch.distributed.fsdp.FullyShardedDataParallel</code></td>
+<td>parameter sharding</td>
+</tr>
+<tr>
+<td>ZeRO</td>
+<td><code>DeepSpeed ZeRO</code></td>
+<td>optimizer/gradient 분산</td>
+</tr>
+<tr>
+<td>all-gather</td>
+<td><code>torch.distributed.all_gather()</code></td>
+<td>parameter 수집</td>
+</tr>
+<tr>
+<td>reduce-scatter</td>
+<td><code>torch.distributed.reduce_scatter()</code></td>
+<td>gradient 분산</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+<li>ZeRO는 단순한 optimizer라고 생각한다</li>
+<li>DDP보다 항상 빠르다고 생각한다</li>
+<li>ZeRO Stage3는 통신이 필요 없다고 생각한다</li>
+<li>FSDP는 Data Parallel과 동일하다고 생각한다</li>
+<li>모든 모델에서 ZeRO가 필요하다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+<li>DDP에서 메모리 복제가 발생하는 이유는 무엇인가?</li>
+<li>ZeRO Stage1,2,3의 차이는 무엇인가?</li>
+<li>parameter sharding이 왜 필요한가?</li>
+<li>FSDP에서 forward 전에 parameter gather가 필요한 이유는 무엇인가?</li>
+<li>ZeRO와 Tensor Parallel의 차이는 무엇인가?</li>
+</ul>

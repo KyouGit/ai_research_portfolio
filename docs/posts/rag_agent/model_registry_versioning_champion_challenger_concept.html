@@ -1,0 +1,294 @@
+<h2>주제: 6.5-3 Model Registry (모델 버전 관리와 Champion / Challenger 전략)</h2>
+<p><strong>분류:</strong> rag_agent</p>
+<p><strong>타입:</strong> concept</p>
+<p><strong>난이도:</strong> 중급</p>
+<p><strong>선수지식:</strong> 있음 — ML Pipeline, Experiment Tracking</p>
+
+<h3>문제 설정</h3>
+<p>ML 시스템에서는 시간이 지남에 따라 여러 모델이 생성됩니다.</p>
+
+<pre><code>
+model_v1
+model_v2
+model_v3
+...
+</code></pre>
+
+<p>문제는 다음과 같습니다.</p>
+
+<ul>
+<li>어떤 모델이 현재 서비스에 사용되는지 관리 필요</li>
+<li>새 모델이 기존 모델보다 좋은지 검증 필요</li>
+<li>모델 rollback 가능해야 함</li>
+</ul>
+
+<p>이를 해결하는 시스템이 <strong>Model Registry</strong>입니다.</p>
+
+<h2>1. Model Registry 개념</h2>
+
+<p>Model Registry는 모델을 중앙에서 관리하는 시스템입니다.</p>
+
+<pre><code>
+Training
+   ↓
+Experiment Tracking
+   ↓
+Model Registry
+   ↓
+Deployment
+</code></pre>
+
+<p>각 모델은 버전으로 관리됩니다.</p>
+
+<p><code>Model = {version_1, version_2, ..., version_n}</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>version_i : 모델 버전</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>모델 lifecycle을 관리하기 위해 필요합니다.</p>
+
+<h3>주의점</h3>
+
+<p>버전 관리 없이 모델을 배포하면 운영 문제가 발생합니다.</p>
+
+<h2>2. 모델 버전 관리</h2>
+
+<p>각 모델은 버전 번호를 가집니다.</p>
+
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1</td>
+<td>baseline 모델</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>feature 개선 모델</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>최신 실험 모델</td>
+</tr>
+</tbody>
+</table>
+
+<p>모델 성능:</p>
+
+<p><code>Metric = E[score(x)]</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>score(x) : 샘플 평가 점수</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>모델 성능을 기준으로 버전을 비교합니다.</p>
+
+<h2>3. Model Lifecycle</h2>
+
+<p>모델은 보통 다음 단계로 관리됩니다.</p>
+
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Staging</td>
+<td>테스트 모델</td>
+</tr>
+<tr>
+<td>Production</td>
+<td>서비스 모델</td>
+</tr>
+<tr>
+<td>Archived</td>
+<td>사용 중지 모델</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>
+Training
+ ↓
+Staging
+ ↓
+Production
+</code></pre>
+
+<h3>왜 중요한가</h3>
+
+<p>모델 배포 프로세스를 체계적으로 관리합니다.</p>
+
+<h2>4. Champion / Challenger 전략</h2>
+
+<p>운영 시스템에서는 보통 두 모델을 비교합니다.</p>
+
+<ul>
+<li>Champion : 현재 서비스 모델</li>
+<li>Challenger : 새 후보 모델</li>
+</ul>
+
+<p>비교 기준:</p>
+
+<p><code>Δ = Metric(challenger) - Metric(champion)</code></p>
+
+<h3>기호 의미</h3>
+
+<ul>
+<li>Metric : 평가 metric</li>
+</ul>
+
+<h3>왜 필요한가</h3>
+
+<p>새 모델이 실제로 더 좋은지 검증합니다.</p>
+
+<h2>5. Online Evaluation</h2>
+
+<p>Challenger 모델은 실제 트래픽에서 테스트할 수 있습니다.</p>
+
+<pre><code>
+User request
+   ↓
+Champion model
+   ↓
+Challenger model
+</code></pre>
+
+<p>평가:</p>
+
+<ul>
+<li>A/B testing</li>
+<li>shadow deployment</li>
+</ul>
+
+<h3>왜 중요한가</h3>
+
+<p>실제 사용자 환경에서 모델을 평가할 수 있습니다.</p>
+
+<h2>6. Model Rollback</h2>
+
+<p>새 모델이 문제가 있을 경우 이전 모델로 복구합니다.</p>
+
+<pre><code>
+v3 deployed
+ ↓
+error detected
+ ↓
+rollback to v2
+</code></pre>
+
+<h3>왜 필요한가</h3>
+
+<p>서비스 안정성을 보장합니다.</p>
+
+<h2>7. MLflow Model Registry</h2>
+
+<p>MLflow는 model registry 기능을 제공합니다.</p>
+
+<p>구성:</p>
+
+<ul>
+<li>model version</li>
+<li>stage management</li>
+<li>artifact storage</li>
+</ul>
+
+<p>예:</p>
+
+<pre><code>
+mlflow.register_model()
+</code></pre>
+
+<h2>8. SageMaker Model Registry</h2>
+
+<p>AWS SageMaker에서도 model registry를 제공합니다.</p>
+
+<p>특징:</p>
+
+<ul>
+<li>모델 승인 workflow</li>
+<li>CI/CD integration</li>
+<li>model lineage 관리</li>
+</ul>
+
+<h2>9. Model Registry Workflow</h2>
+
+<pre><code>
+Training
+   ↓
+Experiment Tracking
+   ↓
+Register Model
+   ↓
+Staging
+   ↓
+Production
+</code></pre>
+
+<h2>코드-수식 연결</h2>
+
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>코드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>모델 등록</td>
+<td><code>mlflow.register_model()</code></td>
+<td>registry 등록</td>
+</tr>
+<tr>
+<td>모델 로드</td>
+<td><code>mlflow.pyfunc.load_model()</code></td>
+<td>production 모델 로드</td>
+</tr>
+<tr>
+<td>버전 관리</td>
+<td><code>model_version</code></td>
+<td>모델 버전</td>
+</tr>
+</tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+
+<ul>
+<li>모델 버전 관리는 코드 버전과 동일하다고 생각한다</li>
+<li>새 모델은 항상 기존 모델보다 좋다고 생각한다</li>
+<li>model registry 없이도 운영이 가능하다고 생각한다</li>
+<li>rollback은 필요하지 않다고 생각한다</li>
+<li>champion/challenger 전략은 대규모 서비스에서만 필요하다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+
+<ul>
+<li>Model Registry는 어떤 문제를 해결하는가?</li>
+<li>모델 버전 관리는 왜 필요한가?</li>
+<li>Champion / Challenger 전략은 어떻게 작동하는가?</li>
+<li>Model lifecycle 단계는 무엇인가?</li>
+<li>Model rollback은 어떤 상황에서 필요한가?</li>
+</ul>
+
+<!-- save_as: docs/posts/rag_agent/model_registry_versioning_champion_challenger_concept.html -->

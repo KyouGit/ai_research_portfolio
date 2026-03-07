@@ -1,0 +1,96 @@
+<h2>주제: 2-3 정규화 (Weight Decay & Dropout)</h2>
+<p class="meta"><strong>분류:</strong> foundations</p>
+<p class="meta"><strong>타입:</strong> concept</p>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>선수지식:</strong> 있음 - 손실함수, optimizer, overfitting</p>
+
+<h3>문제 설정</h3>
+<p>모델이 학습 데이터에만 과도하게 맞는 과적합(overfitting)을 줄이기 위해 정규화(regularization)를 사용합니다.</p>
+<p>대표 방법은 weight decay와 dropout입니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+  <li>모델: 문제 풀이 전략</li>
+  <li>과적합: 문제를 외워버린 상태</li>
+  <li>정규화: 더 단순하고 일반적인 패턴을 학습하도록 유도</li>
+</ul>
+
+<h2>1. Weight Decay</h2>
+<p>손실에 가중치 크기 패널티를 추가합니다.</p>
+<p><code>L' = L + lambda * ||w||^2</code></p>
+<ul>
+  <li>L: 원래 손실</li>
+  <li>w: 가중치</li>
+  <li>lambda: 정규화 강도</li>
+</ul>
+<p>가중치가 과도하게 커지는 것을 억제해 모델 복잡도를 줄입니다.</p>
+<p>주의: lambda가 너무 크면 underfitting이 발생할 수 있습니다.</p>
+
+<h2>2. Weight Decay 업데이트 관점</h2>
+<p><code>w <- w - eta * (grad(L) + lambda * w)</code></p>
+<p>가중치에 지속적인 축소 압력을 주어 일반화 성능을 개선합니다.</p>
+<p>주의: Adam에서는 weight decay가 gradient와 섞이는 이슈가 있어 AdamW를 사용합니다.</p>
+
+<h2>3. Dropout</h2>
+<p>훈련 중 일부 뉴런을 랜덤하게 비활성화합니다.</p>
+<p><code>a' = m * a</code>, <code>m ~ Bernoulli(p)</code></p>
+<ul>
+  <li>a: 활성값</li>
+  <li>m: dropout mask</li>
+  <li>p: 유지 확률</li>
+</ul>
+<p>co-adaptation을 줄이고 서브네트워크 앙상블 효과로 일반화를 돕습니다.</p>
+<p>주의: 추론 단계에서는 dropout을 끕니다.</p>
+
+<h2>4. Dropout 기대값 보정</h2>
+<p>훈련 시 보통 다음 형태를 사용합니다.</p>
+<p><code>a' = (m * a) / p</code></p>
+<p>훈련/추론 간 출력 스케일 차이를 줄이기 위한 보정입니다.</p>
+
+<h2>5. Weight Decay vs Dropout</h2>
+<table>
+  <thead>
+    <tr><th>방법</th><th>목적</th><th>적용 위치</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Weight Decay</td><td>가중치 크기 제한</td><td>파라미터</td></tr>
+    <tr><td>Dropout</td><td>뉴런 랜덤 제거</td><td>활성값</td></tr>
+  </tbody>
+</table>
+
+<h2>6. 일반화에 미치는 영향</h2>
+<ul>
+  <li>Weight Decay: 모델 단순화</li>
+  <li>Dropout: 모델 다양성 증가</li>
+</ul>
+<p>두 방법 모두 과적합 완화와 일반화 성능 향상에 기여합니다.</p>
+
+<h2>코드-수식 연결</h2>
+<table>
+  <thead>
+    <tr><th>수식</th><th>PyTorch 코드</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>L + lambda||w||^2</td><td><code>torch.optim.AdamW(..., weight_decay=lambda)</code></td><td>weight decay</td></tr>
+    <tr><td>a' = m * a</td><td><code>torch.nn.Dropout(p)</code></td><td>dropout</td></tr>
+    <tr><td>m ~ Bernoulli(p)</td><td><code>torch.bernoulli()</code></td><td>dropout mask</td></tr>
+  </tbody>
+</table>
+
+<h2>자주 하는 오해 5개</h2>
+<ul>
+  <li>정규화는 항상 성능을 높인다고 생각한다</li>
+  <li>weight decay와 L2 regularization이 모든 optimizer에서 완전히 같다고 생각한다</li>
+  <li>dropout은 모든 모델에서 필수라고 생각한다</li>
+  <li>dropout을 추론 단계에서도 써야 한다고 생각한다</li>
+  <li>작은 모델에는 정규화가 필요 없다고 생각한다</li>
+</ul>
+
+<h2>체크리스트 (스스로 설명 가능해야 하는 질문)</h2>
+<ul>
+  <li>weight decay는 어떻게 과적합을 줄이는가?</li>
+  <li><code>L' = L + lambda||w||^2</code>의 의미는 무엇인가?</li>
+  <li>dropout은 어떻게 일반화를 개선하는가?</li>
+  <li>dropout mask는 어떤 분포에서 생성되는가?</li>
+  <li>AdamW가 weight decay 이슈를 어떻게 해결하는가?</li>
+</ul>

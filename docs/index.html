@@ -95,11 +95,329 @@
       <section class="section">
   <h2>LLM</h2>
   <div class="grid">
-    <article class="card">
+<article class="card">
   <h3><a href="posts/foundations/0-1_선형대수기초_concept.html">00. [기본기] 선형대수+확률</a></h3>
   <p class="summary">x_i ∈ R^d, P(x|y), softmax 등 BERT 전 필수 베이스</p>
   <p class="meta"><strong>tags</strong>: AI, 기본기, 선형대수, 확률, softmax, conditional probability</p>
   <p class="meta"><strong>updated</strong>: 2026-03-04 00:10:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/1-1_퍼셉트론활성함수_concept.html">01-1. [기본기] 퍼셉트론과 활성함수</a></h3>
+  <p class="summary">a = sigma(Wx + b) 관점에서 선형 변환과 비선형 변환의 역할 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, 기본기, 퍼셉트론, 활성함수, ReLU, GELU, Sigmoid</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/1-2_손실함수기초_concept.html">01-2. [기본기] 손실함수 기초 (MSE vs CE)</a></h3>
+  <p class="summary">MSE와 Cross-Entropy의 차이, 로그우도 연결, 회귀/분류별 선택 기준 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, 기본기, 손실함수, MSE, Cross-Entropy, softmax</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/1-5_손실함수확장_concept.html">01-5. [기본기] 손실함수 확장 (KL vs CE)</a></h3>
+  <p class="summary">Cross-Entropy와 KL Divergence의 관계, one-hot에서의 단순화와 로그우도 연결</p>
+  <p class="meta"><strong>tags</strong>: AI, 기본기, 손실함수, KL, Cross-Entropy, 로그우도</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/1-7_정규화학습안정화_concept.html">01-7. [기본기] 정규화와 학습 안정화</a></h3>
+  <p class="summary">표준화, LayerNorm, gradient vanishing/explosion, clipping으로 학습 안정화 핵심 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, 기본기, 정규화, LayerNorm, gradient clipping, 안정화</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/1-8_텐서shape실전_concept.html">01-8. [기본기] 텐서 Shape 실전</a></h3>
+  <p class="summary">Batch/Sequence/Hidden 차원 추적, broadcasting 규칙, Transformer 텐서 흐름 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, 기본기, 텐서, shape, broadcasting, transformer</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/TS-1_초기화XavierHe_concept.html">TS-1. [기본기] 초기화 (Xavier vs He)</a></h3>
+  <p class="summary">신호 분산 안정화 관점에서 Xavier/He 초기화 원리와 선택 기준 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, 기본기, 초기화, Xavier, He, Kaiming</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/TS-2_활성함수ReLUGELUSwiGLU_concept.html">TS-2. [기본기] 활성함수 (ReLU/GELU/SwiGLU)</a></h3>
+  <p class="summary">ReLU, GELU, SwiGLU의 구조/장단점과 Transformer-LLM 맥락에서의 선택 기준 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, 기본기, 활성함수, ReLU, GELU, SwiGLU</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/ddp_data_parallel_concept.html">DT-1. [분산학습] Data Parallel (DDP)</a></h3>
+  <p class="summary">모델 replica 동기화, gradient all-reduce, 통신 비용까지 DDP 핵심 흐름 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, foundations, distributed training, DDP, all-reduce, data parallel</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/model_tensor_parallel_concept.html">DT-2. [분산학습] Model/Tensor Parallel</a></h3>
+  <p class="summary">모델/텐서 분할, column-row parallel, 통신 병목까지 핵심 구조 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, foundations, model parallel, tensor parallel, all-gather, reduce-scatter</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/pipeline_parallel_microbatch_concept.html">DT-3. [분산학습] Pipeline Parallel</a></h3>
+  <p class="summary">레이어 분할, micro-batch 스케줄, bubble overhead와 효율 식까지 핵심 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, foundations, pipeline parallel, micro-batch, bubble overhead, distributed training</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/zero_fsdp_sharding_concept.html">DT-4. [분산학습] ZeRO / FSDP</a></h3>
+  <p class="summary">state sharding 단계와 FSDP의 all-gather/reduce-scatter 흐름까지 핵심 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, foundations, ZeRO, FSDP, sharding, distributed training</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/gradient_accumulation_effective_batch_concept.html">DT-5. [분산학습] Gradient Accumulation</a></h3>
+  <p class="summary">gradient 누적, effective batch size, 평균/합 업데이트 차이까지 핵심 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, foundations, gradient accumulation, effective batch, DDP</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/bpe_tokenization_concept.html">TK-1. [토크나이징] BPE</a></h3>
+  <p class="summary">subword 토큰화의 merge 규칙과 OOV 완화 원리를 입문 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, tokenization, BPE, subword</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/wordpiece_tokenization_concept.html">TK-2. [토크나이징] WordPiece</a></h3>
+  <p class="summary">likelihood 기반 merge score와 BPE 대비 차이를 입문 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, tokenization, WordPiece, BERT</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/sentencepiece_tokenization_concept.html">TK-3. [토크나이징] SentencePiece</a></h3>
+  <p class="summary">공백 포함 문자열 학습과 Unigram LM 기반 분해 전략을 입문 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, tokenization, SentencePiece, Unigram LM</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/token_length_context_tradeoff_concept.html">TK-4. [토크나이징] Token Length Tradeoff</a></h3>
+  <p class="summary">context window, O(n^2) attention 비용, 성능 tradeoff와 실전 대응 전략 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, token length, context window, attention cost</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/word2vec_distributed_representation_concept.html">3-1. [임베딩] Word2Vec (Distributed Representation)</a></h3>
+  <p class="summary">one-hot 한계를 넘는 분산 표현, skip-gram, negative sampling 핵심 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, Word2Vec, embedding, skip-gram, negative sampling</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/self_attention_qkv_concept.html">3-2. [트랜스포머] Self-Attention (QKV)</a></h3>
+  <p class="summary">Q/K/V 생성부터 scaled dot-product, O(n^2) 복잡도까지 핵심 연산 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, self-attention, transformer, QKV</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/positional_encoding_parallelism_concept.html">3-3. [트랜스포머] Positional Encoding / 병렬화</a></h3>
+  <p class="summary">순서 정보 주입(PE)과 Transformer 병렬화 장점/주의점을 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, positional encoding, transformer, parallelism</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/bert_encoder_mlm_concept.html">4-1. [BERT] Encoder + MLM Pretraining</a></h3>
+  <p class="summary">양방향 encoder, MLM/NSP 사전학습 목적, 입력 임베딩 구성까지 핵심 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, BERT, MLM, transformer encoder</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/roberta_t5_pretraining_objectives_concept.html">4-2. [사전학습] RoBERTa / T5 Objective</a></h3>
+  <p class="summary">RoBERTa 레시피 개선과 T5 span corruption objective 차이를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, RoBERTa, T5, pretraining objective</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/gpt3_in_context_learning_concept.html">4-3. [GPT-3] In-Context Learning 메커니즘</a></h3>
+  <p class="summary">fine-tuning 없이 prompt 예시로 task를 수행하는 ICL 작동 원리를 중상 난이도로 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, GPT-3, in-context learning, few-shot</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/scaling_laws_chinchilla_compute_optimal_concept.html">4-4. [스케일링] Scaling Laws / Chinchilla</a></h3>
+  <p class="summary">같은 compute 예산에서 모델/데이터 균형을 맞추는 compute-optimal scaling 핵심 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, scaling laws, Chinchilla, compute-optimal</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/llm_inference_latency_throughput_memory_concept.html">IO-1. [서빙] LLM Inference Tradeoff</a></h3>
+  <p class="summary">prefill/decode, latency-throughput-memory 상충 관계와 실전 최적화 포인트 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, inference, latency, throughput, KV cache</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/kv_cache_decoding_optimization_concept.html">IO-2. [서빙] KV Cache 디코딩 최적화</a></h3>
+  <p class="summary">naive 디코딩 대비 KV 재사용으로 계산량을 줄이는 핵심 원리와 메모리 tradeoff 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, KV cache, decoding, inference optimization</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/speculative_decoding_draft_verify_concept.html">IO-3. [서빙] Speculative Decoding</a></h3>
+  <p class="summary">draft/verify 이중 모델로 디코딩을 가속하면서 target 분포를 유지하는 핵심 구조 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, speculative decoding, draft model, verify</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/flashattention_memory_io_optimization_concept.html">IO-4. [서빙] FlashAttention</a></h3>
+  <p class="summary">attention의 memory IO 병목을 tile/online softmax로 줄여 가속하는 핵심 원리 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, FlashAttention, memory IO, attention optimization</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/vllm_paged_attention_kv_memory_concept.html">IO-5. [서빙] vLLM Paged Attention</a></h3>
+  <p class="summary">KV cache paging과 continuous batching으로 메모리 단편화를 줄이고 throughput을 높이는 구조 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, vLLM, paged attention, KV cache, batching</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/llm_alignment_rlhf_constitutional_dpo_concept.html">5-1. [정렬] InstructGPT / Constitutional AI / DPO</a></h3>
+  <p class="summary">RLHF, self-critique, DPO의 차이와 alignment 목표를 중상 난이도로 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, alignment, RLHF, DPO, constitutional AI</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/reasoning_cot_self_consistency_r1_concept.html">5-2. [추론] CoT / Self-Consistency / DeepSeek-R1</a></h3>
+  <p class="summary">prompting, sampling, RL 기반 reasoning 강화 흐름을 상 난이도로 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, CoT, self-consistency, DeepSeek-R1, reasoning</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/llm/moe_switch_mixtral_serving_efficiency_concept.html">5-3. [효율화] MoE: Switch / Mixtral</a></h3>
+  <p class="summary">dense 대비 sparse expert routing으로 compute를 줄이는 MoE 구조와 서빙 tradeoff 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, llm, MoE, Switch Transformer, Mixtral, routing</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/rag_pipeline_retrieval_rerank_generation_concept.html">6-1. [RAG] Retrieval → Rerank → Generation</a></h3>
+  <p class="summary">외부 지식 결합을 위한 RAG 3단계 파이프라인과 검색/재정렬 역할을 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, RAG, retrieval, rerank, generation</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/embedding_models_contrastive_sbert_e5_bge_concept.html">6-2. [RAG] Embedding Models (SBERT/e5/BGE)</a></h3>
+  <p class="summary">contrastive learning 기반 임베딩 학습과 bi-encoder/cross-encoder 차이를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, embeddings, SBERT, e5, BGE</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/agent_architecture_react_toolformer_selfrag_concept.html">6-3. [Agent] ReAct / Toolformer / Self-RAG</a></h3>
+  <p class="summary">thought-action-observation 루프와 tool/retrieval 의사결정 구조를 중상 난이도로 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, agent, ReAct, Toolformer, Self-RAG</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/experiment_interpretation_baseline_analysis_experiment.html">6-4. [실험] Baseline 대비 결과 해석</a></h3>
+  <p class="summary">정량/정성 평가, 오류 분석, ablation, 유의성 검정으로 RAG 실험을 해석하는 절차 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, experiment, baseline, ablation, evaluation</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/ml_pipeline_data_feature_training_deploy_concept.html">6.5-1. [MLOps] ML 파이프라인 (데이터 → 학습 → 배포)</a></h3>
+  <p class="summary">데이터 검증부터 학습/평가/배포까지 ML 파이프라인의 단계와 운영 자동화 포인트를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, MLOps, pipeline, training, deployment</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/experiment_tracking_mlflow_wandb_tensorboard_concept.html">6.5-2. [MLOps] Experiment Tracking (MLflow/W&B/TensorBoard)</a></h3>
+  <p class="summary">실험 재현성과 비교를 위해 파라미터/메트릭/아티팩트를 추적하는 워크플로우를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, MLOps, experiment tracking, MLflow, W&B</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/model_registry_versioning_champion_challenger_concept.html">6.5-3. [MLOps] Model Registry (Champion/Challenger)</a></h3>
+  <p class="summary">모델 버전 관리, lifecycle(stage), champion/challenger 비교와 rollback 전략을 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, MLOps, model registry, champion challenger, rollback</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/model_serving_online_batch_triton_torchserve_concept.html">6.5-4. [MLOps] Model Serving (Online vs Batch)</a></h3>
+  <p class="summary">online serving과 batch inference의 차이, latency 구성, Triton/TorchServe/FastAPI 서빙 구조를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, MLOps, model serving, Triton, TorchServe</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/model_monitoring_data_drift_concept_drift_concept.html">6.5-5. [MLOps] Monitoring (Data/Concept Drift)</a></h3>
+  <p class="summary">배포 후 data drift, concept drift, prediction distribution 변화를 감지하고 대응하는 모니터링 체계를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, MLOps, monitoring, data drift, concept drift</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/feature_store_training_serving_skew_concept.html">6.5-6. [MLOps] Feature Store (Training-Serving Skew)</a></h3>
+  <p class="summary">training-serving skew 원인과 offline/online feature store, point-in-time correctness 해결 전략을 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, MLOps, feature store, training-serving skew, Feast</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/rag_agent/llmops_prompt_versioning_rag_evaluation_guardrails_concept.html">6.5-7. [LLMOps] Prompt Versioning / RAG Eval / Guardrails</a></h3>
+  <p class="summary">LLM 운영에서 prompt 버전 관리, RAG 평가, guardrails 설계를 통합하는 LLMOps 핵심 흐름을 중상 난이도로 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, rag_agent, LLMOps, prompt versioning, RAG evaluation, guardrails</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/vision/vit_patch_embedding_transformer_concept.html">7-1. [Vision] ViT (Patch Embedding)</a></h3>
+  <p class="summary">이미지를 patch token으로 변환해 Transformer encoder로 처리하는 ViT 구조와 CNN 대비 차이를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, vision, ViT, patch embedding, transformer, self-attention</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/vision/yolo_one_stage_detector_tradeoff_concept.html">7-2. [Vision] YOLO (One-Stage Tradeoff)</a></h3>
+  <p class="summary">grid 기반 one-stage detection, confidence/IoU/NMS와 속도-정확도 tradeoff를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, vision, YOLO, object detection, one-stage, IoU</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/vision/detr_set_prediction_bipartite_matching_concept.html">7-3. [Vision] DETR (Set Prediction)</a></h3>
+  <p class="summary">object query와 Hungarian matching 기반 set prediction으로 detection을 end-to-end 학습하는 DETR을 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, vision, DETR, set prediction, bipartite matching, transformer</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/vision/clip_contrastive_image_text_zero_shot_concept.html">7-4. [Vision] CLIP (Contrastive Zero-Shot)</a></h3>
+  <p class="summary">이미지-텍스트 dual encoder와 contrastive learning으로 zero-shot 전이를 가능하게 하는 CLIP 구조를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, vision, CLIP, contrastive learning, zero-shot, multimodal</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/generative/gan_minmax_generator_discriminator_concept.html">8-1. [Generative] GAN (Min-Max Learning)</a></h3>
+  <p class="summary">generator-discriminator의 adversarial min-max 학습 구조와 GAN 핵심 손실, 학습 불안정 이슈를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, generative, GAN, adversarial learning, min-max, discriminator</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/generative/stylegan_style_based_latent_control_concept.html">8-2. [Generative] StyleGAN (Style Control)</a></h3>
+  <p class="summary">Z/W latent 분리, mapping network, AdaIN 기반 레이어별 스타일 주입으로 이미지 속성을 제어하는 StyleGAN을 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, generative, StyleGAN, latent space, AdaIN, style mixing</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/generative/ddpm_noise_diffusion_denoising_concept.html">8-3. [Generative] DDPM (Diffusion Denoising)</a></h3>
+  <p class="summary">forward noise와 reverse denoising으로 이미지를 생성하는 DDPM의 확률적 구조와 학습 목표를 중급 관점에서 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, generative, DDPM, diffusion, denoising, U-Net</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/generative/score_based_models_score_function_generation_concept.html">8-4. [Generative] Score-Based Models</a></h3>
+  <p class="summary">score function ∇log p(x) 학습, annealed score matching, Langevin dynamics 기반 생성 과정을 중상 난이도로 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, generative, score-based, diffusion, Langevin, score matching</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/generative/diffusion_sampling_ddim_acceleration_concept.html">8-5. [Generative] Diffusion Sampling (DDIM)</a></h3>
+  <p class="summary">DDPM의 느린 샘플링을 DDIM의 deterministic 경로로 가속하는 원리와 차이를 중상 난이도로 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, generative, DDIM, DDPM, diffusion sampling, acceleration</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/2-1_옵티마이저비교_concept.html">02-1. [중급] Optimizer 비교 (SGD/Momentum/AdamW)</a></h3>
+  <p class="summary">SGD, Momentum, AdamW의 업데이트 차이와 사용 맥락, 일반화 특성 비교</p>
+  <p class="meta"><strong>tags</strong>: AI, foundations, optimizer, SGD, Momentum, AdamW</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
+</article>
+<article class="card">
+  <h3><a href="posts/foundations/2-3_정규화WeightDecayDropout_concept.html">02-3. [중급] 정규화 (Weight Decay & Dropout)</a></h3>
+  <p class="summary">Weight decay와 dropout의 원리, 적용 위치, 일반화 효과와 실전 주의점 정리</p>
+  <p class="meta"><strong>tags</strong>: AI, foundations, regularization, weight decay, dropout</p>
+  <p class="meta"><strong>updated</strong>: 2026-03-07 00:00:00Z</p>
 </article>
 <article class="card">
   <h3><a href="posts/llm/0-5_LLM수식기호임베딩_concept.html">00-1. [기본기] LLM 수식/기호/임베딩</a></h3>
