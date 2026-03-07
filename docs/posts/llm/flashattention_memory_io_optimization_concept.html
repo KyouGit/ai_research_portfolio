@@ -1,3 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #5f6b85;
+      --line: #d8e0ef;
+      --accent: #1f4f99;
+      --code-bg: #eef3ff;
+      --code-line: #d6e1ff;
+      --pre-bg: #0f172a;
+      --pre-text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%);
+      font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(31, 42, 68, 0.06);
+    }
+    h1, h2, h3, h4 { line-height: 1.3; margin: 1.25em 0 0.55em; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-top: 0; }
+    h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #183964; }
+    p { margin: 0.6em 0; }
+    ul, ol { margin: 0.65em 0 0.9em 1.2em; padding: 0; }
+    li { margin: 0.2em 0; }
+    strong { color: #11284a; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-line);
+      border-radius: 7px;
+      padding: 0.12em 0.38em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.93em;
+      color: #17396f;
+      word-break: break-word;
+    }
+    p > code:only-child {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin: 8px 0;
+      font-size: 0.98rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.1px;
+      background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
+    }
+    pre {
+      margin: 0.8em 0 1.05em;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      border-radius: 12px;
+      border: 1px solid #1e2d48;
+      padding: 14px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0.85em 0 1.05em;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    th, td {
+      border-bottom: 1px solid #e7edf9;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #f1f5ff;
+      color: #15335d;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 640px) {
+      .post { padding: 18px 14px; border-radius: 12px; }
+      .topbar a { font-size: 0.84rem; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a>
+      <a href="/ai_research_portfolio/roadmap.html">Roadmap</a>
+      <a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
 <h2>주제: IO-4 FlashAttention (Memory IO 최적화 기반 Attention 가속)</h2>
 <p class="meta"><strong>분류:</strong> llm</p>
 <p class="meta"><strong>타입:</strong> concept</p>
@@ -218,3 +363,24 @@ V block</code></pre>
 <li>FlashAttention의 block algorithm은 어떤 원리인가?</li>
 <li>FlashAttention이 메모리 사용을 줄이는 이유는 무엇인가?</li>
 </ul>
+    </article>
+  </main>
+  <script>
+    (function () {
+      var h2 = document.querySelector('h2');
+      if (h2 && h2.textContent.trim()) {
+        var t = h2.textContent.replace(/^\s*주제\s*:\s*/i, '').trim();
+        document.title = t + ' | AI Research Portfolio';
+      }
+      document.querySelectorAll('table').forEach(function (table) {
+        if (!table.parentElement.classList.contains('table-wrap')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
