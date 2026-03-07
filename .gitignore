@@ -38,5 +38,4 @@ papers/
 
 # Local source and tooling (ignored in docs-only publishing mode)
 *.py
-README.md
 STARTUP_CHECKLIST.md
