@@ -1,0 +1,92 @@
+<h2>[기본기 0-3] 딥러닝을 위한 미분과 연쇄법칙</h2>
+<p class="meta"><strong>난이도:</strong> 기초</p>
+<p class="meta"><strong>태그:</strong> 미분,연쇄법칙,역전파,딥러닝기초</p>
+<p>딥러닝 학습의 목표는 <strong>loss를 최소화하는 파라미터를 찾는 것</strong>입니다. 이를 위해 가중치를 조금 바꿨을 때 loss가 얼마나 변하는지 계산해야 합니다.</p>
+<p><code>\partial L/\partial w</code></p>
+<p>이 값은 "가중치 <code>w</code>를 바꾸면 loss <code>L</code>이 얼마나 변하는가"를 의미합니다.</p>
+<p>업데이트는 보통 아래처럼 진행됩니다.</p>
+<p><code>w = w - \eta \partial L/\partial w</code></p>
+<ul>
+  <li><code>w</code>: 모델 파라미터</li>
+  <li><code>\eta</code>: learning rate</li>
+  <li><code>L</code>: loss</li>
+</ul>
+
+<h3>직관 비유</h3>
+<ul>
+  <li>loss: 산의 높이</li>
+  <li>gradient: 가장 가파른 방향</li>
+  <li>학습: 산을 내려가는 과정</li>
+</ul>
+
+<h3>1) 편미분 (Partial Derivative)</h3>
+<p>딥러닝 함수는 여러 변수에 의존합니다.</p>
+<p><code>L(w,b) = (wx + b - y)^2</code></p>
+<p>따라서 각 변수에 대한 변화율을 따로 계산합니다.</p>
+<p><code>\partial L/\partial w</code>, <code>\partial L/\partial b</code></p>
+<ul>
+  <li><code>L</code>: loss</li>
+  <li><code>w</code>: weight</li>
+  <li><code>b</code>: bias</li>
+</ul>
+<p>주의: 편미분에서는 다른 변수들을 고정하고 미분합니다.</p>
+
+<h3>2) 기울기 (Gradient)</h3>
+<p>gradient는 편미분을 모은 벡터입니다.</p>
+<p><code>\nabla L = [\partial L/\partial w_1, \partial L/\partial w_2, ..., \partial L/\partial w_n]</code></p>
+<p>gradient는 loss가 가장 빨리 증가하는 방향이며, 학습에서는 반대 방향으로 이동합니다.</p>
+<p><code>w = w - \eta \nabla L</code></p>
+
+<h3>3) 연쇄법칙 (Chain Rule)</h3>
+<p>신경망은 함수가 연쇄된 구조입니다.</p>
+<p><code>y = f(g(x))</code></p>
+<p>전체 변화율은 다음과 같습니다.</p>
+<p><code>dy/dx = (dy/dg)(dg/dx)</code></p>
+<p>중간 함수를 지날 때마다 미분이 곱으로 누적됩니다.</p>
+
+<h3>4) 연쇄법칙 계산 예시</h3>
+<p><code>y = (3x + 1)^2</code></p>
+<p><code>g(x)=3x+1</code>, <code>f(g)=g^2</code></p>
+<p><code>dy/dx = (dy/dg)(dg/dx)</code></p>
+<p><code>dy/dg = 2g</code>, <code>dg/dx = 3</code></p>
+<p>따라서 <code>dy/dx = 2(3x+1)\cdot3</code></p>
+
+<h3>5) 역전파 (Backpropagation)</h3>
+<p>역전파는 연쇄법칙을 효율적으로 계산하는 알고리즘입니다.</p>
+<pre><code>x -> layer1 -> layer2 -> layer3 -> loss</code></pre>
+<p>gradient는 뒤에서 앞으로 전달됩니다.</p>
+<pre><code>loss -> layer3 -> layer2 -> layer1</code></pre>
+<p>예를 들어 <code>L=f(h(g(x)))</code>이면</p>
+<p><code>dL/dx = (dL/dh)(dh/dg)(dg/dx)</code></p>
+<p>마지막 레이어 미분값이 먼저 있어야 앞 레이어 미분을 계산할 수 있으므로 backward 순서가 필수입니다.</p>
+
+<h3>코드-수식 연결</h3>
+<table>
+  <thead>
+    <tr><th>수식</th><th>PyTorch 코드</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>\partial L/\partial w</code></td><td><code>w.grad</code></td><td>파라미터 gradient</td></tr>
+    <tr><td><code>d/dx f(g(x))</code></td><td><code>autograd</code></td><td>연쇄법칙 자동 계산</td></tr>
+    <tr><td><code>\nabla L</code></td><td><code>loss.backward()</code></td><td>역전파 실행</td></tr>
+    <tr><td><code>w = w - \eta\nabla L</code></td><td><code>optimizer.step()</code></td><td>파라미터 업데이트</td></tr>
+  </tbody>
+</table>
+
+<h3>자주 하는 오해 5개</h3>
+<ul>
+  <li>역전파가 연쇄법칙과 다른 별도 마법 알고리즘이라고 생각한다</li>
+  <li>chain rule 없이 깊은 신경망 gradient 계산이 가능하다고 생각한다</li>
+  <li>gradient는 항상 안정적이라고 생각한다</li>
+  <li>forward와 backward 계산 흐름이 같다고 생각한다</li>
+  <li>자동미분이 gradient를 근사한다고 생각한다 (대부분 정확 계산)</li>
+</ul>
+
+<h3>체크리스트</h3>
+<ul>
+  <li>편미분이 왜 필요한지 설명할 수 있는가?</li>
+  <li>gradient 벡터가 담는 정보를 설명할 수 있는가?</li>
+  <li>연쇄법칙이 왜 신경망에서 필수인지 설명할 수 있는가?</li>
+  <li>왜 역전파가 뒤에서 앞으로 계산되는가?</li>
+  <li>autograd가 연쇄법칙을 어떻게 자동화하는지 설명할 수 있는가?</li>
+</ul>

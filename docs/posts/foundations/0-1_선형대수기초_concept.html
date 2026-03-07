@@ -1,0 +1,128 @@
+<h2>[기본기 0-1] 딥러닝을 위한 선형대수 기초</h2>
+<p class="meta"><strong>난이도:</strong> 기초</p>
+<p class="meta"><strong>태그:</strong> 기초수학,최적화,딥러닝기초</p>
+<p>딥러닝 모델은 결국 벡터와 행렬을 반복 계산하는 구조입니다. 이 문서는 입문자가 수식을 읽고 코드와 연결할 수 있도록 선형대수 핵심만 압축 정리합니다.</p>
+
+<h3>왜 선형대수가 딥러닝의 시작인가</h3>
+<p>신경망 레이어의 기본 연산은 아래 한 줄입니다.</p>
+<p><code>y = Wx + b</code></p>
+<p>벡터, 행렬곱, 전치, 내적, 노름을 이해하면 대부분의 딥러닝 수식을 읽을 수 있습니다.</p>
+
+<h3>직관 비유</h3>
+<ul>
+  <li>벡터: 숫자가 들어있는 화살표</li>
+  <li>행렬: 벡터를 다른 벡터로 바꾸는 변환 기계</li>
+  <li>행렬곱: 입력을 새로운 특징 공간으로 이동시키는 과정</li>
+  <li>내적: 두 벡터가 얼마나 같은 방향인지 측정</li>
+  <li>노름: 벡터의 길이</li>
+</ul>
+
+<h3>1) 벡터(Vector)</h3>
+<p>벡터는 숫자들의 리스트입니다.</p>
+<pre><code>x = [2, 5, 3]</code></pre>
+<p>벡터 길이를 차원이라고 하며, 위 예시는 <code>x ∈ R^3</code>입니다.</p>
+
+<table>
+  <thead>
+    <tr><th>벡터</th><th>차원</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>[2, 5, 3]</td><td>3</td></tr>
+    <tr><td>[1, 4]</td><td>2</td></tr>
+  </tbody>
+</table>
+
+<h3>2) 행렬(Matrix)</h3>
+<p>행렬은 숫자 표이며, 딥러닝에서는 "변환 장치"로 이해하면 쉽습니다.</p>
+<pre><code>W = [[1, 2],
+     [3, 4],
+     [5, 6]]</code></pre>
+<p>이때 <code>W</code>의 shape은 <code>3 × 2</code>입니다.</p>
+
+<h3>3) 핵심식: 선형 레이어</h3>
+<p><code>y = Wx + b</code></p>
+<ul>
+  <li><code>W</code>: 가중치 행렬</li>
+  <li><code>x</code>: 입력 벡터</li>
+  <li><code>b</code>: bias 벡터</li>
+  <li><code>y</code>: 출력 벡터</li>
+</ul>
+<p>왜 필요한가: 입력 특징을 다른 특징 공간으로 변환해 모델이 문제를 풀 수 있게 만듭니다.</p>
+
+<pre><code>W = [[1, 2],
+     [3, 4]]
+x = [5, 6]
+y = W @ x = [17, 39]</code></pre>
+
+<p>주의점: 행렬곱은 차원 규칙을 만족해야 합니다.</p>
+<p><code>(m × n) · (n × k)</code>에서 중간 차원 <code>n</code>이 같아야 합니다.</p>
+
+<h3>4) 전치(Transpose)</h3>
+<p>전치는 행과 열을 바꾸는 연산입니다.</p>
+<p><code>A^T</code></p>
+<pre><code>A = [[1, 2, 3],
+     [4, 5, 6]]
+A^T = [[1, 4],
+       [2, 5],
+       [3, 6]]</code></pre>
+<p>왜 필요한가: 내적 계산, attention 점수 계산(<code>QK^T</code>)에서 자주 등장합니다.</p>
+<p>주의점: shape이 <code>(m × n) -> (n × m)</code>으로 바뀝니다.</p>
+
+<h3>5) 내적(Dot Product)</h3>
+<p><code>x · y = Σ x_i y_i</code></p>
+<p>내적은 두 벡터가 얼마나 비슷한 방향인지 측정하는 값입니다.</p>
+<pre><code>x = [1, 2, 3]
+y = [4, 5, 6]
+x · y = 1*4 + 2*5 + 3*6 = 32</code></pre>
+<p>왜 필요한가: Transformer attention에서 토큰 유사도를 계산할 때 핵심 연산입니다.</p>
+<p>주의점: 두 벡터의 차원이 같아야 합니다.</p>
+
+<h3>6) L2 노름 (벡터 길이)</h3>
+<p><code>||x||_2 = sqrt( Σ x_i^2 )</code></p>
+<pre><code>x = [3, 4]
+||x||_2 = sqrt(3^2 + 4^2) = 5</code></pre>
+<p>왜 필요한가: 정규화, 거리 계산, 수치 안정화에 쓰입니다.</p>
+
+<h3>7) 확률 기초와 언어모델 연결</h3>
+<p>언어모델은 다음 토큰 확률을 예측합니다. 따라서 <code>P(x|y)</code> 형태를 읽을 수 있어야 합니다.</p>
+<p><code>P(w_1, ..., w_n)=Π_t P(w_t|w_1,...,w_{t-1})</code></p>
+<p>이 체인 룰 관점이 Transformer/BERT/GPT를 이해할 때 중요한 기반이 됩니다.</p>
+
+<h3>8) Attention 수식 연결</h3>
+<p><code>Attention(Q,K,V)=softmax((QK^T)/sqrt(d_k))V</code></p>
+<ul>
+  <li><code>QK^T</code>: 토큰 간 유사도</li>
+  <li><code>softmax</code>: 가중치 정규화</li>
+  <li><code>sqrt(d_k)</code>로 나누는 이유: 차원 증가 시 점수 폭주를 완화해 학습 안정화</li>
+</ul>
+
+<h3>코드-수식 연결</h3>
+<table>
+  <thead>
+    <tr><th>수식</th><th>PyTorch 코드</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>y = Wx + b</code></td><td><code>y = W @ x + b</code></td><td>선형 레이어</td></tr>
+    <tr><td><code>x · y</code></td><td><code>torch.dot(x, y)</code></td><td>벡터 유사도</td></tr>
+    <tr><td><code>||x||_2</code></td><td><code>torch.norm(x, p=2)</code></td><td>벡터 길이</td></tr>
+    <tr><td><code>A^T</code></td><td><code>A.T</code></td><td>전치 행렬</td></tr>
+  </tbody>
+</table>
+
+<h3>자주 하는 오해 5개</h3>
+<ul>
+  <li>행렬곱을 원소별 곱(element-wise)으로 착각한다</li>
+  <li>벡터/행렬 차원을 확인하지 않고 계산을 시작한다</li>
+  <li>전치와 역행렬을 같은 개념으로 생각한다</li>
+  <li>내적과 행렬곱의 의미를 구분하지 못한다</li>
+  <li>노름(길이)과 거리(distance)를 혼동한다</li>
+</ul>
+
+<h3>체크리스트 (스스로 설명 가능해야 하는 질문)</h3>
+<ul>
+  <li>왜 딥러닝 레이어는 <code>y = Wx + b</code> 형태인가?</li>
+  <li>행렬곱 차원 규칙 <code>(m×n)(n×k)</code>를 예시로 설명할 수 있는가?</li>
+  <li>내적이 왜 유사도 신호로 쓰이는가?</li>
+  <li>L2 노름은 무엇을 측정하며 어디에 쓰이는가?</li>
+  <li>Attention에서 <code>QK^T/sqrt(d_k)</code>가 필요한 이유는 무엇인가?</li>
+</ul>

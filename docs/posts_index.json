@@ -2,16 +2,43 @@
   {
     "slug": "Linear_Algebra_Foundations_concept",
     "title": "00. [기본기] 선형대수+확률",
-    "href": "posts/llm/Linear_Algebra_Foundations_concept.html",
+    "href": "posts/foundations/0-1_선형대수기초_concept.html",
     "tags": "AI, 기본기, 선형대수, 확률, softmax, conditional probability",
-    "category": "LLM",
+    "category": "Foundations",
     "updated_utc": "2026-03-04 00:10:00Z",
     "summary": "x_i ∈ R^d, P(x|y), softmax 등 BERT 전 필수 베이스"
   },
   {
+    "slug": "probability_statistics_basics_concept",
+    "title": "00-2. [기본기] 확률/통계 기초",
+    "href": "posts/foundations/0-2_확률통계기초_concept.html",
+    "tags": "AI, 기본기, 확률통계, 조건부확률, Cross-Entropy",
+    "category": "Foundations",
+    "updated_utc": "2026-03-07 00:00:00Z",
+    "summary": "조건부확률, 기댓값, 분산, 로그우도, Cross-Entropy를 딥러닝 관점으로 정리"
+  },
+  {
+    "slug": "bayes_probability_minimum_concept",
+    "title": "00-4. [기본기] 베이즈 관점 확률/통계",
+    "href": "posts/foundations/0-4_베이즈관점확률통계_concept.html",
+    "tags": "AI, 기본기, 베이즈, 우도, 사후확률, 로그우도",
+    "category": "Foundations",
+    "updated_utc": "2026-03-07 00:00:00Z",
+    "summary": "베이즈 정리, 우도와 사후확률 차이, 로그우도와 기대값/분산 관점을 정리"
+  },
+  {
+    "slug": "numerical_stability_softmax_concept",
+    "title": "00-5. [기본기] 수치 안정성 기초",
+    "href": "posts/foundations/0-5_수치안정성기초_concept.html",
+    "tags": "AI, 기본기, 수치안정성, softmax, log-sum-exp",
+    "category": "Foundations",
+    "updated_utc": "2026-03-07 00:00:00Z",
+    "summary": "overflow/underflow, 안정한 softmax, log-sum-exp 계산을 정리"
+  },
+  {
     "slug": "LLM_Foundations_Notation_concept",
     "title": "00-1. [기본기] LLM 수식/기호/임베딩",
-    "href": "posts/llm/LLM_Foundations_Notation_concept.html",
+    "href": "posts/llm/0-5_LLM수식기호임베딩_concept.html",
     "tags": "AI, 기본기, 수식, 기호, 임베딩, LLM",
     "category": "LLM",
     "updated_utc": "2026-03-04 00:00:00Z",
@@ -20,7 +47,7 @@
   {
     "slug": "Word2Vec_concept",
     "title": "00-2. [Word2Vec] 개념 설명",
-    "href": "posts/llm/Word2Vec_concept.html",
+    "href": "posts/llm/3-1_Word2Vec_concept.html",
     "tags": "AI, 논문리뷰, LLM, word2vec, embedding",
     "category": "LLM",
     "updated_utc": "2026-03-04 00:20:00Z",
@@ -29,7 +56,7 @@
   {
     "slug": "Attention_Is_All_You_Need_concept",
     "title": "보조. [Attention Is All You Need] 개념 설명",
-    "href": "posts/llm/Attention_Is_All_You_Need_concept.html",
+    "href": "posts/llm/3-2_어텐션트랜스포머_concept.html",
     "tags": "AI, 논문리뷰, LLM, attention, transformer, encoder-decoder",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -38,7 +65,7 @@
   {
     "slug": "BERT_concept",
     "title": "01. [BERT] 개념 설명",
-    "href": "posts/llm/BERT_concept.html",
+    "href": "posts/llm/4-1_BERT_concept.html",
     "tags": "AI, 논문리뷰, LLM, bert, mlm, encoder",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -47,7 +74,7 @@
   {
     "slug": "RoBERTa_concept",
     "title": "02. [RoBERTa] 개념 설명",
-    "href": "posts/llm/RoBERTa_concept.html",
+    "href": "posts/llm/4-2_RoBERTa_concept.html",
     "tags": "AI, 논문리뷰, LLM, roberta, pretraining, optimization",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -56,7 +83,7 @@
   {
     "slug": "T5_concept",
     "title": "03. [T5] 개념 설명",
-    "href": "posts/llm/T5_concept.html",
+    "href": "posts/llm/4-2_T5_concept.html",
     "tags": "AI, 논문리뷰, LLM, t5, text-to-text, transfer learning",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -65,7 +92,7 @@
   {
     "slug": "GPT3_concept",
     "title": "04. [GPT-3] 개념 설명",
-    "href": "posts/llm/GPT3_concept.html",
+    "href": "posts/llm/4-3_GPT3_concept.html",
     "tags": "AI, 논문리뷰, LLM, gpt-3, few-shot, in-context learning",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -74,7 +101,7 @@
   {
     "slug": "Scaling_Laws_concept",
     "title": "05. [Scaling Laws] 개념 설명",
-    "href": "posts/llm/Scaling_Laws_concept.html",
+    "href": "posts/llm/4-4_스케일링법칙_concept.html",
     "tags": "AI, 논문리뷰, LLM, scaling laws, compute-optimal",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -83,7 +110,7 @@
   {
     "slug": "Chinchilla_concept",
     "title": "06. [Chinchilla] 개념 설명",
-    "href": "posts/llm/Chinchilla_concept.html",
+    "href": "posts/llm/4-4_Chinchilla_concept.html",
     "tags": "AI, 논문리뷰, LLM, chinchilla, data scaling, compute",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -92,7 +119,7 @@
   {
     "slug": "InstructGPT_concept",
     "title": "07. [InstructGPT] 개념 설명",
-    "href": "posts/llm/InstructGPT_concept.html",
+    "href": "posts/llm/5-1_InstructGPT_concept.html",
     "tags": "AI, 논문리뷰, LLM, instructgpt, rlhf, alignment",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -101,7 +128,7 @@
   {
     "slug": "Constitutional_AI_concept",
     "title": "08. [Constitutional AI] 개념 설명",
-    "href": "posts/llm/Constitutional_AI_concept.html",
+    "href": "posts/llm/5-1_ConstitutionalAI_concept.html",
     "tags": "AI, 논문리뷰, LLM, constitutional ai, harmlessness, rlaif",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -110,7 +137,7 @@
   {
     "slug": "DPO_concept",
     "title": "09. [DPO] 개념 설명",
-    "href": "posts/llm/DPO_concept.html",
+    "href": "posts/llm/5-1_DPO_concept.html",
     "tags": "AI, 논문리뷰, LLM, dpo, preference optimization",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -119,7 +146,7 @@
   {
     "slug": "Switch_Transformers_concept",
     "title": "10. [Switch Transformers] 개념 설명",
-    "href": "posts/llm/Switch_Transformers_concept.html",
+    "href": "posts/llm/5-3_SwitchTransformers_concept.html",
     "tags": "AI, 논문리뷰, LLM, switch transformer, moe",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -128,7 +155,7 @@
   {
     "slug": "Mixtral_concept",
     "title": "11. [Mixtral] 개념 설명",
-    "href": "posts/llm/Mixtral_concept.html",
+    "href": "posts/llm/5-3_Mixtral_concept.html",
     "tags": "AI, 논문리뷰, LLM, mixtral, sparse moe",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -137,7 +164,7 @@
   {
     "slug": "RAG_concept",
     "title": "12. [RAG] 개념 설명",
-    "href": "posts/rag_agent/RAG_concept.html",
+    "href": "posts/rag_agent/6-1_RAG_concept.html",
     "tags": "AI, 논문리뷰, LLM, rag, retrieval, grounding",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -146,7 +173,7 @@
   {
     "slug": "ReAct_concept",
     "title": "13. [ReAct] 개념 설명",
-    "href": "posts/rag_agent/ReAct_concept.html",
+    "href": "posts/rag_agent/6-2_ReAct_concept.html",
     "tags": "AI, 논문리뷰, LLM, react, reasoning, acting",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -155,7 +182,7 @@
   {
     "slug": "Toolformer_concept",
     "title": "14. [Toolformer] 개념 설명",
-    "href": "posts/rag_agent/Toolformer_concept.html",
+    "href": "posts/rag_agent/6-2_Toolformer_concept.html",
     "tags": "AI, 논문리뷰, LLM, toolformer, api calling",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -164,7 +191,7 @@
   {
     "slug": "Self_RAG_concept",
     "title": "15. [Self-RAG] 개념 설명",
-    "href": "posts/rag_agent/Self_RAG_concept.html",
+    "href": "posts/rag_agent/6-2_SelfRAG_concept.html",
     "tags": "AI, 논문리뷰, LLM, self-rag, self-reflection",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -173,7 +200,7 @@
   {
     "slug": "Chain_of_Thought_concept",
     "title": "16. [Chain-of-Thought] 개념 설명",
-    "href": "posts/llm/Chain_of_Thought_concept.html",
+    "href": "posts/llm/5-2_ChainOfThought_concept.html",
     "tags": "AI, 논문리뷰, LLM, cot, reasoning prompts",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -182,7 +209,7 @@
   {
     "slug": "Self_Consistency_concept",
     "title": "17. [Self-Consistency] 개념 설명",
-    "href": "posts/llm/Self_Consistency_concept.html",
+    "href": "posts/llm/5-2_SelfConsistency_concept.html",
     "tags": "AI, 논문리뷰, LLM, self-consistency, majority vote",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -191,7 +218,7 @@
   {
     "slug": "DeepSeek_R1_concept",
     "title": "18. [DeepSeek-R1] 개념 설명",
-    "href": "posts/llm/DeepSeek_R1_concept.html",
+    "href": "posts/llm/5-2_DeepSeekR1_concept.html",
     "tags": "AI, 논문리뷰, LLM, deepseek-r1, reasoning, rl",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:42:08Z",
@@ -200,7 +227,7 @@
   {
     "slug": "BERT_MLM_experiment",
     "title": "실험 A. [BERT MLM] 실험 리포트",
-    "href": "posts/llm/BERT_MLM_experiment.html",
+    "href": "posts/llm/E-1_BERTMLM_experiment.html",
     "tags": "AI, 실험자동화, LLM, BERT, MLM",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:33:17Z",
@@ -209,7 +236,7 @@
   {
     "slug": "RAG_Retrieval_FAISS_experiment",
     "title": "실험 B. [RAG Retrieval] 실험 리포트 (FAISS)",
-    "href": "posts/rag_agent/RAG_Retrieval_FAISS_experiment.html",
+    "href": "posts/rag_agent/6-3_RAG리트리벌FAISS_experiment.html",
     "tags": "AI, 실험자동화, LLM, RAG, FAISS",
     "category": "LLM",
     "updated_utc": "2026-03-04 01:33:17Z",
@@ -218,7 +245,7 @@
   {
     "slug": "YOLO_concept",
     "title": "19. [YOLO] 개념 설명",
-    "href": "posts/vision/YOLO_concept.html",
+    "href": "posts/vision/7-1_YOLO_concept.html",
     "tags": "AI, 논문리뷰, Vision, Detection, YOLO",
     "category": "Vision",
     "updated_utc": "2026-03-04 04:22:21Z",
@@ -227,7 +254,7 @@
   {
     "slug": "DETR_concept",
     "title": "20. [DETR] 개념 설명",
-    "href": "posts/vision/DETR_concept.html",
+    "href": "posts/vision/7-2_DETR_concept.html",
     "tags": "AI, 논문리뷰, Vision, Detection, DETR",
     "category": "Vision",
     "updated_utc": "2026-03-04 04:22:21Z",
@@ -236,7 +263,7 @@
   {
     "slug": "CLIP_concept",
     "title": "21. [CLIP] 개념 설명",
-    "href": "posts/vision/CLIP_concept.html",
+    "href": "posts/vision/7-3_CLIP_concept.html",
     "tags": "AI, 논문리뷰, Vision, Multimodal, CLIP",
     "category": "Vision",
     "updated_utc": "2026-03-04 04:22:21Z",
@@ -245,7 +272,7 @@
   {
     "slug": "GAN_concept",
     "title": "22. [GAN] 개념 설명",
-    "href": "posts/generative/GAN_concept.html",
+    "href": "posts/generative/8-1_GAN_concept.html",
     "tags": "AI, 논문리뷰, Generative, GAN",
     "category": "Generative",
     "updated_utc": "2026-03-04 04:22:21Z",
@@ -254,7 +281,7 @@
   {
     "slug": "StyleGAN_concept",
     "title": "23. [StyleGAN] 개념 설명",
-    "href": "posts/generative/StyleGAN_concept.html",
+    "href": "posts/generative/8-2_StyleGAN_concept.html",
     "tags": "AI, 논문리뷰, Generative, GAN, StyleGAN",
     "category": "Generative",
     "updated_utc": "2026-03-04 04:22:21Z",
@@ -263,7 +290,7 @@
   {
     "slug": "DDPM_concept",
     "title": "24. [DDPM] 개념 설명",
-    "href": "posts/generative/DDPM_concept.html",
+    "href": "posts/generative/8-3_DDPM_concept.html",
     "tags": "AI, 논문리뷰, Generative, Diffusion, DDPM",
     "category": "Generative",
     "updated_utc": "2026-03-04 04:22:21Z",
@@ -272,7 +299,7 @@
   {
     "slug": "Neural_Tangent_Kernel_concept",
     "title": "25. [NTK] Neural Tangent Kernel 개념 설명",
-    "href": "posts/foundations/Neural_Tangent_Kernel_concept.html",
+    "href": "posts/foundations/2-4_NTK_concept.html",
     "tags": "AI, 논문리뷰, Foundations, NTK, Overparameterization, Double Descent",
     "category": "General",
     "updated_utc": "2026-03-04 12:00:00Z",

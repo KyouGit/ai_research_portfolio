@@ -1,0 +1,84 @@
+<h2>[기본기 0-2] 딥러닝을 위한 확률/통계 기초</h2>
+<p class="meta"><strong>난이도:</strong> 기초</p>
+<p class="meta"><strong>태그:</strong> 기초수학,확률통계,딥러닝기초</p>
+<p>딥러닝 모델은 "정답의 확률"을 예측합니다. 즉 핵심 목표는 입력이 주어졌을 때 정답일 확률 <code>P(y|x)</code>를 높이는 것입니다.</p>
+
+<h3>왜 딥러닝에서 확률이 중요한가</h3>
+<ul>
+  <li>이미지 분류: <code>P(cat|image)</code></li>
+  <li>감성 분류: <code>P(positive|text)</code></li>
+</ul>
+<p>모델은 정답 자체가 아니라 정답일 가능성을 계산하고, 가장 높은 확률의 클래스를 선택합니다.</p>
+
+<h3>1) 조건부 확률 (Conditional Probability)</h3>
+<p><code>P(y|x) = \frac{P(x,y)}{P(x)}</code></p>
+<ul>
+  <li><code>x</code>: 입력 데이터</li>
+  <li><code>y</code>: 정답</li>
+  <li><code>P(x,y)</code>: 동시 확률</li>
+  <li><code>P(x)</code>: 입력 확률</li>
+</ul>
+<p>왜 필요한가: 딥러닝은 항상 입력 조건 하에서 정답 확률을 계산합니다.</p>
+
+<h3>2) 기댓값 (Expectation)</h3>
+<p><code>E[X] = \sum_x xP(x)</code></p>
+<p>기댓값은 확률적 평균이며, 학습에서 평균 loss와 직접 연결됩니다.</p>
+<table>
+  <thead><tr><th>x</th><th>P(x)</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>1/6</td></tr>
+    <tr><td>2</td><td>1/6</td></tr>
+    <tr><td>3</td><td>1/6</td></tr>
+    <tr><td>4</td><td>1/6</td></tr>
+    <tr><td>5</td><td>1/6</td></tr>
+    <tr><td>6</td><td>1/6</td></tr>
+  </tbody>
+</table>
+<p><code>E[X] = (1+2+3+4+5+6)/6 = 3.5</code></p>
+
+<h3>3) 분산 (Variance)</h3>
+<p><code>Var(X) = E[(X-\mu)^2]</code></p>
+<p>분산은 평균에서 얼마나 퍼져 있는지 측정합니다. BatchNorm/정규화 해석에도 중요합니다.</p>
+
+<h3>4) 로그우도 (Log Likelihood)</h3>
+<p><code>L = \prod_i p(x_i)</code>, <code>\log L = \sum_i \log p(x_i)</code></p>
+<p>확률을 곱하면 수치가 매우 작아지므로 로그로 바꿔 안정적으로 계산합니다.</p>
+<p>주의: <code>p(x)=0</code>이면 <code>\log p(x)</code>가 정의되지 않습니다.</p>
+
+<h3>5) Cross-Entropy</h3>
+<p><code>H(p,q) = -\sum_x p(x)\log q(x)</code></p>
+<ul>
+  <li><code>p</code>: 실제 분포</li>
+  <li><code>q</code>: 모델 예측 분포</li>
+</ul>
+<p>정답 확률이 높을수록 loss가 작아지고, 정답 확률이 낮을수록 loss가 커집니다.</p>
+<p>딥러닝 최적화 관점에서는 보통 <code>Loss = -\log P(y|x)</code> 형태로 사용됩니다.</p>
+
+<h3>코드-수식 연결</h3>
+<table>
+  <thead><tr><th>수식</th><th>PyTorch 코드</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td><code>P(y|x)</code></td><td><code>torch.softmax(logits, dim=-1)</code></td><td>확률 계산</td></tr>
+    <tr><td><code>\log p(x)</code></td><td><code>torch.log(p)</code></td><td>로그 확률</td></tr>
+    <tr><td><code>-\log P(y|x)</code></td><td><code>nn.CrossEntropyLoss()</code></td><td>분류 loss</td></tr>
+    <tr><td><code>E[L]</code></td><td><code>loss.mean()</code></td><td>배치 평균 loss</td></tr>
+  </tbody>
+</table>
+
+<h3>자주 하는 오해 5개</h3>
+<ul>
+  <li>softmax 출력값과 확률 개념을 완전히 동일시한다</li>
+  <li>Cross-Entropy를 단순 암기식으로만 이해한다</li>
+  <li>로그를 쓰는 수치적 이유를 놓친다</li>
+  <li>확률의 합이 1이라는 제약을 잊는다</li>
+  <li>loss가 낮으면 항상 정확도가 높다고 단정한다</li>
+</ul>
+
+<h3>체크리스트</h3>
+<ul>
+  <li><code>P(y|x)</code>가 의미하는 조건부 확률을 설명할 수 있는가?</li>
+  <li>기댓값과 평균 loss의 관계를 설명할 수 있는가?</li>
+  <li>분산이 데이터 분포 해석에 왜 중요한가?</li>
+  <li>우도 대신 로그우도를 쓰는 이유를 설명할 수 있는가?</li>
+  <li>Cross-Entropy가 분류 문제에 적합한 이유를 설명할 수 있는가?</li>
+</ul>

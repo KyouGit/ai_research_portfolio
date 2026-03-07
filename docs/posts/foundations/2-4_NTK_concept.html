@@ -1,0 +1,60 @@
+<h2>Neural Tangent Kernel (NTK) — 왜 큰 신경망이 잘 학습되는가</h2>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>태그:</strong> 기초수학,최적화,딥러닝기초</p>
+<p>NTK는 충분히 큰 신경망에서 학습 동역학이 커널 회귀와 유사해진다는 관점을 제공하는 이론이다.</p>
+
+<h3>한 줄 요약</h3>
+<p>폭이 매우 큰 신경망은 학습 중 함수가 거의 선형화되어, gradient descent가 NTK 기반 kernel regression처럼 동작한다.</p>
+
+<h3>핵심 질문</h3>
+<ul>
+  <li>파라미터 수가 데이터 수보다 훨씬 많아도 왜 학습이 안정적으로 되는가?</li>
+  <li>왜 과매개변수화(overparameterization)에서 오히려 일반화가 좋아지는 구간이 생기는가?</li>
+</ul>
+
+<h3>1. 선형화 관점</h3>
+<p>신경망 출력이 <code>f(x, \theta)</code>일 때, 작은 파라미터 변화 <code>\Delta\theta</code>에 대해 1차 근사하면:</p>
+<pre><code>f(x, \theta + \Delta\theta) ≈ f(x, \theta) + ∇_θ f(x, \theta) · \Delta\theta</code></pre>
+<p>즉 학습이 입력 <code>x</code>의 gradient feature <code>∇_θ f(x, \theta)</code> 위에서의 선형 모델처럼 보인다.</p>
+
+<h3>2. NTK 정의</h3>
+<p>두 입력 <code>x, x'</code>에 대한 NTK는 다음과 같다.</p>
+<pre><code>K(x, x') = ∇_θ f(x)^T ∇_θ f(x')</code></pre>
+<p>해석하면, 두 입력의 gradient feature 유사도(내적)다.</p>
+
+<h3>3. 중요한 결과 (Infinite-width 직관)</h3>
+<ul>
+  <li>신경망 폭이 매우 커지면 학습 중 NTK 변화가 작아진다(거의 상수 커널).</li>
+  <li>이 구간에서 gradient descent의 함수 공간 동역학이 kernel regression과 유사해진다.</li>
+</ul>
+
+<h3>4. Overparameterization과 일반화</h3>
+<p>전통적 통계학의 단순 직관은 “파라미터 증가 = 과적합 증가”였지만, 딥러닝에서는 큰 모델에서 다시 성능이 좋아지는 구간이 나타난다.</p>
+<ul>
+  <li>데이터는 고차원 공간에 놓여도 실제로는 더 낮은 차원의 구조(manifold)를 가지는 경우가 많다.</li>
+  <li>큰 모델은 이 구조를 더 유연하게 표현할 여지를 가진다.</li>
+  <li>SGD가 상대적으로 평평한 해(flat minima)를 선호하는 경향이 일반화에 유리하게 작용할 수 있다.</li>
+</ul>
+
+<h3>5. Double Descent 연결</h3>
+<p>모델 복잡도 증가에 따라 테스트 에러가:</p>
+<pre><code>감소 → 증가(보간 임계점 근처) → 다시 감소</code></pre>
+<p>하는 현상이 double descent다. 보간 임계점(interpolation threshold) 근처에서는 과적합이 두드러질 수 있고, 그보다 더 큰 모델에서는 다시 일반화가 개선될 수 있다.</p>
+
+<h3>6. 세 가지를 하나로 보면</h3>
+<ol>
+  <li>큰 폭의 모델에서는 NTK 관점이 유효해진다.</li>
+  <li>과매개변수화는 최적화를 더 쉽게 만들 수 있다.</li>
+  <li>그 결과가 실무에서 double descent 형태로 관찰되기도 한다.</li>
+</ol>
+
+<h3>7. 해석 시 주의점</h3>
+<ul>
+  <li>NTK는 “아주 큰 폭” 근사에서 특히 강력한 이론이다.</li>
+  <li>현대 대형 모델의 모든 현상(표현학습, 특징학습, SGD 암묵적 편향)을 NTK 하나로 완전히 설명할 수는 없다.</li>
+  <li>그래서 mean-field, feature learning, implicit bias 등과 함께 보는 것이 실전적으로 더 정확하다.</li>
+</ul>
+
+<h3>핵심 결론</h3>
+<p>현대 딥러닝의 성능은 큰 모델, SGD, 대규모 데이터의 결합에서 나온다. NTK는 이 조합의 학습 안정성을 설명하는 강력한 이론적 축 중 하나다.</p>
+

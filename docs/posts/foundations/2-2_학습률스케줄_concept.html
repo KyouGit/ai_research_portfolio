@@ -1,0 +1,155 @@
+<h2>Learning Rate Schedule — 학습률을 어떻게 조절할까</h2>
+<p class="meta"><strong>난이도:</strong> 초중급</p>
+<p class="meta"><strong>태그:</strong> 기초수학,최적화,딥러닝기초</p>
+<p>optimizer를 결정했다면, 다음으로 중요한 것이 learning rate schedule이다. 실제로 optimizer 선택보다 성능에 더 큰 영향을 주는 경우가 많다.</p>
+
+<!-- deep_context:start -->
+<h3>한 줄 요약</h3>
+<p>학습 초반에는 크게, 후반에는 작게. 이 원칙을 어떻게 구현할지가 learning rate schedule이다.</p>
+
+<h3>발전 흐름</h3>
+<pre><code>Constant → Step decay → Exponential → Linear → Cosine → Warmup → Cosine+Warmup (현재 표준)</code></pre>
+
+<h3>이 문서를 읽고 설명할 수 있어야 하는 핵심 3가지</h3>
+<ul>
+  <li>warmup이 왜 필요한지, 특히 Transformer에서 왜 중요한지</li>
+  <li>cosine decay가 linear decay보다 후반 미세 조정에 유리한 이유</li>
+  <li>optimizer의 adaptive lr과 lr schedule의 역할이 어떻게 다른지</li>
+</ul>
+<!-- deep_context:end -->
+
+<!-- beginner_block:start -->
+<h3>처음 보는 사람용 핵심 용어</h3>
+<ul>
+  <li><strong>Learning rate (η)</strong>: 파라미터를 한 번에 얼마나 움직일지 결정하는 보폭.</li>
+  <li><strong>Warmup</strong>: 학습 초반에 lr을 0에서 천천히 올리는 전략. gradient 폭발 방지.</li>
+  <li><strong>Decay</strong>: 학습이 진행되면서 lr을 줄이는 것.</li>
+  <li><strong>Overshoot</strong>: lr이 너무 커서 최적점을 지나쳐버리는 현상.</li>
+  <li><strong>Epoch</strong>: 전체 데이터를 한 번 다 훑는 것. Step은 mini-batch 하나 처리하는 것.</li>
+</ul>
+<!-- beginner_block:end -->
+
+<h3>1단. 왜 learning rate를 바꿔야 하나</h3>
+<p>기본 gradient descent 수식에서 η가 고정이면 문제가 생긴다.</p>
+<pre><code class="language-python">w = w - η * ∇L</code></pre>
+<table>
+  <tr><th>시점</th><th>상태</th><th>고정 lr의 문제</th><th>필요한 lr</th></tr>
+  <tr><td>초반</td><td>loss 크고, 최적점에서 멀다</td><td>너무 작으면 수렴이 느림</td><td>크게</td></tr>
+  <tr><td>후반</td><td>loss 작고, 최적점 근처</td><td>너무 크면 overshoot 발생</td><td>작게</td></tr>
+</table>
+<p>두 조건을 동시에 만족하는 고정 lr은 없다. → schedule 필요.</p>
+
+<h3>2단. Constant — 가장 단순 (거의 안 씀)</h3>
+<pre><code class="language-python">lr = 0.001  # 항상 동일</code></pre>
+<p>초반에 느리거나 후반에 overshoot. 현재 단독으로는 거의 사용하지 않는다.</p>
+
+<h3>3단. Step Decay — 초기 CNN의 표준</h3>
+<pre><code class="language-python">η = η₀ * γ**k      # k: 감소 횟수, γ: 감소 비율 (예: 0.1)
+
+# 예시
+epoch  0~30  → lr = 0.1
+epoch 30~60  → lr = 0.01
+epoch 60~90  → lr = 0.001</code></pre>
+<p>단순하고 효과적이라 VGG, ResNet 등 초기 CNN 학습에서 오래 사용됐다. 계단식으로 lr이 떨어지는 것이 특징.</p>
+
+<h3>4단. Exponential / Linear Decay</h3>
+<pre><code class="language-python"># Exponential decay
+η_t = η₀ * exp(-k * t)       # 빠르게 감소, 점점 완만
+
+# Linear decay (Transformer 이후 많이 씀)
+η_t = η₀ * (1 - t / T)       # T: 총 step 수. 끝에서 0이 됨</code></pre>
+<p>Linear decay는 구현이 쉽고 안정적이라 Transformer 초기 학습에서 많이 사용됐다.</p>
+
+<h3>5단. Cosine Decay — Vision과 LLM 모두 많이 쓰임</h3>
+<pre><code class="language-python">η_t = η_min + 0.5 * (η_max - η_min) * (1 + cos(π * t / T))
+# t: 현재 step, T: 총 step, η_min: 최소 lr (보통 0)</code></pre>
+<p>처음에는 빠르게 감소하고, 후반에는 매우 천천히 감소한다. 이 덕분에 수렴 직전 미세 조정이 정밀하다.</p>
+<ul>
+  <li>Linear decay: 후반에도 일정 속도로 감소 → 너무 거칠 수 있음</li>
+  <li>Cosine decay: 후반 감소 속도가 거의 0에 가까움 → 정밀 수렴에 유리</li>
+</ul>
+
+<h3>6단. Warmup — Transformer의 핵심</h3>
+<p>초기 파라미터가 랜덤 상태일 때 큰 lr을 쓰면 gradient가 폭발한다. 처음 몇 step 동안 lr을 0에서 천천히 올린다.</p>
+<pre><code class="language-python">if step < warmup_steps:
+    lr = peak_lr * (step / warmup_steps)   # 0 → peak_lr 선형 증가
+else:
+    lr = decay_schedule(step)              # 이후 decay 시작</code></pre>
+<p><strong>Attention Is All You Need (2017)</strong> 논문에서 처음 도입. Transformer schedule 수식:</p>
+<pre><code class="language-python">lr = d_model**(-0.5) * min(step**(-0.5), step * warmup_steps**(-1.5))
+# warmup 구간: step 증가 → lr 증가
+# 이후 구간: step 증가 → lr 감소 (step^-0.5 에 의해 자동 감소)</code></pre>
+
+<h3>7단. Cosine + Warmup — 현재 LLM 표준</h3>
+<p>warmup으로 안정적으로 시작하고, cosine으로 정밀하게 수렴한다. 현재 가장 널리 쓰이는 조합.</p>
+<pre><code class="language-python">if step < warmup_steps:
+    lr = peak_lr * (step / warmup_steps)           # 선형 warmup
+else:
+    progress = (step - warmup_steps) / (total_steps - warmup_steps)
+    lr = eta_min + 0.5 * (peak_lr - eta_min) * (1 + cos(π * progress))
+    # cosine decay</code></pre>
+<p>GPT, LLaMA 등 대부분의 LLM 사전학습에서 이 조합을 사용한다.</p>
+
+<h3>8단. 기타 스케줄</h3>
+<table>
+  <tr><th>스케줄</th><th>아이디어</th><th>사용처</th></tr>
+  <tr><td>Reduce on Plateau</td><td>val loss 정체 시 lr 감소 (자동 조절)</td><td>소규모 실험</td></tr>
+  <tr><td>One Cycle Policy</td><td>lr 증가 → 감소 (/\ 형태)</td><td>Vision, FastAI</td></tr>
+  <tr><td>Cosine with Restarts (SGDR)</td><td>cosine decay 후 lr reset 반복</td><td>local minimum 탈출 실험</td></tr>
+</table>
+
+<h3>핵심 수식 정리</h3>
+<table>
+  <tr><th>스케줄</th><th>수식</th></tr>
+  <tr><td>Step decay</td><td>η = η₀ · γᵏ</td></tr>
+  <tr><td>Exponential</td><td>η_t = η₀ · e^(−kt)</td></tr>
+  <tr><td>Linear</td><td>η_t = η₀(1 − t/T)</td></tr>
+  <tr><td>Cosine</td><td>η_t = η_min + ½(η_max − η_min)(1 + cos(πt/T))</td></tr>
+  <tr><td>Transformer</td><td>lr = d^(−0.5) · min(step^(−0.5), step · warmup^(−1.5))</td></tr>
+</table>
+
+<h3>현업 사용 정리</h3>
+<table>
+  <tr><th>분야</th><th>추천 스케줄</th></tr>
+  <tr><td>Vision (CNN)</td><td>Cosine decay, Step decay</td></tr>
+  <tr><td>Transformer (소/중형)</td><td>Warmup + Linear decay</td></tr>
+  <tr><td>LLM 사전학습</td><td>Warmup + Cosine decay</td></tr>
+</table>
+
+<h3>Optimizer와 LR Schedule의 관계</h3>
+<p>Adam은 파라미터별로 adaptive lr을 적용하지만, 전체 lr의 절대 크기는 schedule로 따로 조절해야 한다.</p>
+<ul>
+  <li><strong>Optimizer</strong>: 각 파라미터의 상대적 lr 조절 (방향과 크기 보정)</li>
+  <li><strong>LR Schedule</strong>: 전체 학습률의 절대 크기 조절 (언제 크게/작게)</li>
+</ul>
+<p>둘은 독립적으로 작동한다. AdamW를 써도 schedule 없이 고정 lr을 쓰면 성능이 크게 떨어지는 경우가 많다.</p>
+
+<h3>예상 질문 5개와 답변</h3>
+<ul>
+  <li><strong>Q1. warmup이 왜 필요한가?</strong><br>
+  초기 파라미터가 랜덤이라 gradient가 불안정하다. 큰 lr로 시작하면 gradient 폭발 위험이 있어서 천천히 올린다.</li>
+
+  <li><strong>Q2. cosine이 linear보다 좋은 이유는?</strong><br>
+  후반에 lr이 매우 천천히 줄어들어 수렴 직전 미세 조정이 정밀하다. linear는 후반에도 같은 속도로 감소해서 너무 거칠 수 있다.</li>
+
+  <li><strong>Q3. Adam을 써도 lr schedule이 필요한가?</strong><br>
+  필요하다. Adam은 파라미터별 상대적 lr을 조절하지만, 전체 lr의 절대 크기는 schedule로 따로 조절해야 한다.</li>
+
+  <li><strong>Q4. warmup steps를 얼마로 설정해야 하나?</strong><br>
+  일반적으로 전체 step의 1~10%. LLM에서는 보통 1~2%. 너무 짧으면 초반 불안정, 너무 길면 유효 학습 시간 낭비.</li>
+
+  <li><strong>Q5. Reduce on Plateau가 LLM에 안 맞는 이유는?</strong><br>
+  LLM은 수백만 step이고, validation loss 측정이 비싸다. loss 정체 구간이 자연스럽게 생기는데 불필요한 lr 감소가 자주 발생한다.</li>
+</ul>
+
+<h3>다음에 스스로 해볼 실습 2가지</h3>
+<ul>
+  <li>cosine / linear / constant schedule을 같은 모델에 적용하고 validation loss curve를 한 그래프에 비교. 특히 후반 수렴 정밀도 차이를 확인</li>
+  <li>warmup steps를 100 / 500 / 2000으로 바꾸면서 초반 training loss 안정성 차이를 시각화. gradient norm도 같이 찍어보기</li>
+</ul>
+
+<h3>관련 문서</h3>
+<ul>
+  <li><a href="1-6_옵티마이저기초_concept.html">Optimizer 전체 흐름</a></li>
+  <li><a href="1-3_SGD_concept.html">SGD 상세</a></li>
+</ul>
