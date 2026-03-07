@@ -9,7 +9,6 @@
 docs/*
 !docs/index.html
 !docs/roadmap.html
-!docs/ROADMAP.md
 !docs/posts_index.json
 !docs/posts/
 !docs/posts/**
