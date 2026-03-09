@@ -99,6 +99,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -177,6 +212,19 @@
 <p class="meta"><strong>태그:</strong> foundations,cnn,convolution,pooling</p>
 <div class="tip">CNN은 "이미지 전체를 한 번에 보지 않고, 작은 창을 움직이며 지역 패턴을 찾는 모델"이라고 이해하면 된다.</div>
 <p>이미지는 인접한 픽셀끼리 강하게 관련되어 있다. CNN은 이 구조를 이용해, 같은 필터를 여러 위치에 공유해서 적용함으로써 edge, texture, shape 같은 특징을 효율적으로 추출한다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/2D_Convolution_Animation.gif" alt="2차원 이미지와 커널의 convolution 애니메이션" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>입력 이미지 위를 커널이 이동하면서 출력 feature map이 만들어지는 과정을 보여주는 2D convolution 애니메이션이다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:2D_Convolution_Animation.gif">원본 / 라이선스</a> · Michael Plotke · CC BY-SA 3.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Max_pooling.png" alt="2x2 max pooling 예시" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>2x2 max pooling이 입력 영역에서 가장 큰 값만 남겨 해상도를 줄이는 방식을 한 번에 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Max_pooling.png">원본 / 라이선스</a> · Aphex34 · CC BY-SA 4.0</div>
+  </figure>
+</div>
 <h3>1. Convolution 핵심 식</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi></mrow></msub><mo>&#x0003D;</mo><msub><mo>&#x02211;</mo><mrow><mi>u</mi><mo>&#x0002C;</mo><mi>v</mi></mrow></msub><msub><mi>W</mi><mrow><mi>u</mi><mo>&#x0002C;</mo><mi>v</mi></mrow></msub><msub><mi>x</mi><mrow><mi>i</mi><mo>&#x0002B;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>j</mi><mo>&#x0002B;</mo><mi>v</mi></mrow></msub></mrow></math></div>
 <p>입력 이미지 위를 작은 필터 \(W\)가 슬라이딩하면서 위치마다 내적을 계산한다고 보면 된다. 이 연산 결과가 feature map이다.</p>

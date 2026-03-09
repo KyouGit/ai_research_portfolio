@@ -99,6 +99,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -177,6 +212,24 @@
 <p class="meta"><strong>태그:</strong> foundations,hessian,curvature,optimization</p>
 <div class="tip">gradient가 "어느 방향으로 내려갈지"를 알려준다면, Hessian은 "그 방향의 지형이 얼마나 가파르고 휘어져 있는지"를 알려준다.</div>
 <p>딥러닝에서 loss surface는 단순한 그릇 모양이 아니다. 어떤 방향은 매우 급하고, 어떤 방향은 완만하다. 이 차이를 설명하는 핵심 개념이 곡률(curvature)이고, 그것을 수학적으로 담는 도구가 Hessian이다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gradient_descent.png" alt="Gradient descent의 등고선 이동 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>등고선 위에서 gradient descent가 가장 가파른 방향으로 내려가는 모습을 보여준다. Hessian은 이 지형의 굽힘 정도를 정량화한다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Gradient_descent.png">원본 / 라이선스</a> · Olegalexandrov · Public domain</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Saddle_contours.svg" alt="Saddle point 주변 등고선" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>안장점 주변의 등고선. 어떤 방향은 올라가고 어떤 방향은 내려가는 비등방성 곡률을 직관적으로 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Saddle_contours.svg">원본 / 라이선스</a> · Ekem · CC BY-SA 3.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hessian_matrix_with_columns_coloured.jpg" alt="Hessian 행렬 시각화" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Hessian이 여러 2차 미분 성분을 담은 행렬이라는 점을 직접적으로 보여주는 시각 자료다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Hessian_matrix_with_columns_coloured.jpg">원본 / 라이선스</a> · Gowerrobert · CC BY-SA 3.0</div>
+  </figure>
+</div>
 <h3>1. Hessian 정의</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>H</mi><mo>&#x0003D;</mo><msup><mo>&#x02207;</mo><mn>2</mn></msup><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>&#x003B8;</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>Hessian은 2차 미분을 모아 만든 행렬이다. 각 원소는 한 파라미터를 조금 움직였을 때 gradient가 어떻게 바뀌는지를 나타낸다.</p>

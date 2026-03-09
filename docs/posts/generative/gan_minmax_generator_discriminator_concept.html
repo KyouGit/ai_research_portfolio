@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -200,6 +235,24 @@
 <p>하지만 직접 분포를 모델링하는 것은 어렵습니다.</p>
 
 <p>GAN은 이 문제를 <strong>게임 구조</strong>로 해결합니다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Generative%20adversarial%20network.svg" alt="GAN의 generator-discriminator 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Generator가 가짜 샘플을 만들고, Discriminator가 진짜/가짜를 구분하는 GAN의 핵심 경쟁 구조를 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Generative_adversarial_network.svg">원본 / 라이선스</a> · d2l-ai authors · CC BY-SA 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Discriminative%20vs%20Generative%20Neural%20Networks.png" alt="판별 모델과 생성 모델 비교 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>분류를 하는 판별 모델과 데이터를 직접 만들어내는 생성 모델의 차이를 비교하면 GAN의 위치가 더 선명해진다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Discriminative_vs_Generative_Neural_Networks.png">원본 / 라이선스</a> · own work · CC0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dcgan%28128128_63k%29.gif" alt="DCGAN 생성 샘플 변화 예시" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>GAN 계열 모델이 학습되며 샘플 품질이 점점 좋아지는 모습을 보여주는 예시다. 실제 생성 품질 개선을 체감하기 좋다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Dcgan(128128_63k).gif">원본 / 라이선스</a> · Zisaac33 · CC BY-SA 4.0</div>
+  </figure>
+</div>
 
 <h2>1. GAN 핵심 아이디어</h2>
 

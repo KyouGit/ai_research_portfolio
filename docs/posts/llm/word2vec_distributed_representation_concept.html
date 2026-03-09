@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -201,6 +236,24 @@ cat = [0,1,0,0,0,0,...]</code></pre>
 <li>유사도 계산 불가능</li>
 </ul>
 <p>이 문제를 해결하기 위해 등장한 개념이 <strong>분산 표현(distributed representation)</strong>입니다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/CBOW.png" alt="CBOW 구조도" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>CBOW는 주변 단어들을 입력으로 받아 중심 단어를 예측한다. Word2Vec의 두 대표 학습 방식 중 하나다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:CBOW.png">원본 / 라이선스</a> · Mirkipedia · CC BY-SA 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Skip-gram.png" alt="Skip-gram 구조도" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Skip-gram은 중심 단어 하나로 주변 단어들을 예측한다. 희귀 단어 표현을 잘 학습하는 쪽으로 자주 설명된다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Skip-gram.png">원본 / 라이선스</a> · Moucrowap · CC BY-SA 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Word%20vector%20illustration.jpg" alt="word embedding 관계 시각화" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>king, queen, man, woman 같은 단어가 의미 관계를 벡터 차이로 표현할 수 있다는 Word2Vec의 직관을 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Word_vector_illustration.jpg">원본 / 라이선스</a> · own work · CC BY-SA 4.0</div>
+  </figure>
+</div>
 
 <h2>1. 분산 표현 (Distributed Representation)</h2>
 <p>Word2Vec은 단어를 밀집 벡터로 표현합니다.</p>

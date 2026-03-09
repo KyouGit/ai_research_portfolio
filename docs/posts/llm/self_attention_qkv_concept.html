@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -204,6 +239,24 @@
 <li>중요한 단어에는 더 큰 attention weight 부여</li>
 <li>그 정보를 모아 새로운 표현 생성</li>
 </ul>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Self-Attention%20%28Scaled%20dot-product%20Attention%29.png" alt="scaled dot-product attention 구조도" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Q, K, V를 만들고, 점곱 후 softmax를 거쳐 값을 섞는 scaled dot-product attention 전체 흐름을 한 장으로 요약한 그림이다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Self-Attention_(Scaled_dot-product_Attention).png">원본 / 라이선스</a> · Creative Commons uploader · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Attn-xx-dot.png" alt="encoder self-attention dot product 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>self-attention이 같은 입력 시퀀스 내부에서 토큰 간 관계를 계산하는 방식을 단순화한 도식이다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Attn-xx-dot.png">원본 / 라이선스</a> · Numiri · CC BY-SA 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dot-product-geometric-definition.svg" alt="dot product의 기하학적 의미" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>attention 점수가 결국 query와 key의 내적이라는 점을 이해하려면, dot product의 기하학적 의미를 보는 것이 도움이 된다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Dot-product-geometric-definition.svg">원본 / 라이선스</a> · MikeRun · CC BY-SA 4.0</div>
+  </figure>
+</div>
 
 <h2>1. 입력 토큰 표현</h2>
 <p>문장은 토큰 embedding으로 표현됩니다.</p>

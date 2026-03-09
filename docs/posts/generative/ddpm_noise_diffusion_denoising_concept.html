@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -199,6 +234,24 @@
 </ul>
 
 <p>이 방식이 <strong>Diffusion Model</strong>이며 대표 모델이 <strong>DDPM</strong>입니다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Example%20of%20Forward%20Diffusion%20Models.png" alt="forward diffusion 과정 예시" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>원본 이미지에 단계적으로 노이즈를 섞으면 결국 거의 완전한 잡음으로 바뀐다는 DDPM의 forward process를 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Example_of_Forward_Diffusion_Models.png">원본 / 라이선스</a> · MrAlanKoh · CC BY-SA 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diffusion%20Architecture.png" alt="diffusion model 아키텍처 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>노이즈 추가와 제거, 예측 네트워크, 샘플링 흐름을 포함한 diffusion 모델 전체 구조도다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Diffusion_Architecture.png">원본 / 라이선스</a> · Rombach et al. · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Stable%20Diffusion%20architecture.png" alt="Stable Diffusion 아키텍처 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>DDPM 계열 아이디어가 latent 공간으로 확장된 Stable Diffusion 구조. diffusion 계열이 실제 시스템으로 어떻게 이어지는지도 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Stable_Diffusion_architecture.png">원본 / 라이선스</a> · LMU Munich · MIT License</div>
+  </figure>
+</div>
 
 <h2>1. DDPM 핵심 아이디어</h2>
 
