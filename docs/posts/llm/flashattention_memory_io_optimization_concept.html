@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -177,8 +198,8 @@
 
 <h3>수식</h3>
 <p><code>S = QK<sup>T</sup></code></p>
-<p><code>P = softmax(S)</code></p>
-<p><code>O = PV</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo>&#x0003D;</mo><mi>s</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mi>S</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>O</mi><mo>&#x0003D;</mo><mi>P</mi><mi>V</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -191,7 +212,7 @@
 
 <h3>주의점</h3>
 <p>행렬 S는 크기가 매우 큽니다.</p>
-<p><code>S ∈ R^{n × n}</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>∈</mi><msup><mi>R</mi><mrow><mi>n</mi><mi>×</mi><mi>n</mi></mrow></msup></mrow></math></div>
 
 <h3>문제</h3>
 <p>S를 GPU 메모리에 저장하고 다시 읽어야 합니다.</p>
@@ -205,7 +226,7 @@
 <p>attention은 종종 다음 조건을 가집니다.</p>
 <p><strong>memory-bound workload</strong></p>
 <p>즉:</p>
-<p><code>Runtime ∝ Memory_IO</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mi>u</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>m</mi><mi>e</mi><mi>∝</mi><mi>M</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>r</mi><msub><mi>y</mi><mi>I</mi></msub><mi>O</mi></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>계산 자체보다 데이터 이동이 더 느립니다.</p>
@@ -233,7 +254,7 @@ V block</code></pre>
 <h2>4. Online Softmax</h2>
 <p>FlashAttention은 softmax를 <strong>online 방식</strong>으로 계산합니다.</p>
 <p>softmax:</p>
-<p><code>softmax(x_i) = exp(x_i) / Σ exp(x_j)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>Σ</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>j</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>FlashAttention에서는 다음 값을 유지합니다.</p>
 <ul>
 <li>running max</li>
@@ -241,8 +262,8 @@ V block</code></pre>
 </ul>
 
 <h3>수식</h3>
-<p><code>m_i = max(score)</code></p>
-<p><code>l_i = Σ exp(score - m_i)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>m</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>l</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mi>Σ</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mo>&#x02212;</mo><msub><mi>m</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>전체 attention matrix를 저장하지 않고도 softmax 계산이 가능합니다.</p>
@@ -382,5 +403,17 @@ V block</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -189,7 +210,7 @@
 
 <h2>2. SentencePiece 학습 목표</h2>
 <p>SentencePiece는 다음 확률 모델을 사용합니다.</p>
-<p><code>P(sentence) = Π P(token_i)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>Π</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><msub><mi>n</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -213,7 +234,7 @@ un + believable
 unbel + iev + able
 un + bel + iev + able</code></pre>
 <p>각 분해의 확률:</p>
-<p><code>P(sentence) = Π P(token_i)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>Π</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><msub><mi>n</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>핵심 아이디어</h3>
 <p>확률이 가장 높은 token segmentation을 선택합니다.</p>
@@ -230,7 +251,7 @@ un + bel + iev + able</code></pre>
 <li>대소문자 정규화</li>
 </ul>
 <p>수식 표현:</p>
-<p><code>x' = normalize(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>x</mi><mi>&#x02032;</mi></msup><mo>&#x0003D;</mo><mi>n</mi><mi>o</mi><mi>r</mi><mi>m</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -247,7 +268,7 @@ un + bel + iev + able</code></pre>
 <p>토큰:</p>
 <pre><code>▁Machine ▁learn ing ▁is ▁power ful</code></pre>
 <p>이 토큰은 ID로 변환됩니다.</p>
-<p><code>x = [t1, t2, ..., t_n]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">[</mo><mi>t</mi><mn>1</mn><mo>&#x0002C;</mo><mi>t</mi><mn>2</mn><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -354,5 +375,17 @@ un + bel + iev + able</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

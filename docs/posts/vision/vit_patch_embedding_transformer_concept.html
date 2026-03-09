@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -193,7 +214,7 @@ Patch size: 16 × 16
 
 <p>patch 개수:</p>
 
-<p><code>N = (H × W) / P²</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>N</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>H</mi><mi>×</mi><mi>W</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>P</mi><mi>²</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -218,11 +239,11 @@ Patch size: 16 × 16
 
 <p>flatten:</p>
 
-<p><code>x_p ∈ ℝ^(P² · C)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mi>p</mi></msub><mi>∈</mi><msup><mi>ℝ</mi><mo stretchy="false">&#x00028;</mo></msup><mi>P</mi><mi>²</mi><mi>·</mi><mi>C</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>embedding:</p>
 
-<p><code>z_0 = x_p W_e</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>z</mi><mn>0</mn></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mi>p</mi></msub><msub><mi>W</mi><mi>e</mi></msub></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -244,7 +265,7 @@ Patch size: 16 × 16
 
 <p>Transformer는 순서를 인식하지 못하기 때문에 위치 정보를 추가합니다.</p>
 
-<p><code>z = z_0 + E_pos</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>z</mi><mo>&#x0003D;</mo><msub><mi>z</mi><mn>0</mn></msub><mo>&#x0002B;</mo><msub><mi>E</mi><mi>p</mi></msub><mi>o</mi><mi>s</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -260,7 +281,7 @@ Patch size: 16 × 16
 
 <p>ViT는 일반 Transformer encoder를 사용합니다.</p>
 
-<p><code>Attention(Q,K,V) = softmax(QK^T / √d_k) V</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mi>t</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo stretchy="false">&#x00028;</mo><mi>Q</mi><mo>&#x0002C;</mo><mi>K</mi><mo>&#x0002C;</mo><mi>V</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>s</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup><mo>&#x0002F;</mo><mi>√</mi><msub><mi>d</mi><mi>k</mi></msub><mo stretchy="false">&#x00029;</mo><mi>V</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -289,7 +310,7 @@ Patch size: 16 × 16
 
 <p>출력:</p>
 
-<p><code>y = softmax(W h_cls)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>s</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mi>W</mi><msub><mi>h</mi><mi>c</mi></msub><mi>l</mi><mi>s</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -352,7 +373,7 @@ MLP Head
 
 <p>attention 복잡도:</p>
 
-<p><code>O(N²)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>O</mi><mo stretchy="false">&#x00028;</mo><mi>N</mi><mi>²</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -433,5 +454,17 @@ MLP Head
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

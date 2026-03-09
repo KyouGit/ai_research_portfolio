@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -147,10 +168,10 @@
 <p class="meta"><strong>난이도:</strong> 기초</p>
 <p class="meta"><strong>태그:</strong> 미분,연쇄법칙,역전파,딥러닝기초</p>
 <p>딥러닝 학습의 목표는 <strong>loss를 최소화하는 파라미터를 찾는 것</strong>입니다. 이를 위해 가중치를 조금 바꿨을 때 loss가 얼마나 변하는지 계산해야 합니다.</p>
-<p><code>\partial L/\partial w</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>&#x02202;</mo><mi>L</mi><mo>&#x0002F;</mo><mo>&#x02202;</mo><mi>w</mi></mrow></math></div>
 <p>이 값은 "가중치 <code>w</code>를 바꾸면 loss <code>L</code>이 얼마나 변하는가"를 의미합니다.</p>
 <p>업데이트는 보통 아래처럼 진행됩니다.</p>
-<p><code>w = w - \eta \partial L/\partial w</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>w</mi><mo>&#x0003D;</mo><mi>w</mi><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo>&#x02202;</mo><mi>L</mi><mo>&#x0002F;</mo><mo>&#x02202;</mo><mi>w</mi></mrow></math></div>
 <ul>
   <li><code>w</code>: 모델 파라미터</li>
   <li><code>\eta</code>: learning rate</li>
@@ -166,7 +187,7 @@
 
 <h3>1) 편미분 (Partial Derivative)</h3>
 <p>딥러닝 함수는 여러 변수에 의존합니다.</p>
-<p><code>L(w,b) = (wx + b - y)^2</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>w</mi><mo>&#x0002C;</mo><mi>b</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>w</mi><mi>x</mi><mo>&#x0002B;</mo><mi>b</mi><mo>&#x02212;</mo><mi>y</mi><msup><mo stretchy="false">&#x00029;</mo><mn>2</mn></msup></mrow></math></div>
 <p>따라서 각 변수에 대한 변화율을 따로 계산합니다.</p>
 <p><code>\partial L/\partial w</code>, <code>\partial L/\partial b</code></p>
 <ul>
@@ -178,21 +199,21 @@
 
 <h3>2) 기울기 (Gradient)</h3>
 <p>gradient는 편미분을 모은 벡터입니다.</p>
-<p><code>\nabla L = [\partial L/\partial w_1, \partial L/\partial w_2, ..., \partial L/\partial w_n]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>&#x02207;</mo><mi>L</mi><mo>&#x0003D;</mo><mo stretchy="false">[</mo><mo>&#x02202;</mo><mi>L</mi><mo>&#x0002F;</mo><mo>&#x02202;</mo><msub><mi>w</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mo>&#x02202;</mo><mi>L</mi><mo>&#x0002F;</mo><mo>&#x02202;</mo><msub><mi>w</mi><mn>2</mn></msub><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><mo>&#x02202;</mo><mi>L</mi><mo>&#x0002F;</mo><mo>&#x02202;</mo><msub><mi>w</mi><mi>n</mi></msub><mo stretchy="false">]</mo></mrow></math></div>
 <p>gradient는 loss가 가장 빨리 증가하는 방향이며, 학습에서는 반대 방향으로 이동합니다.</p>
-<p><code>w = w - \eta \nabla L</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>w</mi><mo>&#x0003D;</mo><mi>w</mi><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo>&#x02207;</mo><mi>L</mi></mrow></math></div>
 
 <h3>3) 연쇄법칙 (Chain Rule)</h3>
 <p>신경망은 함수가 연쇄된 구조입니다.</p>
-<p><code>y = f(g(x))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>f</mi><mo stretchy="false">&#x00028;</mo><mi>g</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>전체 변화율은 다음과 같습니다.</p>
-<p><code>dy/dx = (dy/dg)(dg/dx)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mi>y</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>y</mi><mo>&#x0002F;</mo><mi>d</mi><mi>g</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>g</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>중간 함수를 지날 때마다 미분이 곱으로 누적됩니다.</p>
 
 <h3>4) 연쇄법칙 계산 예시</h3>
-<p><code>y = (3x + 1)^2</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>3</mn><mi>x</mi><mo>&#x0002B;</mo><mn>1</mn><msup><mo stretchy="false">&#x00029;</mo><mn>2</mn></msup></mrow></math></div>
 <p><code>g(x)=3x+1</code>, <code>f(g)=g^2</code></p>
-<p><code>dy/dx = (dy/dg)(dg/dx)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mi>y</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>y</mi><mo>&#x0002F;</mo><mi>d</mi><mi>g</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>g</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p><code>dy/dg = 2g</code>, <code>dg/dx = 3</code></p>
 <p>따라서 <code>dy/dx = 2(3x+1)\cdot3</code></p>
 
@@ -202,7 +223,7 @@
 <p>gradient는 뒤에서 앞으로 전달됩니다.</p>
 <pre><code>loss -> layer3 -> layer2 -> layer1</code></pre>
 <p>예를 들어 <code>L=f(h(g(x)))</code>이면</p>
-<p><code>dL/dx = (dL/dh)(dh/dg)(dg/dx)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mi>L</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>L</mi><mo>&#x0002F;</mo><mi>d</mi><mi>h</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>h</mi><mo>&#x0002F;</mo><mi>d</mi><mi>g</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>g</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>마지막 레이어 미분값이 먼저 있어야 앞 레이어 미분을 계산할 수 있으므로 backward 순서가 필수입니다.</p>
 
 <h3>코드-수식 연결</h3>
@@ -254,5 +275,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

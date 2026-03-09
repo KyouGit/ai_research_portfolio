@@ -1,6 +1,213 @@
-<h2>주제: BatchNorm (정규화와 학습 안정화)</h2>
-<p><strong>분류:</strong> foundations</p><p><strong>타입:</strong> concept</p><p><strong>난이도:</strong> 중급</p>
-<p>BatchNorm은 미니배치 통계로 activation을 정규화합니다.</p>
-<p><code>\hat{x}=\frac{x-\mu_B}{\sqrt{\sigma_B^2+\epsilon}},\quad y=\gamma\hat{x}+\beta</code></p>
-<h3>효과</h3><ul><li>학습 안정성 개선</li><li>더 큰 learning rate 허용</li></ul>
-<h3>주의점</h3><ul><li>train/eval 모드 동작 차이</li><li>작은 배치에서 통계량 불안정</li></ul>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #5f6b85;
+      --line: #d8e0ef;
+      --accent: #1f4f99;
+      --code-bg: #eef3ff;
+      --code-line: #d6e1ff;
+      --pre-bg: #0f172a;
+      --pre-text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%);
+      font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(31, 42, 68, 0.06);
+    }
+    h1, h2, h3, h4 { line-height: 1.3; margin: 1.25em 0 0.55em; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-top: 0; }
+    h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #183964; }
+    p { margin: 0.6em 0; }
+    ul, ol { margin: 0.65em 0 0.9em 1.2em; padding: 0; }
+    li { margin: 0.2em 0; }
+    strong { color: #11284a; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-line);
+      border-radius: 7px;
+      padding: 0.12em 0.38em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.93em;
+      color: #17396f;
+      word-break: break-word;
+    }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+      text-align: center;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
+    pre {
+      margin: 0.8em 0 1.05em;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      border-radius: 12px;
+      border: 1px solid #1e2d48;
+      padding: 14px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0.85em 0 1.05em;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    th, td {
+      border-bottom: 1px solid #e7edf9;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #f1f5ff;
+      color: #15335d;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 640px) {
+      .post { padding: 18px 14px; border-radius: 12px; }
+      .topbar a { font-size: 0.84rem; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a>
+      <a href="/ai_research_portfolio/roadmap.html">Roadmap</a>
+      <a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
+<h2>BatchNorm 이해: 왜 정규화가 학습을 안정하게 만들까</h2>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>태그:</strong> foundations,batchnorm,정규화,학습안정화</p>
+<div class="tip">BatchNorm은 "값의 분포가 레이어를 지날수록 너무 흔들리지 않게 만들어 학습을 편하게 하는 장치"라고 이해하면 된다.</div>
+<p>딥러닝에서 같은 모델이라도 초기화나 학습률에 따라 학습이 잘 되기도 하고 갑자기 흔들리기도 한다. BatchNorm은 이런 흔들림을 줄여서 더 큰 learning rate를 써도 안정적으로 학습되게 돕는 대표적인 정규화 기법이다.</p>
+<h3>1. 핵심 수식</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover><mrow><mi>x</mi></mrow><mo stretchy="false">&#x0005E;</mo></mover><mo>&#x0003D;</mo><mfrac><mrow><mi>x</mi><mo>&#x02212;</mo><msub><mi>&#x003BC;</mi><mi>B</mi></msub></mrow><mrow><msqrt><mrow><msubsup><mi>&#x003C3;</mi><mi>B</mi><mn>2</mn></msubsup><mo>&#x0002B;</mo><mi>&#x003F5;</mi></mrow></msqrt></mrow></mfrac><mo>&#x0002C;</mo><mspace width="2em" /><mi>y</mi><mo>&#x0003D;</mo><mi>&#x003B3;</mi><mover><mrow><mi>x</mi></mrow><mo stretchy="false">&#x0005E;</mo></mover><mo>&#x0002B;</mo><mi>&#x003B2;</mi></mrow></math></div>
+<p>앞부분은 미니배치 평균과 분산으로 입력을 정규화하는 단계이고, 뒤의 \(\gamma, \beta\)는 정규화된 값을 다시 학습 가능한 형태로 조정하는 파라미터다.</p>
+<h3>2. 왜 필요한가</h3>
+<ul><li>레이어를 지날수록 activation 스케일이 커지거나 작아지는 문제를 줄인다.</li><li>학습 초기에 gradient가 너무 불안정해지는 상황을 완화한다.</li><li>실무에서는 더 빠른 수렴과 튜닝 난이도 감소로 이어지는 경우가 많다.</li></ul>
+<h3>3. 직관</h3>
+<p>어떤 학생이 매 시험마다 점수 스케일이 다르면 실력을 비교하기 어렵다. BatchNorm은 점수를 평균 0, 분산 1 근처로 맞춰 놓고 비교하게 만드는 것과 비슷하다. 그 위에 \(\gamma, \beta\)를 두는 이유는 "무조건 평균 0, 분산 1이 정답은 아니므로" 모델이 필요한 스케일을 다시 배울 수 있게 하려는 것이다.</p>
+<h3>4. train 모드와 eval 모드</h3>
+<ul><li>학습 중에는 현재 미니배치의 평균과 분산을 사용한다.</li><li>추론 중에는 학습 동안 누적한 running mean, running var를 사용한다.</li></ul>
+<p>이 차이를 모르면 train/eval 전환 시 성능이 갑자기 이상해지는 이유를 설명할 수 없다.</p>
+<h3>5. 장점과 한계</h3>
+<ul><li>장점: 수렴 안정화, 더 큰 learning rate 허용, 깊은 네트워크 학습 용이</li><li>한계: 배치가 너무 작으면 통계량이 불안정할 수 있음</li><li>대안: 작은 배치 환경에서는 LayerNorm, GroupNorm이 더 잘 맞는 경우가 있음</li></ul>
+<h3>6. 코드와 연결</h3>
+<pre><code class="language-python">import torch.nn as nn
+
+layer = nn.BatchNorm1d(num_features=128)</code></pre>
+<p>여기서 <code>num_features</code>는 채널 또는 feature 차원을 뜻한다. 모델은 내부적으로 배치 통계량을 계산하고, 학습 가능한 \(\gamma, \beta\)를 함께 업데이트한다.</p>
+<h3>7. 체크리스트</h3>
+<ul><li>왜 BatchNorm이 학습 안정화를 돕는지 설명할 수 있는가?</li><li>train/eval 모드 차이를 말할 수 있는가?</li><li>작은 배치에서 BatchNorm이 왜 불안정한지 설명할 수 있는가?</li></ul>
+    </article>
+  </main>
+  <script>
+    (function () {
+      var h2 = document.querySelector('h2');
+      if (h2 && h2.textContent.trim()) {
+        var t = h2.textContent.replace(/^\s*주제\s*:\s*/i, '').trim();
+        document.title = t + ' | AI Research Portfolio';
+      }
+      document.querySelectorAll('table').forEach(function (table) {
+        if (!table.parentElement.classList.contains('table-wrap')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+      });
+    })();
+  </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

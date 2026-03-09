@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -189,7 +210,7 @@ Prompt_v3
 
 <p>LLM 출력 확률:</p>
 
-<p><code>P(y | x, prompt)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mo stretchy="false">&#x0007C;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -243,7 +264,7 @@ Prompt_v3
 
 <p>retrieval metric:</p>
 
-<p><code>Recall@k = (# relevant docs in top k) / (# relevant docs)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mi>e</mi><mi>c</mi><mi>a</mi><mi>l</mi><mi>l</mi><mi>@</mi><mi>k</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>#</mi><mi>r</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>v</mi><mi>a</mi><mi>n</mi><mi>t</mi><mi>d</mi><mi>o</mi><mi>c</mi><mi>s</mi><mi>i</mi><mi>n</mi><mi>t</mi><mi>o</mi><mi>p</mi><mi>k</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mo stretchy="false">&#x00028;</mo><mi>#</mi><mi>r</mi><mi>e</mi><mi>l</mi><mi>e</mi><mi>v</mi><mi>a</mi><mi>n</mi><mi>t</mi><mi>d</mi><mi>o</mi><mi>c</mi><mi>s</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -257,7 +278,7 @@ Prompt_v3
 
 <p>generation 평가:</p>
 
-<p><code>Score = E[quality(response)]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mo>&#x0003D;</mo><mi>E</mi><mo stretchy="false">[</mo><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo stretchy="false">&#x00028;</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>평가 방법</h3>
 
@@ -271,7 +292,7 @@ Prompt_v3
 
 <p>전체 시스템 평가는 다음 확률로 볼 수 있습니다.</p>
 
-<p><code>P(answer | query, retrieved_docs)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>a</mi><mi>n</mi><mi>s</mi><mi>w</mi><mi>e</mi><mi>r</mi><mo stretchy="false">&#x0007C;</mo><mi>q</mi><mi>u</mi><mi>e</mi><mi>r</mi><mi>y</mi><mo>&#x0002C;</mo><mi>r</mi><mi>e</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>e</mi><mi>v</mi><mi>e</mi><msub><mi>d</mi><mi>d</mi></msub><mi>o</mi><mi>c</mi><mi>s</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 
@@ -450,5 +471,17 @@ Deploy
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

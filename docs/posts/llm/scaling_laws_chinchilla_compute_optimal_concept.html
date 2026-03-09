@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -168,7 +189,7 @@
 
 <h2>1. Language Model Loss</h2>
 <p>언어 모델은 다음 loss를 최소화합니다.</p>
-<p><code>L = - Σ log P(x_t | x_1,...,x_{t-1})</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>Σ</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -185,7 +206,7 @@
 
 <h2>2. Scaling Law</h2>
 <p>OpenAI 연구에서는 다음 관계를 발견했습니다.</p>
-<p><code>L(N) ≈ aN^{-α}</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>N</mi><mo stretchy="false">&#x00029;</mo><mi>≈</mi><mi>a</mi><msup><mi>N</mi><mrow><mo>&#x02212;</mo><mi>α</mi></mrow></msup></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -202,7 +223,7 @@
 
 <h2>3. Compute Budget</h2>
 <p>훈련 compute는 다음 요소에 비례합니다.</p>
-<p><code>C ∝ N × D</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>∝</mi><mi>N</mi><mi>×</mi><mi>D</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -243,7 +264,7 @@
 <p>DeepMind의 Chinchilla 연구는 다음 결론을 제시했습니다.</p>
 <p><strong>모델 크기와 데이터 크기는 거의 같은 비율로 증가해야 한다.</strong></p>
 <p>즉:</p>
-<p><code>D ≈ 20N</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mi>≈</mi><mn>20</mn><mi>N</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -288,8 +309,8 @@
 
 <h2>7. Compute-Optimal Scaling</h2>
 <p>compute budget C가 고정일 때:</p>
-<p><code>N ∝ C^{0.5}</code></p>
-<p><code>D ∝ C^{0.5}</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>N</mi><mi>∝</mi><msup><mi>C</mi><mrow><mn>0.5</mn></mrow></msup></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mi>∝</mi><msup><mi>C</mi><mrow><mn>0.5</mn></mrow></msup></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -372,5 +393,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

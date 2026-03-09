@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -154,7 +175,7 @@
 
 <p>예측 결과:</p>
 
-<p><code>y = (class, bbox)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>c</mi><mi>l</mi><mi>a</mi><mi>s</mi><mi>s</mi><mo>&#x0002C;</mo><mi>b</mi><mi>b</mi><mi>o</mi><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -194,11 +215,11 @@ Class Prediction
 
 <p>이미지를 S × S grid로 나눕니다.</p>
 
-<p><code>S × S grid</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>×</mi><mi>S</mi><mi>g</mi><mi>r</mi><mi>i</mi><mi>d</mi></mrow></math></div>
 
 <p>각 grid는 다음 값을 예측합니다.</p>
 
-<p><code>(x, y, w, h, confidence)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo>&#x0002C;</mo><mi>w</mi><mo>&#x0002C;</mo><mi>h</mi><mo>&#x0002C;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>f</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -216,7 +237,7 @@ Class Prediction
 
 <p>YOLO는 bounding box를 다음과 같이 표현합니다.</p>
 
-<p><code>bbox = (x, y, w, h)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>b</mi><mi>b</mi><mi>o</mi><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo>&#x0002C;</mo><mi>w</mi><mo>&#x0002C;</mo><mi>h</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>좌표는 grid 기준으로 정규화됩니다.</p>
 
@@ -228,7 +249,7 @@ Class Prediction
 
 <p>confidence는 다음 확률을 의미합니다.</p>
 
-<p><code>confidence = P(object) × IoU</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>f</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo>&#x0003D;</mo><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>o</mi><mi>b</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo><mi>×</mi><mi>I</mi><mi>o</mi><mi>U</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -245,7 +266,7 @@ Class Prediction
 
 <p>IoU는 두 bounding box의 겹침 정도를 측정합니다.</p>
 
-<p><code>IoU = Area(overlap) / Area(union)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>I</mi><mi>o</mi><mi>U</mi><mo>&#x0003D;</mo><mi>A</mi><mi>r</mi><mi>e</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>o</mi><mi>v</mi><mi>e</mi><mi>r</mi><mi>l</mi><mi>a</mi><mi>p</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>A</mi><mi>r</mi><mi>e</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>u</mi><mi>n</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -270,7 +291,7 @@ Class Prediction
 
 <p>손실 함수 구조:</p>
 
-<p><code>L = L_bbox + L_obj + L_class</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><msub><mi>L</mi><mi>b</mi></msub><mi>b</mi><mi>o</mi><mi>x</mi><mo>&#x0002B;</mo><msub><mi>L</mi><mi>o</mi></msub><mi>b</mi><mi>j</mi><mo>&#x0002B;</mo><msub><mi>L</mi><mi>c</mi></msub><mi>l</mi><mi>a</mi><mi>s</mi><mi>s</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -444,5 +465,17 @@ Class Prediction
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

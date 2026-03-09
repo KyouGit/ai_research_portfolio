@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -165,7 +186,7 @@
 <pre><code>batch = 4
 feature = 3
 X shape = (4, 3)</code></pre>
-<p><code>X ∈ R^(B x D)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>X</mi><mi>∈</mi><msup><mi>R</mi><mo stretchy="false">&#x00028;</mo></msup><mi>B</mi><mi>x</mi><mi>D</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -197,7 +218,7 @@ shape = (2, 5, 768)</code></pre>
 
 <h2>3. Hidden Dimension</h2>
 <p>hidden dimension은 토큰 내부 표현 벡터의 크기입니다.</p>
-<p><code>embedding ∈ R^(S x H)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>e</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>d</mi><mi>d</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>∈</mi><msup><mi>R</mi><mo stretchy="false">&#x00028;</mo></msup><mi>S</mi><mi>x</mi><mi>H</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>표현 가능한 특징 공간이 커집니다.</p>
@@ -227,7 +248,7 @@ embedding: (B, S, H)
 Q, K, V:   (B, S, H)
 QK^T:      (B, S, S)
 output:    (B, S, H)</code></pre>
-<p><code>Attention(Q,K,V) = softmax(QK^T / sqrt(d))V</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mi>t</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo stretchy="false">&#x00028;</mo><mi>Q</mi><mo>&#x0002C;</mo><mi>K</mi><mo>&#x0002C;</mo><mi>V</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>s</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup><mo>&#x0002F;</mo><mi>s</mi><mi>q</mi><mi>r</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>d</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mi>V</mi></mrow></math></div>
 
 <h3>주의점</h3>
 <p>attention에서는 sequence 간 상호작용으로 <code>S x S</code> 행렬이 만들어집니다.</p>
@@ -280,5 +301,17 @@ output:    (B, S, H)</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -152,7 +173,7 @@
 <h3>문제 설정</h3>
 <p>생성 모델의 목표는 실제 데이터 분포를 학습하는 것입니다.</p>
 
-<p><code>x ~ p_data(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mtext>&#x000A0;</mtext><msub><mi>p</mi><mi>d</mi></msub><mi>a</mi><mi>t</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>하지만 실제 데이터 분포 <code>p(x)</code>는 보통 직접 계산하기 어렵습니다.</p>
 
@@ -164,7 +185,7 @@
 
 <p>Score function은 다음과 같이 정의됩니다.</p>
 
-<p><code>s(x) = ∇_x log p(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>∇</mi><mi>x</mi></msub><mi>l</mi><mi>o</mi><mi>g</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -193,11 +214,11 @@
 
 <p>모델은 score function을 근사합니다.</p>
 
-<p><code>s_θ(x) ≈ ∇_x log p(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>s</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mi>≈</mi><msub><mi>∇</mi><mi>x</mi></msub><mi>l</mi><mi>o</mi><mi>g</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>loss:</p>
 
-<p><code>L = E[ || s_θ(x) - ∇_x log p(x) ||² ]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mi>E</mi><mo stretchy="false">[</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><msub><mi>s</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x02212;</mo><msub><mi>∇</mi><mi>x</mi></msub><mi>l</mi><mi>o</mi><mi>g</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>²</mi><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -214,7 +235,7 @@
 
 <p>실제 데이터는 보통 노이즈를 추가하여 학습합니다.</p>
 
-<p><code>x̃ = x + σ ε</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mi>̃</mi><mo>&#x0003D;</mo><mi>x</mi><mo>&#x0002B;</mo><mi>σ</mi><mi>ε</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -226,7 +247,7 @@
 
 <p>모델은 다음을 학습합니다.</p>
 
-<p><code>s_θ(x̃, σ)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>s</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><mi>x</mi><mi>̃</mi><mo>&#x0002C;</mo><mi>σ</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 
@@ -236,11 +257,11 @@
 
 <p>여러 noise level을 사용합니다.</p>
 
-<p><code>σ₁ &gt; σ₂ &gt; ... &gt; σ_K</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>σ</mi><mi>₁</mi><mi>&</mi><mi>g</mi><mi>t</mi><mi>;</mi><mi>σ</mi><mi>₂</mi><mi>&</mi><mi>g</mi><mi>t</mi><mi>;</mi><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mi>&</mi><mi>g</mi><mi>t</mi><mi>;</mi><msub><mi>σ</mi><mi>K</mi></msub></mrow></math></div>
 
 <p>loss:</p>
 
-<p><code>L = Σ λ_k E[ || s_θ(x̃_k) - score_k ||² ]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mi>Σ</mi><msub><mi>λ</mi><mi>k</mi></msub><mi>E</mi><mo stretchy="false">[</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><msub><mi>s</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><mi>x</mi><msub><mi>̃</mi><mi>k</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x02212;</mo><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><msub><mi>e</mi><mi>k</mi></msub><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>²</mi><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 
@@ -250,7 +271,7 @@
 
 <p>score function을 사용하여 샘플을 생성합니다.</p>
 
-<p><code>x_{t+1} = x_t + η s_θ(x_t) + √(2η) z</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mi>t</mi></msub><mo>&#x0002B;</mo><mi>η</mi><msub><mi>s</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002B;</mo><mi>√</mi><mo stretchy="false">&#x00028;</mo><mn>2</mn><mi>η</mi><mo stretchy="false">&#x00029;</mo><mi>z</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -394,5 +415,17 @@ Generated sample
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

@@ -1,7 +1,315 @@
-<h2>주제: Entropy (정보량과 불확실성)</h2>
-<p><strong>분류:</strong> foundations</p><p><strong>타입:</strong> concept</p><p><strong>난이도:</strong> 중급</p>
-<p>Entropy는 확률분포의 불확실성을 수치화합니다.</p>
-<p><code>H(X) = -\sum_x p(x) \log p(x)</code></p>
-<h3>직관</h3><ul><li>분포가 균등할수록 entropy가 큼</li><li>한 값에 몰릴수록 entropy가 작음</li></ul>
-<h3>딥러닝 연결</h3><ul><li>Cross-Entropy loss의 기반 개념</li><li>언어모델 perplexity와 직접 연결</li></ul>
-<h3>체크리스트</h3><ul><li>Entropy가 최대/최소가 되는 분포를 설명할 수 있는가?</li><li>Cross-Entropy와의 차이를 설명할 수 있는가?</li></ul>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #5f6b85;
+      --line: #d8e0ef;
+      --accent: #1f4f99;
+      --code-bg: #eef3ff;
+      --code-line: #d6e1ff;
+      --pre-bg: #0f172a;
+      --pre-text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%);
+      font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(31, 42, 68, 0.06);
+    }
+    h1, h2, h3, h4 { line-height: 1.3; margin: 1.25em 0 0.55em; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-top: 0; }
+    h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #183964; }
+    p { margin: 0.6em 0; }
+    ul, ol { margin: 0.65em 0 0.9em 1.2em; padding: 0; }
+    li { margin: 0.2em 0; }
+    strong { color: #11284a; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-line);
+      border-radius: 7px;
+      padding: 0.12em 0.38em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.93em;
+      color: #17396f;
+      word-break: break-word;
+    }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+      text-align: center;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
+    pre {
+      margin: 0.8em 0 1.05em;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      border-radius: 12px;
+      border: 1px solid #1e2d48;
+      padding: 14px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0.85em 0 1.05em;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    th, td {
+      border-bottom: 1px solid #e7edf9;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #f1f5ff;
+      color: #15335d;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 640px) {
+      .post { padding: 18px 14px; border-radius: 12px; }
+      .topbar a { font-size: 0.84rem; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a>
+      <a href="/ai_research_portfolio/roadmap.html">Roadmap</a>
+      <a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
+<h2>Entropy / Cross-Entropy / KL Divergence 이해</h2>
+<p class="meta"><strong>난이도:</strong> 입문</p>
+<p class="meta"><strong>태그:</strong> foundations,entropy,cross_entropy,kl</p>
+<div class="tip">Entropy는 데이터 자체의 불확실성, Cross-Entropy는 모델이 정답 분포를 얼마나 잘 맞추는지, KL은 두 분포 차이를 따로 떼어 본 값이다.</div>
+<p>딥러닝에서 classification loss를 배우다 보면 CrossEntropy가 자주 등장한다. 그런데 이 loss를 제대로 이해하려면 Entropy와 KL divergence까지 함께 봐야 한다.</p>
+<h3>1. Entropy</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>H</mi><mo stretchy="false">&#x00028;</mo><mi>X</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02212;</mo><msub><mo>&#x02211;</mo><mi>x</mi></msub><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mi>log</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<p>Entropy는 분포의 불확실성을 나타낸다. 동전이 항상 앞면이면 entropy가 낮고, 앞면/뒷면이 50 대 50이면 entropy가 높다.</p>
+<h3>2. Cross-Entropy</h3>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>H</mi><mo>(</mo><mi>p</mi><mo>,</mo><mi>q</mi><mo>)</mo>
+      <mo>=</mo>
+      <mo>-</mo>
+      <munderover><mo>&#x2211;</mo><mi>x</mi><mspace width="0"/></munderover>
+      <mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+      <mi>log</mi>
+      <mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>여기서 \(p\)는 실제 데이터 분포, \(q\)는 모델 예측 분포다. 정답에 높은 확률을 주면 cross-entropy가 작아지고, 정답 확률을 낮게 주면 커진다.</p>
+<h3>3. KL Divergence</h3>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <msub><mi>D</mi><mrow><mi>K</mi><mi>L</mi></mrow></msub>
+      <mo>(</mo><mi>p</mi><mo>&#x2225;</mo><mi>q</mi><mo>)</mo>
+      <mo>=</mo>
+      <munderover><mo>&#x2211;</mo><mi>x</mi><mspace width="0"/></munderover>
+      <mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+      <mi>log</mi>
+      <mfrac>
+        <mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow>
+        <mrow><mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow>
+      </mfrac>
+    </mrow>
+  </math>
+</div>
+<p>KL divergence는 "실제 분포 \(p\)를 기준으로 봤을 때, 모델 분포 \(q\)가 얼마나 다른가"를 측정하는 값이다. 이름은 divergence지만, 우리가 흔히 생각하는 대칭 거리와는 다르다.</p>
+<h3>3-1. 공식의 각 항이 뜻하는 것</h3>
+<ul>
+  <li><code>p(x)</code>: 실제로 맞추고 싶은 기준 분포</li>
+  <li><code>q(x)</code>: 모델이 만든 예측 분포</li>
+  <li><code>\log \frac{p(x)}{q(x)}</code>: 그 사건에서 모델이 실제 분포를 얼마나 과소평가 혹은 과대평가했는지의 로그 비율</li>
+  <li>앞의 <code>p(x)</code> 가중치: 실제로 자주 일어나는 사건일수록 더 크게 반영하기 위한 장치</li>
+</ul>
+<p>즉 KL은 "실제로 중요한 사건"에 더 큰 가중치를 두고, 모델 분포가 실제 분포와 얼마나 어긋나는지 평균내는 식이라고 이해하면 된다.</p>
+<h3>3-2. 왜 \(\log \frac{p(x)}{q(x)}\) 꼴인가</h3>
+<p>비율 \(\frac{p(x)}{q(x)}\)는 모델이 실제 분포를 얼마나 잘 맞췄는지 보여 준다.</p>
+<ul>
+  <li>\(q(x)\)가 \(p(x)\)보다 훨씬 작으면, 모델이 그 사건을 과소평가한 것이고 KL 항이 커진다.</li>
+  <li>\(q(x)\)가 \(p(x)\)와 비슷하면, 비율이 1에 가까워지고 로그값도 0에 가까워진다.</li>
+</ul>
+<p>그래서 KL이 작다는 것은 "모델 분포가 실제 분포와 거의 비슷하다"는 뜻이다.</p>
+<h3>3-3. 꼭 기억해야 할 성질</h3>
+<ul>
+  <li>\(D_{KL}(p\parallel q) \ge 0\): 항상 0 이상이다.</li>
+  <li>\(D_{KL}(p\parallel q) = 0\) 이면 거의 모든 지점에서 \(p(x)=q(x)\) 이다.</li>
+  <li>\(D_{KL}(p\parallel q) \neq D_{KL}(q\parallel p)\): 대칭이 아니다.</li>
+</ul>
+<p>마지막 성질이 특히 중요하다. 즉 KL은 "어느 분포를 기준으로 보느냐"에 따라 값이 달라진다. 그래서 \(p\parallel q\)와 \(q\parallel p\)는 서로 다른 질문이다.</p>
+<h3>4. 세 개의 관계</h3>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <msub><mi>D</mi><mrow><mi>K</mi><mi>L</mi></mrow></msub>
+      <mo>(</mo><mi>p</mi><mo>&#x2225;</mo><mi>q</mi><mo>)</mo>
+      <mo>=</mo>
+      <mi>H</mi><mo>(</mo><mi>p</mi><mo>,</mo><mi>q</mi><mo>)</mo>
+      <mo>-</mo>
+      <mi>H</mi><mo>(</mo><mi>p</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>즉 cross-entropy는 데이터 자체의 불확실성인 entropy와, 모델이 틀린 정도인 KL을 합친 값이다.</p>
+<p>여기서 중요한 점은 실제 데이터 분포 \(p\)가 고정되어 있으면 \(H(p)\)는 상수처럼 취급할 수 있다는 것이다. 따라서 최적화 관점에서는</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>min</mi>
+      <mi>H</mi><mo>(</mo><mi>p</mi><mo>,</mo><mi>q</mi><mo>)</mo>
+      <mo>&#x27FA;</mo>
+      <mi>min</mi>
+      <msub><mi>D</mi><mrow><mi>K</mi><mi>L</mi></mrow></msub>
+      <mo>(</mo><mi>p</mi><mo>&#x2225;</mo><mi>q</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>가 된다. 즉 <strong>KL을 최소화하는 것은 결국 cross-entropy를 최소화하는 것과 같은 방향</strong>이다. 둘의 차이는 데이터 자체가 가진 entropy \(H(p)\)이고, 이 값은 모델 파라미터가 바뀌어도 변하지 않기 때문이다.</p>
+<p>그래서 classification에서 cross-entropy loss를 줄인다는 말은, 실제로는 모델 분포 \(q\)를 정답 분포 \(p\)에 더 가깝게 맞추는 과정이라고 이해하면 된다.</p>
+<h3>4-1. ELBO에서는 KL이 직접 loss에 들어간다</h3>
+<p>일반적인 분류 문제에서는 KL이 cross-entropy 안에 숨어 있는 형태로 등장한다. 하지만 VAE 같은 모델에서는 KL divergence가 실제 loss 함수 항으로 직접 들어간다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <msub><mi>&#x2112;</mi><mrow><mi>E</mi><mi>L</mi><mi>B</mi><mi>O</mi></mrow></msub>
+      <mo>=</mo>
+      <msub><mi>&#x1D53C;</mi><mrow><mi>q</mi><mo>(</mo><mi>z</mi><mo>|</mo><mi>x</mi><mo>)</mo></mrow></msub>
+      <mo>[</mo>
+      <mi>log</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>|</mo><mi>z</mi><mo>)</mo>
+      <mo>]</mo>
+      <mo>-</mo>
+      <msub><mi>D</mi><mrow><mi>K</mi><mi>L</mi></mrow></msub>
+      <mo>(</mo><mi>q</mi><mo>(</mo><mi>z</mi><mo>|</mo><mi>x</mi><mo>)</mo><mo>&#x2225;</mo><mi>p</mi><mo>(</mo><mi>z</mi><mo>)</mo><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>이 식에서 두 번째 항은 단순 해석용이 아니라, 최적화 과정에서 직접 다뤄지는 실제 loss 구성 요소다.</p>
+<ul>
+  <li>첫 항: 데이터를 잘 복원하도록 만든다.</li>
+  <li>둘째 항: 잠재분포 \(q(z|x)\)가 prior \(p(z)\)에서 너무 멀어지지 않게 제어한다.</li>
+</ul>
+<p>즉 ELBO에서는 KL이 "분포 차이를 해석하는 도구"를 넘어서, 직접적인 regularization 항으로 작동한다.</p>
+<h3>5. 딥러닝에서 왜 중요한가</h3>
+<ul><li>분류 모델의 기본 loss가 cross-entropy다.</li><li>지식 증류, 분포 정합, VAE 같은 곳에서는 KL divergence가 자주 등장한다.</li><li>Entropy는 모델의 확신 정도와 정보량을 해석하는 데 도움이 된다.</li></ul>
+<h3>6. 코드와 연결</h3>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+
+criterion = nn.CrossEntropyLoss()
+loss = criterion(logits, target)</code></pre>
+<p>PyTorch의 <code>CrossEntropyLoss</code>는 내부적으로 <code>log_softmax</code>와 NLL을 묶어 계산한다.</p>
+<h3>7. 체크리스트</h3>
+<ul><li>Entropy와 Cross-Entropy 차이를 설명할 수 있는가?</li><li>왜 CrossEntropy를 최소화하면 KL도 작아지는가?</li><li>KL divergence 공식에서 <code>\log \frac{p(x)}{q(x)}</code>가 무엇을 뜻하는지 설명할 수 있는가?</li><li>왜 <code>D_{KL}(p\parallel q)</code>와 <code>D_{KL}(q\parallel p)</code>가 다른 질문인지 말할 수 있는가?</li><li>ELBO에서 KL이 왜 직접 loss 항으로 들어가는지 설명할 수 있는가?</li></ul>
+    </article>
+  </main>
+  <script>
+    (function () {
+      var h2 = document.querySelector('h2');
+      if (h2 && h2.textContent.trim()) {
+        var t = h2.textContent.replace(/^\s*주제\s*:\s*/i, '').trim();
+        document.title = t + ' | AI Research Portfolio';
+      }
+      document.querySelectorAll('table').forEach(function (table) {
+        if (!table.parentElement.classList.contains('table-wrap')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+      });
+    })();
+  </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

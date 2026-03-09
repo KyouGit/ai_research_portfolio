@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -169,7 +190,7 @@ Image → CNN → Classifier → Label
 
 <p>목표:</p>
 
-<p><code>sim(image, text) ↑ if matched</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>i</mi><mi>m</mi><mi>a</mi><mi>g</mi><mi>e</mi><mo>&#x0002C;</mo><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo><mi>↑</mi><mi>i</mi><mi>f</mi><mi>m</mi><mi>a</mi><mi>t</mi><mi>c</mi><mi>h</mi><mi>e</mi><mi>d</mi></mrow></math></div>
 
 <h2>1. CLIP 핵심 아이디어</h2>
 
@@ -207,9 +228,9 @@ Text  → Text Encoder  → text embedding
 
 <p>embedding:</p>
 
-<p><code>v = f_img(image)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>v</mi><mo>&#x0003D;</mo><msub><mi>f</mi><mi>i</mi></msub><mi>m</mi><mi>g</mi><mo stretchy="false">&#x00028;</mo><mi>i</mi><mi>m</mi><mi>a</mi><mi>g</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
-<p><code>t = f_txt(text)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>t</mi><mo>&#x0003D;</mo><msub><mi>f</mi><mi>t</mi></msub><mi>x</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -228,7 +249,7 @@ Text  → Text Encoder  → text embedding
 
 <p>CLIP은 cosine similarity를 사용합니다.</p>
 
-<p><code>sim(v,t) = (v · t) / (||v|| ||t||)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>v</mi><mo>&#x0002C;</mo><mi>t</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>v</mi><mi>·</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mo stretchy="false">&#x00028;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>v</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>t</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -255,7 +276,7 @@ Negative pair:
 
 <p>손실 함수:</p>
 
-<p><code>L = - log exp(sim(v_i,t_i)/τ) / Σ exp(sim(v_i,t_j)/τ)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><msub><mi>v</mi><mi>i</mi></msub><mo>&#x0002C;</mo><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>Σ</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><msub><mi>v</mi><mi>i</mi></msub><mo>&#x0002C;</mo><msub><mi>t</mi><mi>j</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -281,7 +302,7 @@ N² possible pairs
 
 <p>목표:</p>
 
-<p><code>sim(v_i,t_i) &gt; sim(v_i,t_j)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><msub><mi>v</mi><mi>i</mi></msub><mo>&#x0002C;</mo><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo><mi>&</mi><mi>g</mi><mi>t</mi><mi>;</mi><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><msub><mi>v</mi><mi>i</mi></msub><mo>&#x0002C;</mo><msub><mi>t</mi><mi>j</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h2>6. Zero-Shot Classification</h2>
 
@@ -296,7 +317,7 @@ N² possible pairs
 
 <p>classification:</p>
 
-<p><code>class = argmax sim(v, t_class)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>c</mi><mi>l</mi><mi>a</mi><mi>s</mi><mi>s</mi><mo>&#x0003D;</mo><mi>a</mi><mi>r</mi><mi>g</mi><mi>m</mi><mi>a</mi><mi>x</mi><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>v</mi><mo>&#x0002C;</mo><msub><mi>t</mi><mi>c</mi></msub><mi>l</mi><mi>a</mi><mi>s</mi><mi>s</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -415,5 +436,17 @@ Contrastive Loss
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

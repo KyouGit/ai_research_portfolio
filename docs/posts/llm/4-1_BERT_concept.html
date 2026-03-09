@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -189,7 +210,7 @@
 <p>예: <code>[CLS] I love machine learning [SEP]</code></p>
 <p>토큰화 예: <code>input_ids = [101, 1045, 2293, 3698, 4083, 102]</code></p>
 <p>입력 임베딩은 보통 다음 합으로 구성됩니다.</p>
-<p><code>embedding = token_embedding + position_embedding + segment_embedding</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>e</mi><mi>m</mi><mi>b</mi><mi>e</mi><mi>d</mi><mi>d</mi><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#x0003D;</mo><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><msub><mi>n</mi><mi>e</mi></msub><mi>m</mi><mi>b</mi><mi>e</mi><mi>d</mi><mi>d</mi><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#x0002B;</mo><mi>p</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><msub><mi>n</mi><mi>e</mi></msub><mi>m</mi><mi>b</mi><mi>e</mi><mi>d</mi><mi>d</mi><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#x0002B;</mo><mi>s</mi><mi>e</mi><mi>g</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mi>e</mi></msub><mi>m</mi><mi>b</mi><mi>e</mi><mi>d</mi><mi>d</mi><mi>i</mi><mi>n</mi><mi>g</mi></mrow></math></div>
 <p>최종 입력 텐서 shape 예: <code>(sequence_length, hidden_size) = (6, 768)</code></p>
 
 <h3>2) Transformer encoder stack (구조 자체는 단순)</h3>
@@ -331,7 +352,7 @@ loss = cross_entropy(
 <p>예: <code>[CLS] I love machine learning [SEP]</code></p>
 <p>Self-attention에서는 모든 토큰이 서로를 보므로, <code>[CLS]</code>도 전체 토큰과 상호작용합니다. 층을 거치며 <code>[CLS]</code> 벡터에 문장 전역 정보가 누적됩니다.</p>
 <p>그래서 분류 태스크에서는 마지막 층의 <code>h_CLS</code>를 바로 분류기에 넣습니다.</p>
-<p><code>y = softmax(W · h_CLS)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>s</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mi>W</mi><mi>·</mi><msub><mi>h</mi><mi>C</mi></msub><mi>L</mi><mi>S</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 앞에 [CLS]를 넣으면 문장 요약 벡터가 되나?</h3>
 <p>직관적으로 <code>[CLS]</code>는 빈 메모장 토큰입니다. 각 attention 층에서 다른 토큰 정보를 가중합으로 받아 업데이트되기 때문에, 깊어질수록 문장 요약 성격이 강해집니다.</p>
@@ -447,5 +468,17 @@ loss = cross_entropy(
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

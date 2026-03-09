@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -152,7 +173,7 @@
 <h3>문제 설정</h3>
 <p>LLM은 텍스트를 생성할 때 토큰을 하나씩 생성합니다.</p>
 <p>언어 모델 목표:</p>
-<p><code>P(x_t | x_1,...,x_{t-1})</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>즉 새 토큰을 생성할 때마다 이전 토큰 전체를 다시 고려해야 합니다.</p>
 <p>문제는 naive 구현에서는 매 step마다 <strong>attention을 처음부터 다시 계산</strong>해야 한다는 점입니다.</p>
 
@@ -184,9 +205,9 @@ Step2: x1 x2
 Step3: x1 x2 x3
 Step4: x1 x2 x3 x4</code></pre>
 <p>각 step에서 attention 계산:</p>
-<p><code>Cost ∝ t²</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>o</mi><mi>s</mi><mi>t</mi><mi>∝</mi><mi>t</mi><mi>²</mi></mrow></math></div>
 <p>전체 비용:</p>
-<p><code>O(T³)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>O</mi><mo stretchy="false">&#x00028;</mo><mi>T</mi><mi>³</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -198,8 +219,8 @@ Step4: x1 x2 x3 x4</code></pre>
 
 <h2>3. KV Cache 아이디어</h2>
 <p>각 토큰의 key/value를 미리 저장합니다.</p>
-<p><code>K_cache = [K1,K2,...,K_{t-1}]</code></p>
-<p><code>V_cache = [V1,V2,...,V_{t-1}]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>K</mi><mi>c</mi></msub><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi><mo>&#x0003D;</mo><mo stretchy="false">[</mo><mi>K</mi><mn>1</mn><mo>&#x0002C;</mo><mi>K</mi><mn>2</mn><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>K</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy="false">]</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>V</mi><mi>c</mi></msub><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi><mo>&#x0003D;</mo><mo stretchy="false">[</mo><mi>V</mi><mn>1</mn><mo>&#x0002C;</mo><mi>V</mi><mn>2</mn><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>V</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -212,9 +233,9 @@ Step4: x1 x2 x3 x4</code></pre>
 
 <h2>4. KV Cache 디코딩</h2>
 <p>새 토큰 t에서 계산되는 값:</p>
-<p><code>Q_t = x_t W_Q</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>Q</mi><mi>t</mi></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mi>t</mi></msub><msub><mi>W</mi><mi>Q</mi></msub></mrow></math></div>
 <p>attention 계산:</p>
-<p><code>Attention(Q_t, K_cache, V_cache)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mi>t</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo stretchy="false">&#x00028;</mo><msub><mi>Q</mi><mi>t</mi></msub><mo>&#x0002C;</mo><msub><mi>K</mi><mi>c</mi></msub><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi><mo>&#x0002C;</mo><msub><mi>V</mi><mi>c</mi></msub><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>직관 설명</h3>
 <ul>
@@ -248,7 +269,7 @@ Step4: x1 x2 x3 x4</code></pre>
 
 <h2>6. KV Cache 메모리</h2>
 <p>KV cache 메모리는 다음과 같이 증가합니다.</p>
-<p><code>Memory ∝ layers × heads × sequence × d_head</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>M</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>∝</mi><mi>l</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi><mi>s</mi><mi>×</mi><mi>h</mi><mi>e</mi><mi>a</mi><mi>d</mi><mi>s</mi><mi>×</mi><mi>s</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>×</mi><msub><mi>d</mi><mi>h</mi></msub><mi>e</mi><mi>a</mi><mi>d</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -343,5 +364,17 @@ K_cache = [K1,K2,K3]</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

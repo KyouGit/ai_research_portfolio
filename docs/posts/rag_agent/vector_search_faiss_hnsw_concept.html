@@ -1,6 +1,205 @@
-<h2>주제: Vector Search (FAISS / HNSW 기본)</h2>
-<p><strong>분류:</strong> rag_agent</p><p><strong>타입:</strong> concept</p><p><strong>난이도:</strong> 중급</p>
-<p>Vector search는 임베딩 유사도로 관련 문서를 찾습니다.</p>
-<p><code>sim(q,d)=\frac{q\cdot d}{\|q\|\|d\|}</code></p>
-<h3>핵심</h3><ul><li>Exact search vs ANN</li><li>FAISS(IVF/PQ), HNSW 그래프 탐색</li></ul>
-<h3>트레이드오프</h3><ul><li>Recall ↑ ↔ Latency ↑</li><li>메모리/정확도/속도 균형</li></ul>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #5f6b85;
+      --line: #d8e0ef;
+      --accent: #1f4f99;
+      --code-bg: #eef3ff;
+      --code-line: #d6e1ff;
+      --pre-bg: #0f172a;
+      --pre-text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%);
+      font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(31, 42, 68, 0.06);
+    }
+    h1, h2, h3, h4 { line-height: 1.3; margin: 1.25em 0 0.55em; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-top: 0; }
+    h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #183964; }
+    p { margin: 0.6em 0; }
+    ul, ol { margin: 0.65em 0 0.9em 1.2em; padding: 0; }
+    li { margin: 0.2em 0; }
+    strong { color: #11284a; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-line);
+      border-radius: 7px;
+      padding: 0.12em 0.38em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.93em;
+      color: #17396f;
+      word-break: break-word;
+    }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+      text-align: center;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
+    pre {
+      margin: 0.8em 0 1.05em;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      border-radius: 12px;
+      border: 1px solid #1e2d48;
+      padding: 14px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0.85em 0 1.05em;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    th, td {
+      border-bottom: 1px solid #e7edf9;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #f1f5ff;
+      color: #15335d;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 640px) {
+      .post { padding: 18px 14px; border-radius: 12px; }
+      .topbar a { font-size: 0.84rem; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a>
+      <a href="/ai_research_portfolio/roadmap.html">Roadmap</a>
+      <a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
+<h2>Vector Search 이해: FAISS와 HNSW는 왜 필요한가</h2>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>태그:</strong> rag,vector_search,faiss,hnsw</p>
+<div class="tip">RAG에서 중요한 것은 "좋은 답변" 이전에 "맞는 문서를 빨리 찾는 것"이다. vector search는 그 검색 엔진 역할을 한다.</div>
+<p>임베딩 모델이 질문과 문서를 벡터로 바꿔도, 그다음에 빠르게 가장 가까운 벡터를 찾아야 실제 시스템이 된다. 이때 exact search만 쓰면 느릴 수 있어서 ANN 기법이 필요하다.</p>
+<h3>1. 핵심 유사도</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>d</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mi>q</mi><mi>&#x000B7;</mi><mi>d</mi></mrow><mrow><mo fence="false" stretchy="false">&#x02016;</mo><mi>q</mi><mo fence="false" stretchy="false">&#x02016;</mo><mo fence="false" stretchy="false">&#x02016;</mo><mi>d</mi><mo fence="false" stretchy="false">&#x02016;</mo></mrow></mfrac></mrow></math></div>
+<p>코사인 유사도는 두 벡터 방향이 얼마나 비슷한지 본다. 질문과 문서 임베딩이 비슷할수록 관련 문서일 가능성이 높다.</p>
+<h3>2. Exact search vs ANN</h3>
+<ul><li>Exact search: 정확하지만 대규모 데이터에서 느릴 수 있다.</li><li>ANN: 약간의 정확도 손실을 감수하고 훨씬 빠르게 찾는다.</li></ul>
+<h3>3. FAISS와 HNSW</h3>
+<ul><li>FAISS: 다양한 인덱스 구조(Flat, IVF, PQ 등)를 제공하는 라이브러리</li><li>HNSW: 그래프 기반 탐색으로 빠른 최근접 이웃 검색을 수행</li></ul>
+<h3>4. 왜 중요한가</h3>
+<p>RAG 품질은 생성 모델만의 문제가 아니다. retrieval recall이 낮으면 뒤의 LLM이 아무리 좋아도 정답 근거를 못 찾는다.</p>
+<h3>5. 체크리스트</h3>
+<ul><li>왜 vector search가 RAG의 핵심 병목 중 하나인가?</li><li>Exact search와 ANN tradeoff를 설명할 수 있는가?</li><li>FAISS와 HNSW의 큰 차이를 말할 수 있는가?</li></ul>
+    </article>
+  </main>
+  <script>
+    (function () {
+      var h2 = document.querySelector('h2');
+      if (h2 && h2.textContent.trim()) {
+        var t = h2.textContent.replace(/^\s*주제\s*:\s*/i, '').trim();
+        document.title = t + ' | AI Research Portfolio';
+      }
+      document.querySelectorAll('table').forEach(function (table) {
+        if (!table.parentElement.classList.contains('table-wrap')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+      });
+    })();
+  </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

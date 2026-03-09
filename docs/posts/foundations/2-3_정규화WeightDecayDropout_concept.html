@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -162,7 +183,7 @@
 
 <h2>1. Weight Decay</h2>
 <p>손실에 가중치 크기 패널티를 추가합니다.</p>
-<p><code>L' = L + lambda * ||w||^2</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>L</mi><mi>&#x02032;</mi></msup><mo>&#x0003D;</mo><mi>L</mi><mo>&#x0002B;</mo><mi>l</mi><mi>a</mi><mi>m</mi><mi>b</mi><mi>d</mi><mi>a</mi><mo>&#x0002A;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>w</mi><mo stretchy="false">&#x0007C;</mo><msup><mo stretchy="false">&#x0007C;</mo><mn>2</mn></msup></mrow></math></div>
 <ul>
   <li>L: 원래 손실</li>
   <li>w: 가중치</li>
@@ -189,7 +210,7 @@
 
 <h2>4. Dropout 기대값 보정</h2>
 <p>훈련 시 보통 다음 형태를 사용합니다.</p>
-<p><code>a' = (m * a) / p</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>a</mi><mi>&#x02032;</mi></msup><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>m</mi><mo>&#x0002A;</mo><mi>a</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>p</mi></mrow></math></div>
 <p>훈련/추론 간 출력 스케일 차이를 줄이기 위한 보정입니다.</p>
 
 <h2>5. Weight Decay vs Dropout</h2>
@@ -258,5 +279,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

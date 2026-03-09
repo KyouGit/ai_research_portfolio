@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -156,7 +177,7 @@
 <p>모델은 정답 자체가 아니라 정답일 가능성을 계산하고, 가장 높은 확률의 클래스를 선택합니다.</p>
 
 <h3>1) 조건부 확률 (Conditional Probability)</h3>
-<p><code>P(y|x) = \frac{P(x,y)}{P(x)}</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mo stretchy="false">&#x0007C;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy="false">&#x00029;</mo></mrow><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></mfrac></mrow></math></div>
 <ul>
   <li><code>x</code>: 입력 데이터</li>
   <li><code>y</code>: 정답</li>
@@ -166,7 +187,7 @@
 <p>왜 필요한가: 딥러닝은 항상 입력 조건 하에서 정답 확률을 계산합니다.</p>
 
 <h3>2) 기댓값 (Expectation)</h3>
-<p><code>E[X] = \sum_x xP(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>E</mi><mo stretchy="false">[</mo><mi>X</mi><mo stretchy="false">]</mo><mo>&#x0003D;</mo><msub><mo>&#x02211;</mo><mi>x</mi></msub><mi>x</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>기댓값은 확률적 평균이며, 학습에서 평균 loss와 직접 연결됩니다.</p>
 <table>
   <thead><tr><th>x</th><th>P(x)</th></tr></thead>
@@ -179,10 +200,10 @@
     <tr><td>6</td><td>1/6</td></tr>
   </tbody>
 </table>
-<p><code>E[X] = (1+2+3+4+5+6)/6 = 3.5</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>E</mi><mo stretchy="false">[</mo><mi>X</mi><mo stretchy="false">]</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002B;</mo><mn>2</mn><mo>&#x0002B;</mo><mn>3</mn><mo>&#x0002B;</mo><mn>4</mn><mo>&#x0002B;</mo><mn>5</mn><mo>&#x0002B;</mo><mn>6</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mn>6</mn><mo>&#x0003D;</mo><mn>3.5</mn></mrow></math></div>
 
 <h3>3) 분산 (Variance)</h3>
-<p><code>Var(X) = E[(X-\mu)^2]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mo stretchy="false">&#x00028;</mo><mi>X</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>E</mi><mo stretchy="false">[</mo><mo stretchy="false">&#x00028;</mo><mi>X</mi><mo>&#x02212;</mo><mi>&#x003BC;</mi><msup><mo stretchy="false">&#x00029;</mo><mn>2</mn></msup><mo stretchy="false">]</mo></mrow></math></div>
 <p>분산은 평균에서 얼마나 퍼져 있는지 측정합니다. BatchNorm/정규화 해석에도 중요합니다.</p>
 
 <h3>4) 로그우도 (Log Likelihood)</h3>
@@ -191,7 +212,7 @@
 <p>주의: <code>p(x)=0</code>이면 <code>\log p(x)</code>가 정의되지 않습니다.</p>
 
 <h3>5) Cross-Entropy</h3>
-<p><code>H(p,q) = -\sum_x p(x)\log q(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>H</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02212;</mo><msub><mo>&#x02211;</mo><mi>x</mi></msub><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mi>log</mi><mi>q</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <ul>
   <li><code>p</code>: 실제 분포</li>
   <li><code>q</code>: 모델 예측 분포</li>
@@ -246,5 +267,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

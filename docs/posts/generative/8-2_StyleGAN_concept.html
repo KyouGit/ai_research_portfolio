@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -143,16 +164,19 @@
       <a href="/ai_research_portfolio/index.html">Index</a>
     </nav>
     <article class="post">
-<h2>[StyleGAN] 개념 설명</h2>
-<p class="meta"><strong>난이도:</strong> 초중급</p>
-<p class="meta"><strong>태그:</strong> Generative,생성모델</p>
-<p>StyleGAN은 스타일 제어와 고품질 이미지 생성으로 유명한 GAN 계열입니다.</p>
-
-<h3>1단. 문제 정의</h3><p>해당 분야의 핵심 문제를 해결하기 위한 모델입니다.</p>
-<h3>2단. 기존 한계</h3><p>이전 접근의 속도/품질/확장성 한계를 개선합니다.</p>
-<h3>3단. 핵심 아이디어</h3><p>모델 구조와 학습 목적을 바꿔 성능을 개선합니다.</p>
-<h3>4단. 비용/리스크</h3><p>연산 비용과 데이터 품질 의존성 관리가 필요합니다.</p>
-<h3>5단. 실무 적용</h3><p>태스크와 latency 예산에 맞춰 도입 판단을 해야 합니다.</p>
+<h2>[StyleGAN] 입문 개요</h2>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>태그:</strong> generative,stylegan,latent</p>
+<div class="tip">StyleGAN의 핵심은 "잠재 벡터를 바로 넣지 않고, 스타일로 바꿔 각 레이어를 조절한다"는 점이다.</div>
+<p>StyleGAN은 GAN 계열 중에서도 특히 얼굴 생성처럼 고해상도 이미지를 매우 자연스럽게 만드는 것으로 유명하다. 단순히 이미지를 만드는 것에서 끝나지 않고, 잠재공간을 더 잘 제어할 수 있게 만든 구조가 핵심이다.</p>
+<h3>1. 왜 기존 GAN을 넘어섰나</h3>
+<ul><li>생성 품질이 높다.</li><li>스타일 단위로 제어가 가능하다.</li><li>거친 구조와 세부 texture를 다른 레이어에서 다룰 수 있다.</li></ul>
+<h3>2. 핵심 아이디어</h3>
+<p>입력 latent \(z\)를 mapping network가 중간 잠재공간 \(w\)로 바꾸고, 각 레이어에 style을 주입한다. 이 방식 덕분에 특정 수준의 시각 속성을 더 분리해서 다룰 수 있다.</p>
+<h3>3. 왜 중요한가</h3>
+<p>StyleGAN은 "좋은 생성 결과"뿐 아니라 "잠재공간 해석 가능성"을 보여 주었다. 그래서 표현 제어, 편집, attribute steering을 생각할 때 중요한 기준점이 된다.</p>
+<h3>4. 더 깊게 보기</h3>
+<p><a href="./stylegan_style_based_latent_control_concept.html">Style-based latent control 상세 문서</a></p>
     </article>
   </main>
   <script>
@@ -172,5 +196,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

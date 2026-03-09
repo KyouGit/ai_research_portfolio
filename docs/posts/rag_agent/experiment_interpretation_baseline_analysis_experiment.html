@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -184,7 +205,7 @@
 </tbody>
 </table>
 <p>실험 목표:</p>
-<p><code>Improvement = Metric(model) - Metric(baseline)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>I</mi><mi>m</mi><mi>p</mi><mi>r</mi><mi>o</mi><mi>v</mi><mi>e</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi><mo>&#x0003D;</mo><mi>M</mi><mi>e</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>c</mi><mo stretchy="false">&#x00028;</mo><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mo stretchy="false">&#x00029;</mo><mo>&#x02212;</mo><mi>M</mi><mi>e</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>c</mi><mo stretchy="false">&#x00028;</mo><mi>b</mi><mi>a</mi><mi>s</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>n</mi><mi>e</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -246,14 +267,14 @@
 </tbody>
 </table>
 <p>개선:</p>
-<p><code>Δ = 0.71 - 0.62 = 0.09</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Δ</mi><mo>&#x0003D;</mo><mn>0.71</mn><mo>&#x02212;</mo><mn>0.62</mn><mo>&#x0003D;</mo><mn>0.09</mn></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>성능 개선을 객관적으로 비교할 수 있습니다.</p>
 
 <h2>3. 기대값 관점</h2>
 <p>많은 평가 metric은 평균 성능을 측정합니다.</p>
-<p><code>Metric = E[score(x)]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>M</mi><mi>e</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>c</mi><mo>&#x0003D;</mo><mi>E</mi><mo stretchy="false">[</mo><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -306,7 +327,7 @@ Proposed answer: "Alexander Graham Bell invented the telephone in 1876."</code><
 </tbody>
 </table>
 <p>목표:</p>
-<p><code>Error_rate = errors / total_samples</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>E</mi><mi>r</mi><mi>r</mi><mi>o</mi><msub><mi>r</mi><mi>r</mi></msub><mi>a</mi><mi>t</mi><mi>e</mi><mo>&#x0003D;</mo><mi>e</mi><mi>r</mi><mi>r</mi><mi>o</mi><mi>r</mi><mi>s</mi><mo>&#x0002F;</mo><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><msub><mi>l</mi><mi>s</mi></msub><mi>a</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>e</mi><mi>s</mi></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>시스템 개선 방향을 찾을 수 있습니다.</p>
@@ -342,7 +363,7 @@ Proposed answer: "Alexander Graham Bell invented the telephone in 1876."</code><
 <h2>7. 통계적 유의성</h2>
 <p>작은 개선은 우연일 수 있습니다.</p>
 <p>통계 검정을 사용합니다.</p>
-<p><code>p-value &lt; 0.05</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo>&#x02212;</mo><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi><mi>&</mi><mi>l</mi><mi>t</mi><mi>;</mi><mn>0.05</mn></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -495,5 +516,17 @@ Proposed answer: "Alexander Graham Bell invented the telephone in 1876."</code><
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

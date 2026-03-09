@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -173,7 +194,7 @@
 
 <h2>1. Token Sequence 표현</h2>
 <p>LLM 입력은 다음과 같은 토큰 시퀀스입니다.</p>
-<p><code>x = [t1, t2, ..., t_n]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">[</mo><mi>t</mi><mn>1</mn><mo>&#x0002C;</mo><mi>t</mi><mn>2</mn><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -205,7 +226,7 @@
 
 <h2>3. Attention 계산 비용</h2>
 <p>Transformer의 self-attention 계산은 다음 복잡도를 가집니다.</p>
-<p><code>Cost ∝ n^2</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>o</mi><mi>s</mi><mi>t</mi><mi>∝</mi><msup><mi>n</mi><mn>2</mn></msup></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -244,7 +265,7 @@
 
 <h2>4. Token 비용</h2>
 <p>API 기반 LLM에서는 token 수가 비용을 결정합니다.</p>
-<p><code>Cost ≈ price_per_token × tokens</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>o</mi><mi>s</mi><mi>t</mi><mi>≈</mi><mi>p</mi><mi>r</mi><mi>i</mi><mi>c</mi><msub><mi>e</mi><mi>p</mi></msub><mi>e</mi><msub><mi>r</mi><mi>t</mi></msub><mi>o</mi><mi>k</mi><mi>e</mi><mi>n</mi><mi>×</mi><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><mi>n</mi><mi>s</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -368,5 +389,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

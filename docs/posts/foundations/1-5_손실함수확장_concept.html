@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -165,7 +186,7 @@
 <p>학습의 목표는 모델 분포 Q를 실제 분포 P에 최대한 가깝게 만드는 것입니다.</p>
 
 <h2>1. Cross-Entropy</h2>
-<p><code>H(P,Q) = - sum(P(x) * log Q(x))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>H</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo>&#x0002C;</mo><mi>Q</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>s</mi><mi>u</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002A;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>Q</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -180,7 +201,7 @@
 <p>Q(x)가 0에 가까우면 로그 항이 크게 발산할 수 있어 수치 안정화가 필요합니다.</p>
 
 <h2>2. KL Divergence</h2>
-<p><code>D_KL(P||Q) = sum(P(x) * log(P(x)/Q(x)))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>D</mi><mi>K</mi></msub><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>Q</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>s</mi><mi>u</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002A;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>Q</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -196,7 +217,7 @@
 
 <h2>3. Cross-Entropy와 KL Divergence 관계</h2>
 <p>KL Divergence를 전개하면 다음이 됩니다.</p>
-<p><code>D_KL(P||Q) = H(P,Q) - H(P)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>D</mi><mi>K</mi></msub><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>Q</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>H</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo>&#x0002C;</mo><mi>Q</mi><mo stretchy="false">&#x00029;</mo><mo>&#x02212;</mo><mi>H</mi><mo stretchy="false">&#x00028;</mo><mi>P</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <ul>
   <li><code>H(P)</code>: 실제 분포 entropy</li>
   <li><code>H(P,Q)</code>: cross-entropy</li>
@@ -205,7 +226,7 @@
 
 <h2>4. 분류 문제에서의 단순화</h2>
 <p>정답 분포 P가 one-hot이면 Cross-Entropy는 다음 형태로 단순화됩니다.</p>
-<p><code>L = -log Q(y)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>Q</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>즉 모델이 정답 클래스 확률을 크게 만들도록 학습합니다.</p>
 
 <h2>코드-수식 연결</h2>
@@ -260,5 +281,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

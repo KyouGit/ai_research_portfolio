@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -169,7 +190,7 @@
 
 <h2>1. Latency (지연시간)</h2>
 <p>Latency는 요청이 완료될 때까지 걸리는 시간입니다.</p>
-<p><code>Latency = T_prefill + T_decode</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mi>a</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>y</mi><mo>&#x0003D;</mo><msub><mi>T</mi><mi>p</mi></msub><mi>r</mi><mi>e</mi><mi>f</mi><mi>i</mi><mi>l</mi><mi>l</mi><mo>&#x0002B;</mo><msub><mi>T</mi><mi>d</mi></msub><mi>e</mi><mi>c</mi><mi>o</mi><mi>d</mi><mi>e</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -186,7 +207,7 @@
 <h2>2. Prefill 단계</h2>
 <p>Prefill 단계에서는 전체 prompt를 한 번에 처리합니다.</p>
 <p>Self-attention 계산:</p>
-<p><code>Cost ∝ n²</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>o</mi><mi>s</mi><mi>t</mi><mi>∝</mi><mi>n</mi><mi>²</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -202,7 +223,7 @@
 <h2>3. Decode 단계</h2>
 <p>decode 단계에서는 토큰을 하나씩 생성합니다.</p>
 <p>목표:</p>
-<p><code>P(x_t | x_1,...,x_{t-1})</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -217,7 +238,7 @@
 
 <h2>4. Throughput (처리량)</h2>
 <p>Throughput은 일정 시간 동안 처리 가능한 요청 수입니다.</p>
-<p><code>Throughput = requests / second</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><mi>h</mi><mi>r</mi><mi>o</mi><mi>u</mi><mi>g</mi><mi>h</mi><mi>p</mi><mi>u</mi><mi>t</mi><mo>&#x0003D;</mo><mi>r</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>s</mi><mi>t</mi><mi>s</mi><mo>&#x0002F;</mo><mi>s</mi><mi>e</mi><mi>c</mi><mi>o</mi><mi>n</mi><mi>d</mi></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>서비스 비용과 직결됩니다.</p>
@@ -227,7 +248,7 @@
 
 <h2>5. Memory 사용량</h2>
 <p>LLM inference에서 메모리는 다음 요소로 구성됩니다.</p>
-<p><code>Memory = model + KV cache + activation</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>M</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>r</mi><mi>y</mi><mo>&#x0003D;</mo><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mo>&#x0002B;</mo><mi>K</mi><mi>V</mi><mi>c</mi><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi><mo>&#x0002B;</mo><mi>a</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>v</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -241,7 +262,7 @@
 
 <h2>6. KV Cache</h2>
 <p>Transformer decode 단계에서는 이전 attention을 저장합니다.</p>
-<p><code>KV_cache ∝ n × d × layers</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>K</mi><msub><mi>V</mi><mi>c</mi></msub><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi><mi>∝</mi><mi>n</mi><mi>×</mi><mi>d</mi><mi>×</mi><mi>l</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi><mi>s</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -358,5 +379,17 @@ GPU inference</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

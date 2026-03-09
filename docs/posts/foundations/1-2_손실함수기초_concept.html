@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -164,7 +185,7 @@
 
 <h2>1. Mean Squared Error (MSE)</h2>
 <p>MSE는 예측값과 정답의 차이를 제곱하여 평균을 계산합니다.</p>
-<p><code>MSE = (1/N) * sum((y - y_hat)^2)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>M</mi><mi>S</mi><mi>E</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002F;</mo><mi>N</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002A;</mo><mi>s</mi><mi>u</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mo stretchy="false">&#x00028;</mo><mi>y</mi><mo>&#x02212;</mo><msub><mi>y</mi><mi>h</mi></msub><mi>a</mi><mi>t</mi><msup><mo stretchy="false">&#x00029;</mo><mn>2</mn></msup><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -200,7 +221,7 @@
 
 <h2>2. Cross-Entropy</h2>
 <p>Cross-Entropy는 확률 분포 간의 차이를 측정하는 손실입니다.</p>
-<p><code>L = - sum(y * log(y_hat))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>s</mi><mi>u</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mo>&#x0002A;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">&#x00028;</mo><msub><mi>y</mi><mi>h</mi></msub><mi>a</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -225,7 +246,7 @@
     <tr><td>dog</td><td>0</td><td>0.2</td></tr>
   </tbody>
 </table>
-<p><code>L = -log(0.8)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">&#x00028;</mo><mn>0.8</mn><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>분류 문제에서 모델이 정답 확률을 높이도록 학습합니다.</p>
@@ -251,7 +272,7 @@
 
 <h2>4. Cross-Entropy와 로그우도</h2>
 <p>Cross-Entropy는 다음 식과 직접 연결됩니다.</p>
-<p><code>L = -log P(y|x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mo stretchy="false">&#x0007C;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>즉 모델이 정답 클래스 확률을 높이도록 학습하는 과정입니다.</p>
 
 <h3>왜 필요한가</h3>
@@ -312,5 +333,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

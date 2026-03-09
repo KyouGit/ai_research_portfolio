@@ -1,6 +1,296 @@
-<h2>주제: VAE (ELBO와 Reparameterization)</h2>
-<p><strong>분류:</strong> generative</p><p><strong>타입:</strong> concept</p><p><strong>난이도:</strong> 중상</p>
-<p>VAE는 확률적 잠재변수 모델로 분포를 학습합니다.</p>
-<p><code>\mathcal{L}_{ELBO}=\mathbb{E}_{q_\phi(z|x)}[\log p_\theta(x|z)]-D_{KL}(q_\phi(z|x)\|p(z))</code></p>
-<p><code>z=\mu+\sigma\odot\epsilon,\ \epsilon\sim\mathcal{N}(0,I)</code></p>
-<h3>핵심</h3><ul><li>재구성항 + KL 정규화</li><li>Reparameterization trick으로 역전파 가능</li></ul>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #5f6b85;
+      --line: #d8e0ef;
+      --accent: #1f4f99;
+      --code-bg: #eef3ff;
+      --code-line: #d6e1ff;
+      --pre-bg: #0f172a;
+      --pre-text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%);
+      font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(31, 42, 68, 0.06);
+    }
+    h1, h2, h3, h4 { line-height: 1.3; margin: 1.25em 0 0.55em; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-top: 0; }
+    h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #183964; }
+    p { margin: 0.6em 0; }
+    ul, ol { margin: 0.65em 0 0.9em 1.2em; padding: 0; }
+    li { margin: 0.2em 0; }
+    strong { color: #11284a; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-line);
+      border-radius: 7px;
+      padding: 0.12em 0.38em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.93em;
+      color: #17396f;
+      word-break: break-word;
+    }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+      text-align: center;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
+    pre {
+      margin: 0.8em 0 1.05em;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      border-radius: 12px;
+      border: 1px solid #1e2d48;
+      padding: 14px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0.85em 0 1.05em;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    th, td {
+      border-bottom: 1px solid #e7edf9;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #f1f5ff;
+      color: #15335d;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 640px) {
+      .post { padding: 18px 14px; border-radius: 12px; }
+      .topbar a { font-size: 0.84rem; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a>
+      <a href="/ai_research_portfolio/roadmap.html">Roadmap</a>
+      <a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
+<h2>VAE 이해: Latent Variable Model부터 ELBO, Reparameterization까지</h2>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>태그:</strong> generative,vae,latent_variable_model,elbo,reparameterization</p>
+<div class="tip">VAE를 제대로 이해하려면 먼저 "데이터 뒤에 직접 보이지 않는 잠재 원인이 있다"는 Latent Variable Model 관점부터 잡아야 한다.</div>
+<p>일반 autoencoder는 입력을 압축했다가 복원하는 구조지만, 그 latent vector가 샘플링 가능한 확률공간이라는 보장은 없다. VAE는 latent를 확률변수로 두고, "보이지 않는 원인 변수 \(z\)가 데이터를 생성한다"는 생성 모델 관점으로 문제를 다시 세운다.</p>
+
+<h3>1. Latent Variable Model이란 무엇인가</h3>
+<p>Latent Variable Model은 데이터 \(x\)를 직접 설명하는 대신, 그 뒤에 숨어 있는 잠재변수 \(z\)가 있다고 가정하는 모델이다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>&#x0222B;</mo><mi>p</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo>)</mo><mi>d</mi><mi>z</mi></mrow></math></div>
+<p>이 식의 뜻은 "관측 데이터 \(x\)의 확률은, 모든 가능한 잠재변수 \(z\)를 고려해 합치거나 적분한 결과"라는 것이다.</p>
+<p>예를 들어 얼굴 이미지 \(x\)가 있다고 하자. 이 이미지를 직접 설명하는 대신, 그 뒤에</p>
+<ul>
+  <li>표정</li>
+  <li>조명</li>
+  <li>시점</li>
+  <li>머리 모양</li>
+</ul>
+<p>같은 잠재 요인 \(z\)가 있다고 생각하면, 데이터 구조를 훨씬 더 자연스럽게 설명할 수 있다.</p>
+
+<h3>2. 생성 모델 관점에서 VAE는 무엇을 배우나</h3>
+<p>VAE는 두 가지를 같이 배운다.</p>
+<ul>
+  <li><strong>Decoder</strong> \(p(x|z)\): 잠재변수 \(z\)가 주어졌을 때 데이터를 어떻게 생성할지</li>
+  <li><strong>Encoder</strong> \(q(z|x)\): 관측 데이터 \(x\)를 보고 어떤 잠재변수 \(z\)가 그럴듯한지</li>
+</ul>
+<p>여기서 중요한 점은 decoder는 생성 모델이고, encoder는 추론 모델이라는 점이다. 즉 decoder는 "원인에서 결과로", encoder는 "결과에서 원인으로" 가는 방향이다.</p>
+
+<h3>3. 왜 직접 likelihood를 최대화하지 못하나</h3>
+<p>우리가 진짜로 최대화하고 싶은 것은 데이터 likelihood \(p(x)\) 또는 데이터셋 전체에 대한 \(\log p(x)\)다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>log</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>log</mi><mo>&#x0222B;</mo><mi>p</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo>)</mo><mi>d</mi><mi>z</mi></mrow></math></div>
+<p>문제는 이 적분이 보통 닫힌 형태로 계산되지 않는다는 것이다. 잠재변수 공간이 고차원이고 신경망이 들어가면, 정확한 posterior \(p(z|x)\)도 계산하기 어렵다.</p>
+<p>즉 VAE의 핵심 문제는 단순히 생성이 아니라, <strong>잠재변수가 들어간 확률모델의 추론이 어렵다</strong>는 데 있다.</p>
+
+<h3>4. Variational Inference: 어려운 posterior를 근사하자</h3>
+<p>그래서 VAE는 진짜 posterior \(p(z|x)\)를 직접 구하려 하지 않고, 계산 가능한 근사 posterior \(q(z|x)\)를 따로 만든다. 이것이 variational inference 관점이다.</p>
+<div class="tip">핵심 아이디어는 간단하다. "진짜 posterior는 어렵다. 대신 신경망으로 근사 posterior를 만들고, 그게 진짜 posterior와 비슷해지게 학습하자."</div>
+<p>이 근사 분포가 보통 encoder 네트워크의 출력이다.</p>
+
+<h3>5. ELBO는 왜 등장하나</h3>
+<p>우리는 \(\log p(x)\)를 직접 최대화하기 어렵기 때문에, 대신 그 아래쪽 경계(lower bound)를 최대화한다. 그 하한이 바로 ELBO다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>log</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>&#x02265;</mo><msub><mi>&#x02112;</mi><mrow><mi>E</mi><mi>L</mi><mi>B</mi><mi>O</mi></mrow></msub></mrow></math></div>
+<p>즉 ELBO를 크게 만들면, 직접 다루기 어려운 \(\log p(x)\)도 같이 커지는 방향으로 간다.</p>
+
+<h3>6. ELBO 공식</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>&#x02112;</mi><mrow><mi>E</mi><mi>L</mi><mi>B</mi><mi>O</mi></mrow></msub><mo>=</mo><msub><mi>&#x1D53C;</mi><mrow><mi>q</mi><mo>(</mo><mi>z</mi><mo>|</mo><mi>x</mi><mo>)</mo></mrow></msub><mo>[</mo><mi>log</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>|</mo><mi>z</mi><mo>)</mo><mo>]</mo><mo>-</mo><msub><mi>D</mi><mrow><mi>K</mi><mi>L</mi></mrow></msub><mo>(</mo><mi>q</mi><mo>(</mo><mi>z</mi><mo>|</mo><mi>x</mi><mo>)</mo><mo>&#x2225;</mo><mi>p</mi><mo>(</mo><mi>z</mi><mo>)</mo><mo>)</mo></mrow></math></div>
+<p>이 식은 VAE를 이해하는 핵심이다. 두 항의 역할이 완전히 다르다.</p>
+<ul>
+  <li><strong>재구성 항</strong> \(\mathbb{E}_{q(z|x)}[\log p(x|z)]\): latent \(z\)만 보고 원래 데이터를 잘 복원하게 만든다.</li>
+  <li><strong>KL 항</strong> \(D_{KL}(q(z|x)\parallel p(z))\): encoder가 만든 잠재분포가 prior에서 너무 멀어지지 않게 만든다.</li>
+</ul>
+<p>즉 VAE는 "복원 잘하기"와 "잠재공간을 정돈하기"를 동시에 요구하는 모델이다.</p>
+
+<h3>7. ELBO를 loss로 보면 어떻게 되나</h3>
+<p>딥러닝에서는 보통 최소화 문제를 쓰므로, 실제 구현에서는 \(-ELBO\)를 loss로 사용한다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Loss</mi><mo>=</mo><mo>-</mo><msub><mi>&#x02112;</mi><mrow><mi>E</mi><mi>L</mi><mi>B</mi><mi>O</mi></mrow></msub></mrow></math></div>
+<p>그러면 해석은 더 익숙해진다.</p>
+<ul>
+  <li>재구성 loss는 작을수록 좋다.</li>
+  <li>KL regularization도 적절히 제어되어야 한다.</li>
+</ul>
+<p>즉 VAE loss는 "reconstruction loss + latent regularization"으로 읽으면 된다.</p>
+
+<h3>8. 왜 KL이 직접 loss에 들어가나</h3>
+<p>일반 분류 문제에서는 KL이 cross-entropy 안에 숨어 있는 경우가 많다. 하지만 VAE에서는 KL divergence가 수식 속 해석용 개념이 아니라, 실제 loss 함수 항으로 직접 들어간다.</p>
+<p>그 이유는 latent posterior \(q(z|x)\)를 prior \(p(z)\) 근처로 유지해야 샘플링이 가능한 잠재공간이 만들어지기 때문이다. 만약 이 항이 없으면 latent space가 제멋대로 흩어져서, 학습 후 \(z \sim p(z)\)로 샘플링했을 때 그럴듯한 데이터가 잘 안 나올 수 있다.</p>
+
+<h3>9. Reparameterization Trick은 왜 필요한가</h3>
+<p>문제는 \(z \sim q(z|x)\)처럼 샘플링이 들어가면, gradient를 encoder 파라미터까지 바로 전달하기 어렵다는 점이다. 샘플링 연산이 미분 경로를 끊어 버리기 때문이다.</p>
+<p>그래서 VAE는 샘플링을 다음처럼 다시 쓴다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>z</mi><mo>=</mo><mi>&#x03BC;</mi><mo>+</mo><mi>&#x03C3;</mi><mo>&#x2299;</mo><mi>&#x03F5;</mi><mo>,</mo><mspace width="1em"/><mi>&#x03F5;</mi><mo>&#x223C;</mo><mi>&#x1D4A9;</mi><mo>(</mo><mn>0</mn><mo>,</mo><mi>I</mi><mo>)</mo></mrow></math></div>
+<p>이 식의 의미는 "랜덤성은 \(\epsilon\)에서만 가져오고, \(\mu, \sigma\)는 신경망이 결정하게 하자"는 것이다. 이렇게 하면 샘플링을 포함한 전체 계산 그래프가 다시 미분 가능해진다.</p>
+
+<h3>10. Encoder는 실제로 무엇을 출력하나</h3>
+<p>보통 encoder는 latent vector 자체를 바로 내지 않고, 잠재분포의 평균 \(\mu(x)\)와 분산 또는 log-variance \(\log \sigma^2(x)\)를 출력한다.</p>
+<ul>
+  <li>\(\mu\): latent 분포의 중심</li>
+  <li>\(\sigma\): 불확실성 또는 퍼짐 정도</li>
+</ul>
+<p>즉 VAE의 encoder는 deterministic code를 만드는 것이 아니라, "이 입력에 대해 latent가 어디쯤 있고 얼마나 퍼져 있어야 하는가"를 예측하는 네트워크다.</p>
+
+<h3>11. VAE와 일반 Autoencoder 차이</h3>
+<ul>
+  <li><strong>Autoencoder</strong>: latent를 그냥 압축표현으로 사용</li>
+  <li><strong>VAE</strong>: latent를 확률분포로 모델링</li>
+</ul>
+<p>그래서 일반 autoencoder는 표현 학습에는 좋을 수 있지만, latent 공간에서 임의 샘플을 뽑아 새로운 데이터를 생성하는 데는 약하다. 반면 VAE는 학습 과정에서 latent space를 정돈하므로, 샘플링 기반 생성이 자연스럽다.</p>
+
+<h3>12. VAE의 생성 과정</h3>
+<p>학습이 끝난 뒤에는 prior에서 latent를 샘플링하고 decoder에 넣으면 된다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>z</mi><mo>&#x223C;</mo><mi>p</mi><mo>(</mo><mi>z</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>x</mi><mo>&#x223C;</mo><mi>p</mi><mo>(</mo><mi>x</mi><mo>|</mo><mi>z</mi><mo>)</mo></mrow></math></div>
+<p>이게 VAE가 "생성 모델"인 이유다. 학습할 때부터 latent를 prior에 맞춰 두었기 때문에, 추론 시에도 prior에서 바로 샘플링할 수 있다.</p>
+
+<h3>13. VAE의 장점과 한계</h3>
+<ul>
+  <li>장점: latent space가 해석 가능하고, 샘플링이 자연스럽고, 학습이 비교적 안정적이다.</li>
+  <li>한계: 생성 이미지가 GAN보다 흐리게 나오는 경우가 많고, ELBO 최적화가 항상 perceptual quality와 일치하지는 않는다.</li>
+</ul>
+
+<h3>14. 체크리스트</h3>
+<ul>
+  <li>Latent Variable Model이 무엇인지 설명할 수 있는가?</li>
+  <li>왜 \(\log p(x)\)를 직접 최대화하기 어려운가?</li>
+  <li>ELBO의 두 항이 각각 무슨 역할을 하는가?</li>
+  <li>왜 KL이 VAE loss에 직접 들어가야 하는가?</li>
+  <li>Reparameterization Trick이 gradient 문제를 어떻게 해결하는가?</li>
+  <li>일반 Autoencoder와 VAE의 핵심 차이를 설명할 수 있는가?</li>
+</ul>
+    </article>
+  </main>
+  <script>
+    (function () {
+      var h2 = document.querySelector('h2');
+      if (h2 && h2.textContent.trim()) {
+        var t = h2.textContent.replace(/^\s*주제\s*:\s*/i, '').trim();
+        document.title = t + ' | AI Research Portfolio';
+      }
+      document.querySelectorAll('table').forEach(function (table) {
+        if (!table.parentElement.classList.contains('table-wrap')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+      });
+    })();
+  </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

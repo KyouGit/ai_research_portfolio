@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -240,7 +261,7 @@
 <h3>1) 데이터 자체가 long-tail (Zipf)</h3>
 <p>자연어/이미지/코드 데이터는 상위 빈도 패턴이 대부분 질량을 차지하고, 희귀 패턴이 긴 꼬리를 이루는 분포를 가집니다.</p>
 <p>텍스트에선 Zipf 법칙으로 자주 표현합니다.</p>
-<p><code>P(rank = k) ∝ k^-s</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>r</mi><mi>a</mi><mi>n</mi><mi>k</mi><mo>&#x0003D;</mo><mi>k</mi><mo stretchy="false">&#x00029;</mo><mi>∝</mi><msup><mi>k</mi><mo>&#x02212;</mo></msup><mi>s</mi></mrow></math></div>
 <p>즉 고빈도 패턴은 빨리 학습되지만, tail 패턴은 매우 천천히 커버됩니다.</p>
 
 <h3>2) 모델은 분포를 단계적으로 근사한다</h3>
@@ -262,9 +283,9 @@
 
 <h3>정보이론 관점</h3>
 <p>LLM 학습 loss는 보통 cross-entropy입니다.</p>
-<p><code>L = - E_{x~p_data}[log p_theta(x)]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><msub><mi>E</mi><mrow><mi>x</mi><mtext>&#x000A0;</mtext><msub><mi>p</mi><mi>d</mi></msub><mi>a</mi><mi>t</mi><mi>a</mi></mrow></msub><mo stretchy="false">[</mo><mi>l</mi><mi>o</mi><mi>g</mi><msub><mi>p</mi><mi>t</mi></msub><mi>h</mi><mi>e</mi><mi>t</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">]</mo></mrow></math></div>
 <p>모델 규모가 커지면 근사 품질은 좋아지지만, 자연 데이터의 본질적 불확실성 때문에 loss가 0으로 가지는 않습니다. 그래서 다음처럼 쓰는 경우가 많습니다.</p>
-<p><code>L(N) = A N^-alpha + L_inf</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>N</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>A</mi><msup><mi>N</mi><mo>&#x02212;</mo></msup><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><mi>a</mi><mo>&#x0002B;</mo><msub><mi>L</mi><mi>i</mi></msub><mi>n</mi><mi>f</mi></mrow></math></div>
 <p>여기서 <code>L_inf</code>는 irreducible entropy(데이터 자체의 예측 불가능성)입니다.</p>
 
 <h3>함수 근사 관점</h3>
@@ -412,5 +433,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

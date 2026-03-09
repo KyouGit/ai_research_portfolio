@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -154,7 +175,7 @@
 
 <p>목표:</p>
 
-<p><code>x ~ P_data(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mtext>&#x000A0;</mtext><msub><mi>P</mi><mi>d</mi></msub><mi>a</mi><mi>t</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>즉 모델이 실제 데이터 분포를 학습해야 합니다.</p>
 
@@ -199,7 +220,7 @@ Noise z → Generator → Fake Image
 
 <p>Generator는 노이즈에서 데이터를 생성합니다.</p>
 
-<p><code>x_fake = G(z)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mi>f</mi></msub><mi>a</mi><mi>k</mi><mi>e</mi><mo>&#x0003D;</mo><mi>G</mi><mo stretchy="false">&#x00028;</mo><mi>z</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -221,7 +242,7 @@ Noise z → Generator → Fake Image
 
 <p>Discriminator는 입력이 진짜인지 가짜인지 판별합니다.</p>
 
-<p><code>D(x) = P(real | x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>r</mi><mi>e</mi><mi>a</mi><mi>l</mi><mo stretchy="false">&#x0007C;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -237,11 +258,11 @@ Noise z → Generator → Fake Image
 
 <p>GAN의 핵심 수식:</p>
 
-<p><code>min_G max_D V(D,G)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mi>i</mi><msub><mi>n</mi><mi>G</mi></msub><mi>m</mi><mi>a</mi><msub><mi>x</mi><mi>D</mi></msub><mi>V</mi><mo stretchy="false">&#x00028;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>G</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>objective:</p>
 
-<p><code>V(D,G) = E_{x~P_data}[log D(x)] + E_{z~P_z}[log(1 - D(G(z)))]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>V</mi><mo stretchy="false">&#x00028;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>G</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>E</mi><mrow><mi>x</mi><mtext>&#x000A0;</mtext><msub><mi>P</mi><mi>d</mi></msub><mi>a</mi><mi>t</mi><mi>a</mi></mrow></msub><mo stretchy="false">[</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">]</mo><mo>&#x0002B;</mo><msub><mi>E</mi><mrow><mi>z</mi><mtext>&#x000A0;</mtext><msub><mi>P</mi><mi>z</mi></msub></mrow></msub><mo stretchy="false">[</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>G</mi><mo stretchy="false">&#x00028;</mo><mi>z</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -295,7 +316,7 @@ Noise z → Generator → Fake Image
 
 <p>Generator는 다음 목표를 가집니다.</p>
 
-<p><code>L_G = - log D(G(z))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>L</mi><mi>G</mi></msub><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>G</mi><mo stretchy="false">&#x00028;</mo><mi>z</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 
@@ -305,7 +326,7 @@ Noise z → Generator → Fake Image
 
 <p>Discriminator 손실:</p>
 
-<p><code>L_D = - log D(x) - log(1 - D(G(z)))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>L</mi><mi>D</mi></msub><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>G</mi><mo stretchy="false">&#x00028;</mo><mi>z</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 
@@ -429,5 +450,17 @@ Update G
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

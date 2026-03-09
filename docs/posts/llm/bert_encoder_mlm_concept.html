@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -152,7 +173,7 @@
 <h3>문제 설정</h3>
 <p>기존 언어 모델(GPT 이전)은 대부분 <strong>단방향 언어 모델</strong>이었습니다.</p>
 <p>예:</p>
-<p><code>P(w_t | w_1, ..., w_{t-1})</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>w</mi><mi>t</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>w</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>w</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>즉 이전 단어만 보고 다음 단어를 예측합니다.</p>
 <p>하지만 자연어 이해(NLU)에서는 <strong>양방향 문맥</strong>이 중요합니다.</p>
 <p>BERT는 이를 해결하기 위해 <strong>bidirectional Transformer Encoder</strong>를 사용합니다.</p>
@@ -179,7 +200,7 @@ Contextual Representation</code></pre>
 Feed Forward Network</code></pre>
 
 <h3>수식</h3>
-<p><code>H = Encoder(X)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>H</mi><mo>&#x0003D;</mo><mi>E</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>r</mi><mo stretchy="false">&#x00028;</mo><mi>X</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -192,7 +213,7 @@ Feed Forward Network</code></pre>
 
 <h2>2. BERT 입력 구성</h2>
 <p>BERT 입력은 세 가지 embedding을 합쳐 생성됩니다.</p>
-<p><code>X = E_token + E_segment + E_position</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>X</mi><mo>&#x0003D;</mo><msub><mi>E</mi><mi>t</mi></msub><mi>o</mi><mi>k</mi><mi>e</mi><mi>n</mi><mo>&#x0002B;</mo><msub><mi>E</mi><mi>s</mi></msub><mi>e</mi><mi>g</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi><mo>&#x0002B;</mo><msub><mi>E</mi><mi>p</mi></msub><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -210,10 +231,10 @@ Feed Forward Network</code></pre>
 <p>예:</p>
 <pre><code>The cat sits on the [MASK]</code></pre>
 <p>모델 목표:</p>
-<p><code>P(w_mask | context)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>w</mi><mi>m</mi></msub><mi>a</mi><mi>s</mi><mi>k</mi><mo stretchy="false">&#x0007C;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>수식</h3>
-<p><code>L = - log P(w_mask | context)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>w</mi><mi>m</mi></msub><mi>a</mi><mi>s</mi><mi>k</mi><mo stretchy="false">&#x0007C;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -258,7 +279,7 @@ Feed Forward Network</code></pre>
 <p>BERT는 또 하나의 pretraining task를 사용합니다.</p>
 <p><strong>Next Sentence Prediction</strong></p>
 <p>목표:</p>
-<p><code>P(IsNext | sentence_A, sentence_B)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>I</mi><mi>s</mi><mi>N</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x0007C;</mo><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>c</mi><msub><mi>e</mi><mi>A</mi></msub><mo>&#x0002C;</mo><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>c</mi><msub><mi>e</mi><mi>B</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>입력</h3>
 <pre><code>[CLS] sentence A [SEP] sentence B [SEP]</code></pre>
@@ -277,7 +298,7 @@ Feed Forward Network</code></pre>
 
 <h2>6. BERT Pretraining Loss</h2>
 <p>BERT는 두 loss를 함께 학습합니다.</p>
-<p><code>L = L_MLM + L_NSP</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><msub><mi>L</mi><mi>M</mi></msub><mi>L</mi><mi>M</mi><mo>&#x0002B;</mo><msub><mi>L</mi><mi>N</mi></msub><mi>S</mi><mi>P</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -384,5 +405,17 @@ Feed Forward Network</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

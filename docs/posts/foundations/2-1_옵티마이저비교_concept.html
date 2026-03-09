@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -161,15 +182,15 @@
 </ul>
 
 <h2>1. SGD</h2>
-<p><code>w_{t+1} = w_t - eta * g_t</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mrow><mi>t</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>w</mi><mi>t</mi></msub><mo>&#x02212;</mo><mi>e</mi><mi>t</mi><mi>a</mi><mo>&#x0002A;</mo><msub><mi>g</mi><mi>t</mi></msub></mrow></math></div>
 <ul>
   <li>단순하고 계산 비용이 낮음</li>
   <li>gradient noise에 민감하고 진동 가능</li>
 </ul>
 
 <h2>2. Momentum</h2>
-<p><code>v_t = beta * v_{t-1} + g_t</code></p>
-<p><code>w_{t+1} = w_t - eta * v_t</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>&#x0003D;</mo><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi><mo>&#x0002A;</mo><msub><mi>v</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0002B;</mo><msub><mi>g</mi><mi>t</mi></msub></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mrow><mi>t</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>w</mi><mi>t</mi></msub><mo>&#x02212;</mo><mi>e</mi><mi>t</mi><mi>a</mi><mo>&#x0002A;</mo><msub><mi>v</mi><mi>t</mi></msub></mrow></math></div>
 <ul>
   <li>이전 방향을 누적해 수렴 가속</li>
   <li>진동 완화</li>
@@ -178,8 +199,8 @@
 
 <h2>3. AdamW</h2>
 <p>Adam의 1차/2차 모멘트 추정:</p>
-<p><code>m_t = beta1 * m_{t-1} + (1-beta1) * g_t</code></p>
-<p><code>v_t = beta2 * v_{t-1} + (1-beta2) * g_t^2</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>&#x0003D;</mo><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi><mn>1</mn><mo>&#x0002A;</mo><msub><mi>m</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0002B;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi><mn>1</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0002A;</mo><msub><mi>g</mi><mi>t</mi></msub></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>&#x0003D;</mo><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi><mn>2</mn><mo>&#x0002A;</mo><msub><mi>v</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0002B;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi><mn>2</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0002A;</mo><msubsup><mi>g</mi><mi>t</mi><mn>2</mn></msubsup></mrow></math></div>
 <p>업데이트:</p>
 <p><code>w <- w - eta * m_t / (sqrt(v_t) + epsilon) - eta * lambda * w</code></p>
 <ul>
@@ -253,5 +274,17 @@ AdamW: gradient 평균/분산으로 adaptive step + weight decay 분리</code></
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

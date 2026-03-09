@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -151,7 +172,7 @@
 
 <h3>문제 설정</h3>
 <p>신경망은 선형 연산만으로는 복잡한 패턴을 학습할 수 없기 때문에 비선형 활성함수가 필요합니다.</p>
-<p><code>a = sigma(Wx + b)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>a</mi><mo>&#x0003D;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>W</mi><mi>x</mi><mo>&#x0002B;</mo><mi>b</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>직관 비유</h3>
 <ul>
@@ -161,7 +182,7 @@
 </ul>
 
 <h2>1. ReLU</h2>
-<p><code>ReLU(x) = max(0, x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mi>e</mi><mi>L</mi><mi>U</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mn>0</mn><mo>&#x0002C;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <ul>
   <li>양수는 통과, 음수는 0으로 차단</li>
   <li>계산이 단순하고 빠름</li>
@@ -170,7 +191,7 @@
 <p>주의: 음수 영역 gradient가 0이라 dead neuron 문제가 생길 수 있습니다.</p>
 
 <h2>2. GELU</h2>
-<p><code>GELU(x) = x * Phi(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>G</mi><mi>E</mi><mi>L</mi><mi>U</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>x</mi><mo>&#x0002A;</mo><mi>P</mi><mi>h</mi><mi>i</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>Phi(x)는 표준정규 누적분포함수(CDF)입니다.</p>
 <ul>
   <li>ReLU보다 부드러운 비선형성</li>
@@ -179,8 +200,8 @@
 <p>주의: ReLU보다 계산량이 다소 큽니다.</p>
 
 <h2>3. SwiGLU</h2>
-<p><code>SwiGLU(x) = (xW1) * Swish(xW2)</code></p>
-<p><code>Swish(x) = x * sigmoid(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>w</mi><mi>i</mi><mi>G</mi><mi>L</mi><mi>U</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>x</mi><mi>W</mi><mn>1</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0002A;</mo><mi>S</mi><mi>w</mi><mi>i</mi><mi>s</mi><mi>h</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mi>W</mi><mn>2</mn><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>w</mi><mi>i</mi><mi>s</mi><mi>h</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>x</mi><mo>&#x0002A;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>o</mi><mi>i</mi><mi>d</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <ul>
   <li>두 경로 중 하나를 gate처럼 사용</li>
   <li>정보를 선택적으로 통과시켜 표현력 향상</li>
@@ -202,7 +223,7 @@
 
 <h2>5. Transformer에서 위치</h2>
 <pre><code>x -> Linear -> Activation -> Linear</code></pre>
-<p><code>FFN(x) = W2 * sigma(W1x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>F</mi><mi>F</mi><mi>N</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>W</mi><mn>2</mn><mo>&#x0002A;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>W</mi><mn>1</mn><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>여기서 sigma로 ReLU/GELU/SwiGLU가 사용됩니다.</p>
 
 <h2>코드-수식 연결</h2>
@@ -253,5 +274,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

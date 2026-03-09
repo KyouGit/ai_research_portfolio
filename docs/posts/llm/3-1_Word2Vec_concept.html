@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -159,7 +180,7 @@
 </ul>
 
 <h3>대표 직관</h3>
-<p><code>king - man + woman ≈ queen</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>k</mi><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#x02212;</mo><mi>m</mi><mi>a</mi><mi>n</mi><mo>&#x0002B;</mo><mi>w</mi><mi>o</mi><mi>m</mi><mi>a</mi><mi>n</mi><mi>≈</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>e</mi><mi>n</mi></mrow></math></div>
 <p>완벽한 수학 법칙이라기보다, 의미 관계가 벡터 공간에서 선형적으로 나타날 수 있음을 보여준 상징적 예시입니다.</p>
 
 <h3>한계 (중요)</h3>
@@ -193,5 +214,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

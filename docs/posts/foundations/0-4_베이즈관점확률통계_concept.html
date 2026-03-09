@@ -81,6 +81,28 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block math {
+      margin: 0 auto;
+      display: block;
+      text-align: center;
+      font-size: 1.08rem;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -146,7 +168,8 @@
 <h2>[기본기 0-4] 딥러닝을 위한 확률/통계 최소셋 (베이즈 관점)</h2>
 <p class="meta"><strong>난이도:</strong> 기초</p>
 <p class="meta"><strong>태그:</strong> 확률통계,베이즈,우도,사후확률</p>
-<p>딥러닝 학습의 본질은 "데이터가 주어졌을 때 어떤 파라미터가 가장 그럴듯한가"를 찾는 것입니다. 이를 확률로 쓰면 <code>p(\theta|D)</code>입니다.</p>
+<p>딥러닝 학습의 본질은 "데이터가 주어졌을 때 어떤 파라미터가 가장 그럴듯한가"를 찾는 것이다. 이 문서는 그 질문을 확률 언어로 바꾸는 가장 기본적인 흐름을 설명한다.</p>
+<div class="tip">먼저 문장으로 이해하면 된다. "데이터를 잘 설명하는 모델을 찾고 싶다"가 우도이고, "데이터를 보고 나서 어떤 모델을 더 믿게 되었는가"가 사후확률이다.</div>
 
 <h3>왜 베이즈 관점이 중요한가</h3>
 <ul>
@@ -154,38 +177,241 @@
   <li><code>D</code>: 관측 데이터</li>
   <li><code>p(\theta|D)</code>: 데이터를 본 뒤의 믿음(사후확률)</li>
 </ul>
-<p>즉 데이터가 들어오면 모델에 대한 믿음이 업데이트됩니다.</p>
+<p>즉 데이터가 들어오면 모델에 대한 믿음이 업데이트된다. 베이즈 관점은 이 업데이트를 수식으로 적는 방법이다.</p>
 
 <h3>1) 베이즈 정리</h3>
-<p><code>p(\theta|D) \propto p(D|\theta)p(\theta)</code></p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>p</mi><mo>(</mo><mi>&#x03B8;</mi><mo>|</mo><mi>D</mi><mo>)</mo>
+      <mo>=</mo>
+      <mfrac>
+        <mrow>
+          <mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+          <mi>p</mi><mo>(</mo><mi>&#x03B8;</mi><mo>)</mo>
+        </mrow>
+        <mrow>
+          <mi>p</mi><mo>(</mo><mi>D</mi><mo>)</mo>
+        </mrow>
+      </mfrac>
+    </mrow>
+  </math>
+</div>
 <ul>
   <li><code>p(\theta|D)</code>: 사후확률 (posterior)</li>
   <li><code>p(D|\theta)</code>: 우도 (likelihood)</li>
   <li><code>p(\theta)</code>: 사전확률 (prior)</li>
+  <li><code>p(D)</code>: 정규화 상수. "전체 확률을 1로 맞추는 역할"이라고 생각하면 된다.</li>
 </ul>
-<p>딥러닝에서는 계산 단순화를 위해 prior를 생략하고 MLE 관점(<code>argmax_\theta p(D|\theta)</code>)으로 학습하는 경우가 많습니다.</p>
+<p>이 식은 "원래 믿고 있던 것(prior)"과 "데이터가 얼마나 잘 설명되는가(likelihood)"를 합쳐서 "업데이트된 믿음(posterior)"을 만드는 공식이다.</p>
+
+<p>각 항의 의미를 표로 다시 보면 다음과 같다.</p>
+<table>
+  <thead>
+    <tr><th>기호</th><th>의미</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>p(\theta|D)</code></td><td>데이터를 본 뒤 파라미터에 대한 믿음, 즉 사후확률</td></tr>
+    <tr><td><code>p(D|\theta)</code></td><td>주어진 파라미터가 데이터를 얼마나 잘 설명하는지 나타내는 우도</td></tr>
+    <tr><td><code>p(\theta)</code></td><td>데이터를 보기 전 파라미터에 대한 초기 믿음, 즉 사전확률</td></tr>
+    <tr><td><code>p(D)</code></td><td>데이터 자체가 관측될 확률로, 정규화 상수 역할을 한다</td></tr>
+  </tbody>
+</table>
+
+<p>직관적으로 보면 <code>posterior = likelihood × prior</code> 구조다. 즉 데이터 설명력과 기존 믿음이 결합되어 최종적인 모델 믿음이 정해진다.</p>
+
+<h3>왜 딥러닝에서는 prior를 자주 생략할까</h3>
+<p>실무 딥러닝에서는 대규모 신경망에 대해 prior를 명시적으로 설계하고 계산하는 일이 어렵다. 그래서 자주 아래처럼 단순화한다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>p</mi><mo>(</mo><mi>&#x03B8;</mi><mo>|</mo><mi>D</mi><mo>)</mo>
+      <mo>&#x221D;</mo>
+      <mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+      <mi>p</mi><mo>(</mo><mi>&#x03B8;</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>여기서 prior를 거의 상수처럼 취급하면, 결국 "우도를 가장 크게 만드는 파라미터"를 찾는 문제가 된다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <msup><mi>&#x03B8;</mi><mo>*</mo></msup>
+      <mo>=</mo>
+      <munder>
+        <mrow><mi>arg</mi><mi>max</mi></mrow>
+        <mi>&#x03B8;</mi>
+      </munder>
+      <mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>이것이 Maximum Likelihood Estimation, 즉 MLE다. 딥러닝 학습을 "데이터 확률을 최대화하는 파라미터 찾기"라고 설명하는 이유가 여기 있다.</p>
+
+<h3>MLE와 MAP는 무엇이 다른가</h3>
+<div class="tip">MLE는 "데이터 설명력만 보자"는 관점이고, MAP는 "기존 믿음(prior)까지 반영하자"는 관점이다.</div>
+<p>둘 다 좋은 파라미터를 찾는 방법이지만, 무엇을 최적화하느냐가 다르다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mrow>
+      <msubsup><mi>&#x03B8;</mi><mrow><mi>M</mi><mi>L</mi><mi>E</mi></mrow><mo>*</mo></msubsup>
+      <mo>=</mo>
+      <munder><mrow><mi>arg</mi><mi>max</mi></mrow><mi>&#x03B8;</mi></munder>
+      <mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mrow>
+      <msubsup><mi>&#x03B8;</mi><mrow><mi>M</mi><mi>A</mi><mi>P</mi></mrow><mo>*</mo></msubsup>
+      <mo>=</mo>
+      <munder><mrow><mi>arg</mi><mi>max</mi></mrow><mi>&#x03B8;</mi></munder>
+      <mi>p</mi><mo>(</mo><mi>&#x03B8;</mi><mo>|</mo><mi>D</mi><mo>)</mo>
+      <mo>=</mo>
+      <munder><mrow><mi>arg</mi><mi>max</mi></mrow><mi>&#x03B8;</mi></munder>
+      <mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+      <mi>p</mi><mo>(</mo><mi>&#x03B8;</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>MLE는 오직 데이터가 얼마나 잘 설명되는지만 본다. 반면 MAP는 prior까지 고려해서, "원래 그럴듯하다고 생각한 파라미터 범위"를 더 선호한다.</p>
+<p>직관적으로는 다음처럼 이해하면 된다.</p>
+<ul>
+  <li>MLE: 데이터만 보고 최대한 잘 맞추기</li>
+  <li>MAP: 데이터도 보되, 너무 이상한 파라미터는 prior로 억제하기</li>
+</ul>
+<p>그래서 MAP는 regularization과도 연결된다. 예를 들어 가우시안 prior를 두면, 결과적으로 큰 가중치를 억제하는 형태가 되어 L2 regularization과 비슷한 효과가 나온다.</p>
+<p>실무 딥러닝에서는 보통 MLE 관점으로 설명을 시작하지만, weight decay나 Bayesian learning을 이해하려면 MAP 관점이 훨씬 자연스럽다.</p>
 
 <h3>2) 우도 (Likelihood)</h3>
-<p><code>p(D|\theta)</code>는 "모델 파라미터가 주어졌을 때 데이터가 나올 가능성"입니다.</p>
-<p><code>\theta^* = argmax\; p(D|\theta)</code></p>
-<p>주의: 우도는 <code>\theta</code>에 대해 정규화된 확률밀도와는 해석이 다릅니다.</p>
+<p>우도는 <code>p(D|\theta)</code>다. 의미는 "파라미터 <code>\theta</code>가 주어졌을 때, 지금 관측한 데이터 <code>D</code>가 나올 확률"이다.</p>
+<p>예를 들어 <code>\theta_1</code>은 고양이 이미지를 잘 분류하고, <code>\theta_2</code>는 잘 분류하지 못한다면 보통 <code>p(D|\theta_1) &gt; p(D|\theta_2)</code>로 해석할 수 있다.</p>
+<p>그래서 가장 좋은 파라미터는 우도를 가장 크게 만드는 값으로 잡는다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>&#x003B8;</mi><mo>&#x0002A;</mo></msup><mo>&#x0003D;</mo><mi>\arg</mi><msub><mo>max</mo><mi>&#x003B8;</mi></msub><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>D</mi><mo stretchy="false">&#x0007C;</mo><mi>&#x003B8;</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<p>주의: 우도는 데이터를 고정하고 파라미터에 대해 비교하는 관점이라서, <code>\theta</code>에 대한 일반적인 확률분포와 완전히 같은 방식으로 읽으면 안 된다.</p>
 
 <h3>3) 로그우도 (Log Likelihood)</h3>
-<p><code>p(D|\theta)=\prod_i p(x_i|\theta)</code></p>
-<p><code>\log p(D|\theta)=\sum_i \log p(x_i|\theta)</code></p>
+<p>실제 데이터셋은 보통 하나의 샘플이 아니라 여러 샘플로 이루어진다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x0007B;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>x</mi><mi>n</mi></msub><mo stretchy="false">&#x0007D;</mo></mrow></math></div>
+<p>각 데이터가 독립적으로 생성되었다고 가정하면 전체 데이터의 우도는 각 샘플 우도의 곱으로 쓸 수 있다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+      <mo>=</mo>
+      <munderover><mo>&#x220F;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+      <mi>p</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>log</mi>
+      <mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+      <mo>=</mo>
+      <munderover><mo>&#x2211;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+      <mi>log</mi>
+      <mi>p</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
 <ul>
   <li>곱셈을 덧셈으로 바꿔 계산이 쉬워짐</li>
   <li>수치 안정성 개선(아주 작은 값 언더플로우 완화)</li>
 </ul>
+<p>즉 전체 데이터 확률은 각 데이터 확률의 곱이고, 로그를 취하면 각 샘플의 로그 확률을 더하는 형태가 된다.</p>
+<p>왜 로그를 쓰는지가 중요하다. 확률은 보통 매우 작은 값이라서 여러 개를 곱하면 금방 <code>0</code>에 가까워진다. 예를 들어 <code>0.001 × 0.002 × 0.0003</code> 같은 값은 컴퓨터에서 다루기 불편하다.</p>
+<p>하지만 로그를 취하면 아주 작은 값도 다루기 쉬운 숫자로 바뀐다. 예를 들어 <code>10^{-30}</code>은 로그를 취하면 <code>-30</code> 수준으로 바뀐다.</p>
+<p>또한 <code>\log(a \times b \times c) = \log a + \log b + \log c</code> 이므로, 복잡한 곱 계산을 단순한 합 계산으로 바꿀 수 있다. 그래서 딥러닝에서는 로그우도를 기본 도구처럼 사용한다.</p>
+<p>그래서 최종 목표는 다음처럼 쓸 수 있다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>&#x003B8;</mi><mo>&#x0002A;</mo></msup><mo>&#x0003D;</mo><mi>\arg</mi><msub><mo>max</mo><mi>&#x003B8;</mi></msub><msubsup><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mi>log</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">&#x0007C;</mo><mi>&#x003B8;</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<p>이 식의 의미는 단순하다. 각 데이터 샘플 <code>x_i</code>를 모델이 얼마나 잘 설명하는지 로그확률로 계산하고, 그 값을 모두 더한 뒤, 그 합이 가장 커지도록 파라미터 <code>\theta</code>를 찾는 것이다. 이것을 <strong>log likelihood 최대화</strong>라고 한다.</p>
 
-<h3>4) 기댓값 (Expectation)</h3>
-<p><code>\mathbb{E}[X] = \sum_x x p(x)</code></p>
+<h3>4) Loss가 등장하는 이유: NLL</h3>
+<p>우리는 본질적으로 <code>maximize log likelihood</code>, 즉 로그우도를 최대화하고 싶다. 하지만 딥러닝 프레임워크는 대개 loss를 최소화하는 인터페이스로 설계되어 있다.</p>
+<p>그래서 부호를 반대로 바꿔 다음처럼 쓴다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>Loss</mi><mo>=</mo><mo>-</mo><mi>log</mi><mi>p</mi><mo>(</mo><mi>D</mi><mo>|</mo><mi>&#x03B8;</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mi>o</mi><mi>s</mi><mi>s</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><msubsup><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mi>log</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">&#x0007C;</mo><mi>&#x003B8;</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<p>이것이 바로 Negative Log Likelihood, 즉 NLL이다. 이름 그대로 로그우도 앞에 마이너스를 붙인 값이다.</p>
+<p>그래서 아래 세 문장은 모두 같은 뜻이다.</p>
+<ul>
+  <li>log likelihood를 최대화한다.</li>
+  <li>negative log likelihood를 최소화한다.</li>
+  <li>loss를 최소화한다.</li>
+</ul>
+<p>즉 <strong>log likelihood 최대화 = NLL 최소화</strong>다. 부호만 바뀌었을 뿐, 모델이 데이터를 더 잘 설명하게 만든다는 본질은 달라지지 않는다.</p>
+
+<h3>5) Cross Entropy와 연결</h3>
+<p>분류 문제에서는 보통 정답 라벨 <code>y</code>가 주어졌을 때, 모델이 그 정답을 얼마나 높은 확률로 맞히는지를 본다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>Loss</mi><mo>=</mo><mo>-</mo><mi>log</mi><mi>p</mi><mo>(</mo><mi>y</mi><mo>|</mo><mi>x</mi><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>이 형태가 바로 분류에서 자주 쓰는 <code>CrossEntropyLoss</code>와 연결된다.</p>
+<div class="tip">Cross Entropy는 "정답 분포와 모델 예측 분포가 얼마나 어긋나는가"를 재는 loss라고 생각하면 이해가 쉽다.</div>
+<p>원-핫 라벨 분류에서는 실제 정답이 한 클래스에만 1을 주기 때문에, 결국 모델이 정답 클래스에 부여한 확률이 핵심이 된다.</p>
+<ul>
+  <li>모델이 정답 클래스에 높은 확률을 주면 loss가 작다.</li>
+  <li>모델이 정답 클래스에 낮은 확률을 주면 loss가 크다.</li>
+</ul>
+<p>예를 들어 정답이 cat일 때</p>
+<ul>
+  <li><code>p(cat|x)=0.9</code> 이면 loss는 작다.</li>
+  <li><code>p(cat|x)=0.1</code> 이면 loss는 매우 커진다.</li>
+</ul>
+<p>즉 Cross Entropy는 "정답에 얼마나 확신을 줬는가"를 벌점 형태로 측정하는 함수다.</p>
+<p>원-핫 라벨 설정에서는 Cross Entropy를 최소화하는 것이 Negative Log Likelihood를 최소화하는 것과 사실상 같은 의미다. 그래서 분류 문제에서는 <code>CrossEntropyLoss</code>를 쓰는 것이 곧 정답 로그확률을 최대화하는 것과 연결된다.</p>
+<p>즉 아래 흐름으로 이해하면 된다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>k</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>h</mi><mi>o</mi><mi>o</mi><mi>d</mi><mo>&#x0003D;</mo><mi>m</mi><mi>a</mi><mi>x</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>l</mi><mi>i</mi><mi>k</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>h</mi><mi>o</mi><mi>o</mi><mi>d</mi><mo>&#x0003D;</mo><mi>m</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>n</mi><mi>e</mi><mi>g</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>v</mi><mi>e</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>l</mi><mi>i</mi><mi>k</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>h</mi><mi>o</mi><mi>o</mi><mi>d</mi><mo>&#x0003D;</mo><mi>m</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>c</mi><mi>r</mi><mi>o</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>y</mi></mrow></math></div>
+
+<h3>6) 기댓값 (Expectation)</h3>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>E</mi><mo>[</mo><mi>X</mi><mo>]</mo>
+      <mo>=</mo>
+      <mrow>
+        <mo>&#x2211;</mo>
+        <mi>x</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+      </mrow>
+    </mrow>
+  </math>
+</div>
 <p>딥러닝의 loss는 보통 데이터 분포에 대한 평균으로 해석됩니다.</p>
-<p><code>\mathbb{E}[L(x)]</code></p>
+<p><code>E[L(x)]</code>는 "샘플 하나하나의 loss를 장기적으로 평균내면 어떤 값이 되는가"를 뜻한다.</p>
+<p>직관적으로 말하면 expectation은 확률 가중 평균이다. 실제 딥러닝에서는 전체 데이터 분포를 알 수 없으므로, 샘플 평균으로 이 기댓값을 근사한다.</p>
+<div class="math-block">
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mi>E</mi><mo>[</mo><mi>L</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>]</mo>
+      <mo>&#x2248;</mo>
+      <mfrac><mn>1</mn><mi>N</mi></mfrac>
+      <munderover><mo>&#x2211;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover>
+      <mi>L</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo>
+    </mrow>
+  </math>
+</div>
+<p>코드에서 자주 보는 <code>loss.mean()</code>은 바로 이 기댓값 근사와 연결된다.</p>
 
-<h3>5) 분산 (Variance)</h3>
+<h3>7) 분산 (Variance)</h3>
 <p><code>Var(X)=\mathbb{E}[(X-\mu)^2]</code></p>
-<p>분산은 불확실성/퍼짐 정도를 나타내며, 정규화(BatchNorm)와 학습 안정성 해석에 중요합니다.</p>
+<p>여기서 <code>\mu = \mathbb{E}[X]</code>다. 즉 분산은 값이 평균에서 얼마나 퍼져 있는지를 나타낸다.</p>
+<p>분산은 불확실성이나 퍼짐 정도를 나타내며, 딥러닝에서는 정규화(BatchNorm), 초기화 안정성, gradient 해석과 직접 연결된다.</p>
+<p>특히 SGD에서는 gradient가 사실상 확률 변수처럼 움직인다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>g</mi><mo>&#x0003D;</mo><mo>&#x02207;</mo><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>&#x003B8;</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<p>미니배치가 바뀔 때마다 gradient 값도 달라지므로 gradient variance가 존재한다. 이 분산이 너무 크면 학습이 흔들리고, loss가 진동하며, 수렴 속도가 느려질 수 있다.</p>
+<p>그래서 실전에서는 BatchNorm, Adam, larger batch size, gradient clipping 같은 기법으로 분산과 학습 안정성을 함께 관리한다.</p>
 
 <h3>우도 vs 사후확률 (핵심 차이)</h3>
 <table>
@@ -210,6 +436,34 @@
     <tr><td><code>\mathbb{E}[L]</code></td><td><code>loss.mean()</code></td><td>평균 loss</td></tr>
   </tbody>
 </table>
+
+<h3>딥러닝 코드와 수식의 대응 관계</h3>
+<p>실제 딥러닝 코드는 복잡해 보여도, 핵심 구조는 확률 모델의 수식을 구현한 형태로 볼 수 있다.</p>
+<table>
+  <thead>
+    <tr><th>수식</th><th>PyTorch 코드</th><th>의미</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>p(D|\theta)</code></td><td><code>model(x)</code></td><td>현재 파라미터가 데이터를 얼마나 잘 설명하는지</td></tr>
+    <tr><td><code>\log p(x)</code></td><td><code>torch.log(p)</code></td><td>로그 확률</td></tr>
+    <tr><td><code>\sum \log p(x)</code></td><td><code>log_prob.sum()</code></td><td>전체 데이터에 대한 로그우도 누적</td></tr>
+    <tr><td><code>\mathbb{E}[L]</code></td><td><code>loss.mean()</code></td><td>배치 기준 평균 loss</td></tr>
+  </tbody>
+</table>
+
+<h3>전체 흐름: 딥러닝 학습의 수식 구조</h3>
+<p>딥러닝 학습은 구현 세부가 다양해 보여도, 큰 흐름은 거의 항상 아래 순서를 따른다.</p>
+<ol>
+  <li><strong>데이터 관측</strong><br /><code>D = \{x_1, x_2, ...\}</code></li>
+  <li><strong>모델 확률 계산</strong><br /><code>p(x|\theta)</code></li>
+  <li><strong>로그우도 계산</strong><br /><code>\log p(D|\theta)</code></li>
+  <li><strong>NLL loss로 변환</strong><br /><code>L = -\log p(D|\theta)</code></li>
+  <li><strong>평균 loss 계산</strong><br /><code>\mathbb{E}[L]</code> 또는 미니배치 평균 <code>loss.mean()</code></li>
+  <li><strong>파라미터 업데이트</strong><br />gradient descent로 <code>\theta</code>를 조정</li>
+</ol>
+
+<p>이 흐름을 한 문장으로 요약하면, 딥러닝은 데이터를 잘 설명하는 확률 모델을 학습하는 과정이다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>k</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>h</mi><mi>o</mi><mi>o</mi><mi>d</mi><mo>&#x0003D;</mo><mi>m</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>n</mi><mi>e</mi><mi>g</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>v</mi><mi>e</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>l</mi><mi>i</mi><mi>k</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>h</mi><mi>o</mi><mi>o</mi><mi>d</mi><mo>&#x0003D;</mo><mi>m</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>c</mi><mi>r</mi><mi>o</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>y</mi></mrow></math></div>
 
 <h3>자주 하는 오해 5개</h3>
 <ul>
@@ -247,5 +501,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

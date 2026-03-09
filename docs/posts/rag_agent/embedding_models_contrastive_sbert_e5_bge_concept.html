@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -152,7 +173,7 @@
 <h3>문제 설정</h3>
 <p>RAG 시스템에서는 질문과 문서를 벡터 공간으로 변환하여 유사도를 계산합니다.</p>
 <p>embedding 함수:</p>
-<p><code>e = f(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>e</mi><mo>&#x0003D;</mo><mi>f</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -171,7 +192,7 @@
 Negative pair:
 (query, irrelevant document)</code></pre>
 <p>대표적인 loss:</p>
-<p><code>L = - log exp(sim(q,d+)/τ) / Σ exp(sim(q,d_i)/τ)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002B;</mo><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>Σ</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><msub><mi>d</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -189,7 +210,7 @@ Negative pair:
 
 <h2>2. Similarity 계산</h2>
 <p>embedding 기반 검색에서는 cosine similarity를 사용합니다.</p>
-<p><code>sim(q,d) = (q · d) / (||q|| ||d||)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>d</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>q</mi><mi>·</mi><mi>d</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mo stretchy="false">&#x00028;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>q</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mi>d</mi><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x0007C;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -211,7 +232,7 @@ Negative pair:
 <pre><code>sentence1 → BERT → embedding1
 sentence2 → BERT → embedding2</code></pre>
 <p>유사도:</p>
-<p><code>sim(e1,e2)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>e</mi><mn>1</mn><mo>&#x0002C;</mo><mi>e</mi><mn>2</mn><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>문장 embedding을 빠르게 계산할 수 있습니다.</p>
@@ -230,7 +251,7 @@ sentence2 → BERT → embedding2</code></pre>
 <pre><code>query: "query: What is RAG?"
 document: "passage: Retrieval Augmented Generation..."</code></pre>
 <p>학습 목표:</p>
-<p><code>maximize sim(query, positive_doc)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mi>u</mi><mi>e</mi><mi>r</mi><mi>y</mi><mo>&#x0002C;</mo><mi>p</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>v</mi><msub><mi>e</mi><mi>d</mi></msub><mi>o</mi><mi>c</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>검색 성능을 크게 개선합니다.</p>
@@ -244,7 +265,7 @@ document: "passage: Retrieval Augmented Generation..."</code></pre>
 <li>large dataset</li>
 </ul>
 <p>loss:</p>
-<p><code>L = - log exp(sim(q,d+)/τ) / Σ exp(sim(q,d_i)/τ)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002B;</mo><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>Σ</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><msub><mi>d</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>RAG 시스템에서 높은 검색 성능을 제공합니다.</p>
@@ -254,8 +275,8 @@ document: "passage: Retrieval Augmented Generation..."</code></pre>
 <pre><code>Query encoder
 Document encoder</code></pre>
 <p>embedding:</p>
-<p><code>q = f_q(query)</code></p>
-<p><code>d = f_d(document)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>q</mi><mo>&#x0003D;</mo><msub><mi>f</mi><mi>q</mi></msub><mo stretchy="false">&#x00028;</mo><mi>q</mi><mi>u</mi><mi>e</mi><mi>r</mi><mi>y</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mo>&#x0003D;</mo><msub><mi>f</mi><mi>d</mi></msub><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>o</mi><mi>c</mi><mi>u</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>query와 document embedding을 독립적으로 계산할 수 있습니다.</p>
@@ -368,5 +389,17 @@ Document encoder</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

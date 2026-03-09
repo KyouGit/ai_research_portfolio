@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -191,10 +212,10 @@ I drink tea</code></pre>
 <h2>3. Skip-Gram 모델</h2>
 <p>Word2Vec의 대표 모델은 Skip-Gram입니다.</p>
 <p>목표:</p>
-<p><code>P(context | word)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x0007C;</mo><mi>w</mi><mi>o</mi><mi>r</mi><mi>d</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>수식</h3>
-<p><code>P(w_o | w_c) = exp(v_o · v_c) / Σ exp(v_i · v_c)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>w</mi><mi>o</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>w</mi><mi>c</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><msub><mi>v</mi><mi>o</mi></msub><mi>·</mi><msub><mi>v</mi><mi>c</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>Σ</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><msub><mi>v</mi><mi>i</mi></msub><mi>·</mi><msub><mi>v</mi><mi>c</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -212,9 +233,9 @@ I drink tea</code></pre>
 
 <h2>4. 학습 목표</h2>
 <p>Word2Vec의 목적 함수:</p>
-<p><code>L = Σ log P(context | center)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mi>Σ</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x0007C;</mo><mi>c</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>r</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>또는</p>
-<p><code>L = Σ log P(w_o | w_c)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mi>Σ</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><msub><mi>w</mi><mi>o</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>w</mi><mi>c</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>문맥 예측을 통해 단어 의미를 학습합니다.</p>
@@ -230,7 +251,7 @@ I drink tea</code></pre>
 <li>랜덤 단어 -> 낮은 확률</li>
 </ul>
 <p>수식:</p>
-<p><code>L = log σ(v_o · v_c) + Σ log σ(-v_n · v_c)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>σ</mi><mo stretchy="false">&#x00028;</mo><msub><mi>v</mi><mi>o</mi></msub><mi>·</mi><msub><mi>v</mi><mi>c</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002B;</mo><mi>Σ</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>σ</mi><mo stretchy="false">&#x00028;</mo><mo>&#x02212;</mo><msub><mi>v</mi><mi>n</mi></msub><mi>·</mi><msub><mi>v</mi><mi>c</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -247,7 +268,7 @@ I drink tea</code></pre>
 <p>이것은 벡터 공간에서 의미 관계가 학습되었음을 보여줍니다.</p>
 
 <h3>수식</h3>
-<p><code>v_king - v_man + v_woman ≈ v_queen</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>k</mi></msub><mi>i</mi><mi>n</mi><mi>g</mi><mo>&#x02212;</mo><msub><mi>v</mi><mi>m</mi></msub><mi>a</mi><mi>n</mi><mo>&#x0002B;</mo><msub><mi>v</mi><mi>w</mi></msub><mi>o</mi><mi>m</mi><mi>a</mi><mi>n</mi><mi>≈</mi><msub><mi>v</mi><mi>q</mi></msub><mi>u</mi><mi>e</mi><mi>e</mi><mi>n</mi></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>단어 의미 구조가 벡터 공간에 반영됩니다.</p>
@@ -353,5 +374,17 @@ bank (finance)</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -161,7 +182,7 @@
 </ul>
 
 <h2>1. 데이터 표준화 (Standardization)</h2>
-<p><code>x' = (x - mu) / sigma</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>x</mi><mi>&#x02032;</mi></msup><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mi>m</mi><mi>u</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -177,7 +198,7 @@
 <p>학습 데이터에서 계산한 평균/표준편차를 검증·테스트에도 동일하게 사용해야 합니다.</p>
 
 <h2>2. Layer Normalization</h2>
-<p><code>LayerNorm(x) = (x - mu) / sqrt(sigma^2 + epsilon)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi><mi>N</mi><mi>o</mi><mi>r</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mi>m</mi><mi>u</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>s</mi><mi>q</mi><mi>r</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><msup><mi>a</mi><mn>2</mn></msup><mo>&#x0002B;</mo><mi>e</mi><mi>p</mi><mi>s</mi><mi>i</mi><mi>l</mi><mi>o</mi><mi>n</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -195,7 +216,7 @@
 
 <h2>3. Gradient Vanishing</h2>
 <p>역전파에서 gradient가 매우 작아져 초기 레이어가 거의 업데이트되지 않는 문제입니다.</p>
-<p><code>dL/dx = (dL/da)(da/dz)(dz/dx)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mi>L</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>L</mi><mo>&#x0002F;</mo><mi>d</mi><mi>a</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>a</mi><mo>&#x0002F;</mo><mi>d</mi><mi>z</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>z</mi><mo>&#x0002F;</mo><mi>d</mi><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>대응 방법</h3>
 <ul>
@@ -281,5 +302,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

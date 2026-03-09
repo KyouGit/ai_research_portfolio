@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -179,7 +200,7 @@ Layer3 -> GPU2</code></pre>
 <li>f1, f2 : 레이어 함수</li>
 </ul>
 <p>수식:</p>
-<p><code>y = f3(f2(f1(x)))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>f</mi><mn>3</mn><mo stretchy="false">&#x00028;</mo><mi>f</mi><mn>2</mn><mo stretchy="false">&#x00028;</mo><mi>f</mi><mn>1</mn><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>모델이 GPU 메모리를 초과할 때 학습 가능하게 만듭니다.</p>
@@ -190,17 +211,17 @@ Layer3 -> GPU2</code></pre>
 <h2>2. Tensor Parallel</h2>
 <p>Tensor Parallel은 하나의 레이어 연산을 여러 GPU로 분할하는 방법입니다.</p>
 <p>대표적인 예는 Transformer의 linear layer입니다.</p>
-<p><code>y = Wx</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>W</mi><mi>x</mi></mrow></math></div>
 <p>여기서 W를 GPU마다 나눕니다.</p>
 
 <h3>Column Parallel</h3>
 <p>가중치 행렬을 열 기준으로 분할합니다.</p>
 <pre><code>W = [W1 | W2]</code></pre>
 <p>각 GPU 계산:</p>
-<p><code>y1 = W1 x</code></p>
-<p><code>y2 = W2 x</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mn>1</mn><mo>&#x0003D;</mo><mi>W</mi><mn>1</mn><mi>x</mi></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mn>2</mn><mo>&#x0003D;</mo><mi>W</mi><mn>2</mn><mi>x</mi></mrow></math></div>
 <p>결과:</p>
-<p><code>y = concat(y1, y2)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>c</mi><mi>a</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mn>1</mn><mo>&#x0002C;</mo><mi>y</mi><mn>2</mn><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>큰 행렬곱을 여러 GPU로 나눠 계산할 수 있습니다.</p>
@@ -214,10 +235,10 @@ Layer3 -> GPU2</code></pre>
 [W1
  W2]</code></pre>
 <p>계산:</p>
-<p><code>y1 = W1 x</code></p>
-<p><code>y2 = W2 x</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mn>1</mn><mo>&#x0003D;</mo><mi>W</mi><mn>1</mn><mi>x</mi></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mn>2</mn><mo>&#x0003D;</mo><mi>W</mi><mn>2</mn><mi>x</mi></mrow></math></div>
 <p>결과:</p>
-<p><code>y = y1 + y2</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>y</mi><mn>1</mn><mo>&#x0002B;</mo><mi>y</mi><mn>2</mn></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -229,7 +250,7 @@ Layer3 -> GPU2</code></pre>
 
 <h2>4. Transformer Tensor Parallel 예</h2>
 <p>Transformer FFN:</p>
-<p><code>FFN(x) = W2 sigma(W1 x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>F</mi><mi>F</mi><mi>N</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>W</mi><mn>2</mn><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>W</mi><mn>1</mn><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>Tensor parallel 적용:</p>
 <pre><code>GPU0 : W1_0
 GPU1 : W1_1</code></pre>
@@ -248,9 +269,9 @@ GPU1 -> W1_1 x</code></pre>
 </ul>
 
 <h3>수식 예</h3>
-<p><code>y = concat(y1, y2)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>c</mi><mi>a</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mn>1</mn><mo>&#x0002C;</mo><mi>y</mi><mn>2</mn><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>또는</p>
-<p><code>y = Σ y_i</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>Σ</mi><msub><mi>y</mi><mi>i</mi></msub></mrow></math></div>
 
 <h3>왜 중요한가</h3>
 <p>통신 비용이 병목이 될 수 있습니다.</p>
@@ -345,5 +366,17 @@ GPU1 -> W1_1 x</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

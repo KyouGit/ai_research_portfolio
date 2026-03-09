@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -193,7 +214,7 @@
 <p>즉 k개의 mini-batch gradient를 합칩니다.</p>
 
 <h3>수식</h3>
-<p><code>g = Σ ∇L_i</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>g</mi><mo>&#x0003D;</mo><mi>Σ</mi><mi>∇</mi><msub><mi>L</mi><mi>i</mi></msub></mrow></math></div>
 <p>업데이트:</p>
 <p><code>w <- w - eta g</code></p>
 
@@ -205,7 +226,7 @@
 
 <h2>3. Effective Batch Size</h2>
 <p>Gradient accumulation을 사용하면 실제 batch size가 증가한 것과 같은 효과를 얻습니다.</p>
-<p><code>B_eff = B x k</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>B</mi><mi>e</mi></msub><mi>f</mi><mi>f</mi><mo>&#x0003D;</mo><mi>B</mi><mi>x</mi><mi>k</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -249,7 +270,7 @@
 
 <h2>5. Gradient 평균</h2>
 <p>실제 구현에서는 gradient 평균을 사용하는 경우가 많습니다.</p>
-<p><code>g = (1/k) Σ ∇L_i</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>g</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002F;</mo><mi>k</mi><mo stretchy="false">&#x00029;</mo><mi>Σ</mi><mi>∇</mi><msub><mi>L</mi><mi>i</mi></msub></mrow></math></div>
 <p>이 경우 learning rate 조정이 필요 없습니다.</p>
 
 <h3>주의점</h3>
@@ -353,5 +374,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

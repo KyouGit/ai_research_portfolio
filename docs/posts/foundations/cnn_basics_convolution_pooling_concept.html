@@ -1,6 +1,219 @@
-<h2>주제: CNN Basics (Convolution / Pooling)</h2>
-<p><strong>분류:</strong> foundations</p><p><strong>타입:</strong> concept</p><p><strong>난이도:</strong> 중급</p>
-<p>CNN은 지역 패턴을 공유 가중치로 추출하는 모델입니다.</p>
-<p><code>y_{i,j}=\sum_{u,v} W_{u,v} x_{i+u,j+v}</code></p>
-<h3>핵심</h3><ul><li>Local receptive field</li><li>Weight sharing</li><li>Pooling으로 다운샘플링</li></ul>
-<h3>체크리스트</h3><ul><li>stride/padding이 출력 shape에 미치는 영향을 설명할 수 있는가?</li><li>Conv와 ViT의 inductive bias 차이를 설명할 수 있는가?</li></ul>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #5f6b85;
+      --line: #d8e0ef;
+      --accent: #1f4f99;
+      --code-bg: #eef3ff;
+      --code-line: #d6e1ff;
+      --pre-bg: #0f172a;
+      --pre-text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%);
+      font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(31, 42, 68, 0.06);
+    }
+    h1, h2, h3, h4 { line-height: 1.3; margin: 1.25em 0 0.55em; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-top: 0; }
+    h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #183964; }
+    p { margin: 0.6em 0; }
+    ul, ol { margin: 0.65em 0 0.9em 1.2em; padding: 0; }
+    li { margin: 0.2em 0; }
+    strong { color: #11284a; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-line);
+      border-radius: 7px;
+      padding: 0.12em 0.38em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.93em;
+      color: #17396f;
+      word-break: break-word;
+    }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+      text-align: center;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
+    pre {
+      margin: 0.8em 0 1.05em;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      border-radius: 12px;
+      border: 1px solid #1e2d48;
+      padding: 14px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0.85em 0 1.05em;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    th, td {
+      border-bottom: 1px solid #e7edf9;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #f1f5ff;
+      color: #15335d;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 640px) {
+      .post { padding: 18px 14px; border-radius: 12px; }
+      .topbar a { font-size: 0.84rem; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a>
+      <a href="/ai_research_portfolio/roadmap.html">Roadmap</a>
+      <a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
+<h2>CNN Basics 이해: Convolution과 Pooling은 무엇을 하는가</h2>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>태그:</strong> foundations,cnn,convolution,pooling</p>
+<div class="tip">CNN은 "이미지 전체를 한 번에 보지 않고, 작은 창을 움직이며 지역 패턴을 찾는 모델"이라고 이해하면 된다.</div>
+<p>이미지는 인접한 픽셀끼리 강하게 관련되어 있다. CNN은 이 구조를 이용해, 같은 필터를 여러 위치에 공유해서 적용함으로써 edge, texture, shape 같은 특징을 효율적으로 추출한다.</p>
+<h3>1. Convolution 핵심 식</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi></mrow></msub><mo>&#x0003D;</mo><msub><mo>&#x02211;</mo><mrow><mi>u</mi><mo>&#x0002C;</mo><mi>v</mi></mrow></msub><msub><mi>W</mi><mrow><mi>u</mi><mo>&#x0002C;</mo><mi>v</mi></mrow></msub><msub><mi>x</mi><mrow><mi>i</mi><mo>&#x0002B;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>j</mi><mo>&#x0002B;</mo><mi>v</mi></mrow></msub></mrow></math></div>
+<p>입력 이미지 위를 작은 필터 \(W\)가 슬라이딩하면서 위치마다 내적을 계산한다고 보면 된다. 이 연산 결과가 feature map이다.</p>
+<h3>2. 왜 convolution이 좋은가</h3>
+<ul><li>Local receptive field: 가까운 픽셀 관계를 먼저 본다.</li><li>Weight sharing: 같은 필터를 전체 위치에 재사용하므로 파라미터 수가 줄어든다.</li><li>Translation tolerance: 위치가 조금 달라도 비슷한 패턴을 감지할 수 있다.</li></ul>
+<h3>3. Pooling은 무엇인가</h3>
+<p>Pooling은 feature map을 요약해서 공간 크기를 줄이는 연산이다. 가장 흔한 max pooling은 작은 영역의 최대값만 남긴다.</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>y</mi><mrow><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi></mrow></msub><mo>&#x0003D;</mo><msub><mo>max</mo><mrow><mo stretchy="false">&#x00028;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>v</mi><mo stretchy="false">&#x00029;</mo><mo>&#x02208;</mo><msub><mi>&#x0211B;</mi><mrow><mi>i</mi><mo>&#x0002C;</mo><mi>j</mi></mrow></msub></mrow></msub><msub><mi>x</mi><mrow><mi>u</mi><mo>&#x0002C;</mo><mi>v</mi></mrow></msub></mrow></math></div>
+<p>이렇게 하면 계산량이 줄고, 작은 위치 변화에 덜 민감해진다.</p>
+<h3>4. stride와 padding</h3>
+<ul><li><code>stride</code>: 필터를 몇 칸씩 움직일지 결정한다.</li><li><code>padding</code>: 입력 가장자리에 값을 덧붙여 출력 크기를 조절한다.</li></ul>
+<p>이 둘을 이해해야 출력 feature map shape를 정확히 추적할 수 있다.</p>
+<h3>5. CNN과 ViT의 차이</h3>
+<p>CNN은 지역성(locality)과 가중치 공유라는 강한 inductive bias를 갖는다. 반면 ViT는 더 일반적인 attention 구조를 쓰지만, 데이터가 적을 때는 CNN의 귀납 bias가 장점이 될 수 있다.</p>
+<h3>6. 코드와 연결</h3>
+<pre><code class="language-python">import torch.nn as nn
+
+model = nn.Sequential(
+    nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1),
+    nn.ReLU(),
+    nn.MaxPool2d(kernel_size=2)
+)</code></pre>
+<p><code>Conv2d</code>가 패턴을 뽑고, <code>MaxPool2d</code>가 공간 크기를 줄인다.</p>
+<h3>7. 체크리스트</h3>
+<ul><li>왜 weight sharing이 파라미터 효율을 높이는가?</li><li>stride와 padding이 출력 shape에 어떤 영향을 주는가?</li><li>CNN과 ViT의 inductive bias 차이를 설명할 수 있는가?</li></ul>
+    </article>
+  </main>
+  <script>
+    (function () {
+      var h2 = document.querySelector('h2');
+      if (h2 && h2.textContent.trim()) {
+        var t = h2.textContent.replace(/^\s*주제\s*:\s*/i, '').trim();
+        document.title = t + ' | AI Research Portfolio';
+      }
+      document.querySelectorAll('table').forEach(function (table) {
+        if (!table.parentElement.classList.contains('table-wrap')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+      });
+    })();
+  </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

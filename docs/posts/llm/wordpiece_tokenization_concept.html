@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -168,7 +189,7 @@
 
 <h2>1. 기본 아이디어</h2>
 <p>WordPiece는 다음 목표를 가집니다.</p>
-<p><code>maximize P(text)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>즉 선택한 토큰 집합이 전체 텍스트 확률을 가장 높게 만들도록 합니다.</p>
 
 <h3>기호 의미</h3>
@@ -185,7 +206,7 @@
 <h2>2. WordPiece Merge 기준</h2>
 <p>BPE는 단순히 가장 자주 등장하는 pair를 merge합니다.</p>
 <p>하지만 WordPiece는 다음 점수를 사용합니다.</p>
-<p><code>score = count(pair) / (count(token1) x count(token2))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mo>&#x0003D;</mo><mi>c</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>a</mi><mi>i</mi><mi>r</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mo stretchy="false">&#x00028;</mo><mi>c</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><mi>n</mi><mn>1</mn><mo stretchy="false">&#x00029;</mo><mi>x</mi><mi>c</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><mi>n</mi><mn>2</mn><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -211,9 +232,9 @@
 5. 반복</code></pre>
 
 <h3>수식 표현</h3>
-<p><code>pair* = argmax score(pair)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mi>a</mi><mi>i</mi><mi>r</mi><mo>&#x0002A;</mo><mo>&#x0003D;</mo><mi>a</mi><mi>r</mi><mi>g</mi><mi>m</mi><mi>a</mi><mi>x</mi><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>a</mi><mi>i</mi><mi>r</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>merge:</p>
-<p><code>token_new = concat(token_i, token_j)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><msub><mi>n</mi><mi>n</mi></msub><mi>e</mi><mi>w</mi><mo>&#x0003D;</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>c</mi><mi>a</mi><mi>t</mi><mo stretchy="false">&#x00028;</mo><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><msub><mi>n</mi><mi>i</mi></msub><mo>&#x0002C;</mo><mi>t</mi><mi>o</mi><mi>k</mi><mi>e</mi><msub><mi>n</mi><mi>j</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>주의점</h3>
 <p>vocabulary 크기 제한에 도달하면 merge 종료</p>
@@ -236,7 +257,7 @@
 <p>토큰 분해:</p>
 <pre><code>un ##bel ##iev ##able</code></pre>
 <p>이 토큰들은 ID로 변환됩니다.</p>
-<p><code>x = [t1, t2, ..., t_n]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy="false">[</mo><mi>t</mi><mn>1</mn><mo>&#x0002C;</mo><mi>t</mi><mn>2</mn><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -338,5 +359,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

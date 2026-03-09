@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -173,7 +194,7 @@ GPU1 -> batch1
 GPU2 -> batch2
 GPU3 -> batch3</code></pre>
 <p>각 GPU는 동일한 모델을 가지고 있습니다.</p>
-<p><code>model0 = model1 = model2 = model3</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mn>0</mn><mo>&#x0003D;</mo><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mn>1</mn><mo>&#x0003D;</mo><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mn>2</mn><mo>&#x0003D;</mo><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi><mn>3</mn></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -202,13 +223,13 @@ GPU2 : L2 = loss(model(x2))</code></pre>
 
 <h2>3. Backward Pass</h2>
 <p>각 GPU는 gradient를 계산합니다.</p>
-<p><code>g_i = ∇L_i</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mi>∇</mi><msub><mi>L</mi><mi>i</mi></msub></mrow></math></div>
 <p>하지만 각 GPU의 gradient는 서로 다릅니다.</p>
 <p>그래서 gradient를 평균내야 합니다.</p>
 
 <h2>4. Gradient All-Reduce</h2>
 <p>DDP의 핵심 연산은 <strong>All-Reduce</strong>입니다.</p>
-<p><code>g = (1/N) Σ g_i</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>g</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002F;</mo><mi>N</mi><mo stretchy="false">&#x00029;</mo><mi>Σ</mi><msub><mi>g</mi><mi>i</mi></msub></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -254,7 +275,7 @@ GPU3 = g</code></pre>
 
 <h2>7. 수식 요약</h2>
 <p>전체 batch gradient:</p>
-<p><code>g = (1/N) Σ ∇L_i</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>g</mi><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002F;</mo><mi>N</mi><mo stretchy="false">&#x00029;</mo><mi>Σ</mi><mi>∇</mi><msub><mi>L</mi><mi>i</mi></msub></mrow></math></div>
 <p>파라미터 업데이트:</p>
 <p><code>w <- w - eta * g</code></p>
 
@@ -325,5 +346,17 @@ GPU3 = g</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

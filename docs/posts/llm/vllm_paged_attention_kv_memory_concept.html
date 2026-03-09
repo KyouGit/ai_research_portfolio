@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -152,7 +173,7 @@
 <h3>문제 설정</h3>
 <p>LLM inference에서 가장 큰 메모리 사용 요소 중 하나는 <strong>KV Cache</strong>입니다.</p>
 <p>KV cache 메모리:</p>
-<p><code>Memory ∝ layers × heads × sequence × d_head</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>M</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>∝</mi><mi>l</mi><mi>a</mi><mi>y</mi><mi>e</mi><mi>r</mi><mi>s</mi><mi>×</mi><mi>h</mi><mi>e</mi><mi>a</mi><mi>d</mi><mi>s</mi><mi>×</mi><mi>s</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>×</mi><msub><mi>d</mi><mi>h</mi></msub><mi>e</mi><mi>a</mi><mi>d</mi></mrow></math></div>
 <p>즉 sequence length가 증가할수록 KV cache가 크게 증가합니다.</p>
 <p>문제는 실제 LLM 서비스에서는 요청마다 <strong>서로 다른 길이의 context</strong>가 존재한다는 점입니다.</p>
 
@@ -175,7 +196,7 @@ Request B: [KV KV KV ....]</code></pre>
 </ul>
 
 <h3>수식</h3>
-<p><code>Memory_waste ∝ max_sequence - actual_sequence</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>M</mi><mi>e</mi><mi>m</mi><mi>o</mi><mi>r</mi><msub><mi>y</mi><mi>w</mi></msub><mi>a</mi><mi>s</mi><mi>t</mi><mi>e</mi><mi>∝</mi><mi>m</mi><mi>a</mi><msub><mi>x</mi><mi>s</mi></msub><mi>e</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo>&#x02212;</mo><mi>a</mi><mi>c</mi><mi>t</mi><mi>u</mi><mi>a</mi><msub><mi>l</mi><mi>s</mi></msub><mi>e</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi></mrow></math></div>
 
 <h3>왜 문제인가</h3>
 <p>많은 요청을 동시에 처리하기 어렵습니다.</p>
@@ -195,9 +216,9 @@ Request B → Page2 Page3</code></pre>
 
 <h2>3. KV Cache Paging 구조</h2>
 <p>KV cache는 다음 구조를 가집니다.</p>
-<p><code>KV_cache = {page_1, page_2, ..., page_n}</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>K</mi><msub><mi>V</mi><mi>c</mi></msub><mi>a</mi><mi>c</mi><mi>h</mi><mi>e</mi><mo>&#x0003D;</mo><mrow><mi>p</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>p</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mn>2</mn></msub><mo>&#x0002C;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002E;</mo><mo>&#x0002C;</mo><mi>p</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mi>n</mi></msub></mrow></mrow></math></div>
 <p>각 request는 page table을 가집니다.</p>
-<p><code>Sequence → [page indices]</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>→</mi><mo stretchy="false">[</mo><mi>p</mi><mi>a</mi><mi>g</mi><mi>e</mi><mi>i</mi><mi>n</mi><mi>d</mi><mi>i</mi><mi>c</mi><mi>e</mi><mi>s</mi><mo stretchy="false">]</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -339,5 +360,17 @@ GPU Inference</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -167,7 +188,7 @@ you love I</code></pre>
 
 <h2>1. Transformer 입력</h2>
 <p>Transformer 입력은 다음 두 정보를 결합합니다.</p>
-<p><code>X = E + P</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>X</mi><mo>&#x0003D;</mo><mi>E</mi><mo>&#x0002B;</mo><mi>P</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -184,8 +205,8 @@ you love I</code></pre>
 
 <h2>2. Sinusoidal Positional Encoding</h2>
 <p>Transformer 논문에서는 사인/코사인 함수를 사용했습니다.</p>
-<p><code>PE(pos,2i) = sin(pos / 10000^(2i/d))</code></p>
-<p><code>PE(pos,2i+1) = cos(pos / 10000^(2i/d))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mi>E</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>&#x0002C;</mo><mn>2</mn><mi>i</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>s</mi><mi>i</mi><mi>n</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>&#x0002F;</mo><msup><mn>10000</mn><mo stretchy="false">&#x00028;</mo></msup><mn>2</mn><mi>i</mi><mo>&#x0002F;</mo><mi>d</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mi>E</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>&#x0002C;</mo><mn>2</mn><mi>i</mi><mo>&#x0002B;</mo><mn>1</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>c</mi><mi>o</mi><mi>s</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>&#x0002F;</mo><msup><mn>10000</mn><mo stretchy="false">&#x00028;</mo></msup><mn>2</mn><mi>i</mi><mo>&#x0002F;</mo><mi>d</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -212,7 +233,7 @@ token3 -> pos 3</code></pre>
 <h2>4. Relative Position 정보</h2>
 <p>sin/cos encoding의 중요한 특징:</p>
 <p>두 위치 간 관계를 계산할 수 있습니다.</p>
-<p><code>PE(pos+k)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mi>E</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>&#x0002B;</mo><mi>k</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>-> 상대 위치 정보 표현 가능</p>
 
 <h3>왜 중요한가</h3>
@@ -221,7 +242,7 @@ token3 -> pos 3</code></pre>
 <h2>5. Transformer 병렬화</h2>
 <p>Transformer의 큰 장점은 <strong>완전 병렬 계산</strong>입니다.</p>
 <p>Self-attention 연산:</p>
-<p><code>Attention(Q,K,V) = softmax(QKᵀ/√d_k)V</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mi>t</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo stretchy="false">&#x00028;</mo><mi>Q</mi><mo>&#x0002C;</mo><mi>K</mi><mo>&#x0002C;</mo><mi>V</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>s</mi><mi>o</mi><mi>f</mi><mi>t</mi><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mi>Q</mi><mi>K</mi><mi>ᵀ</mi><mo>&#x0002F;</mo><mi>√</mi><msub><mi>d</mi><mi>k</mi></msub><mo stretchy="false">&#x00029;</mo><mi>V</mi></mrow></math></div>
 <p>이 연산은 모든 토큰에 대해 동시에 계산됩니다.</p>
 
 <h3>기호 의미</h3>
@@ -344,5 +365,17 @@ Self-Attention</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

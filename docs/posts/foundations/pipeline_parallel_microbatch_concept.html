@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -175,7 +196,7 @@ GPU3 : Layer4</code></pre>
 <pre><code>x -> GPU0 -> GPU1 -> GPU2 -> GPU3</code></pre>
 
 <h3>수식 표현</h3>
-<p><code>y = f4(f3(f2(f1(x))))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>f</mi><mn>4</mn><mo stretchy="false">&#x00028;</mo><mi>f</mi><mn>3</mn><mo stretchy="false">&#x00028;</mo><mi>f</mi><mn>2</mn><mo stretchy="false">&#x00028;</mo><mi>f</mi><mn>1</mn><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>모델이 너무 커서 하나의 GPU에 올릴 수 없을 때 학습이 가능합니다.</p>
@@ -185,7 +206,7 @@ GPU3 : Layer4</code></pre>
 
 <h2>2. Micro-batch</h2>
 <p>전체 batch를 여러 작은 batch로 나눕니다.</p>
-<p><code>B = M x b</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>B</mi><mo>&#x0003D;</mo><mi>M</mi><mi>x</mi><mi>b</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -222,7 +243,7 @@ GPU1~GPU3 idle</code></pre>
 <p>생산 라인이 완전히 채워지기 전까지 일부 작업자가 기다리는 상황과 같습니다.</p>
 
 <h3>수식 근사</h3>
-<p><code>Bubble ≈ (pipeline_stages - 1) / micro_batches</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>B</mi><mi>u</mi><mi>b</mi><mi>b</mi><mi>l</mi><mi>e</mi><mi>≈</mi><mo stretchy="false">&#x00028;</mo><mi>p</mi><mi>i</mi><mi>p</mi><mi>e</mi><mi>l</mi><mi>i</mi><mi>n</mi><msub><mi>e</mi><mi>s</mi></msub><mi>t</mi><mi>a</mi><mi>g</mi><mi>e</mi><mi>s</mi><mo>&#x02212;</mo><mn>1</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>m</mi><mi>i</mi><mi>c</mi><mi>r</mi><msub><mi>o</mi><mi>b</mi></msub><mi>a</mi><mi>t</mi><mi>c</mi><mi>h</mi><mi>e</mi><mi>s</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -235,7 +256,7 @@ GPU1~GPU3 idle</code></pre>
 
 <h2>5. 효율 개선</h2>
 <p>pipeline 효율:</p>
-<p><code>Efficiency ≈ M / (M + P - 1)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>E</mi><mi>f</mi><mi>f</mi><mi>i</mi><mi>c</mi><mi>i</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>y</mi><mi>≈</mi><mi>M</mi><mo>&#x0002F;</mo><mo stretchy="false">&#x00028;</mo><mi>M</mi><mo>&#x0002B;</mo><mi>P</mi><mo>&#x02212;</mo><mn>1</mn><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -339,5 +360,17 @@ GPU1~GPU3 idle</code></pre>
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

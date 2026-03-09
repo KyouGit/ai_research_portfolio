@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -151,7 +172,7 @@
 
 <h3>문제 설정</h3>
 <p>신경망의 가장 기본 단위는 퍼셉트론입니다. 퍼셉트론은 입력 벡터를 받아 선형 변환을 수행한 뒤 비선형 함수를 통과시켜 출력 값을 만듭니다.</p>
-<p><code>a = sigma(Wx + b)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>a</mi><mo>&#x0003D;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>W</mi><mi>x</mi><mo>&#x0002B;</mo><mi>b</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>직관 비유</h3>
 <ul>
@@ -178,7 +199,7 @@
 
 <h2>2. 선형 연산</h2>
 <p>퍼셉트론의 첫 단계는 선형 연산입니다.</p>
-<p><code>z = Wx + b</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>z</mi><mo>&#x0003D;</mo><mi>W</mi><mi>x</mi><mo>&#x0002B;</mo><mi>b</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 <ul>
@@ -207,7 +228,7 @@
 
 <h2>3. 활성함수</h2>
 <p>선형 계산 결과 z를 비선형 함수에 통과시킵니다.</p>
-<p><code>a = sigma(z)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>a</mi><mo>&#x0003D;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>z</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h3>왜 필요한가</h3>
 <p>비선형성이 없으면 깊은 신경망도 하나의 선형식으로 합쳐집니다.</p>
@@ -219,21 +240,21 @@
 
 <h2>4. 대표 활성함수</h2>
 <h3>Sigmoid</h3>
-<p><code>sigma(x) = 1 / (1 + e^(-x))</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002F;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002B;</mo><msup><mi>e</mi><mo stretchy="false">&#x00028;</mo></msup><mo>&#x02212;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <ul>
   <li>출력 범위: 0~1</li>
   <li>확률 해석이 필요한 출력에 자주 사용</li>
 </ul>
 
 <h3>ReLU</h3>
-<p><code>ReLU(x) = max(0, x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mi>e</mi><mi>L</mi><mi>U</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">&#x00028;</mo><mn>0</mn><mo>&#x0002C;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <ul>
   <li>계산이 단순하고 빠름</li>
   <li>딥러닝에서 매우 널리 사용</li>
 </ul>
 
 <h3>GELU</h3>
-<p><code>GELU(x) = x * Phi(x)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>G</mi><mi>E</mi><mi>L</mi><mi>U</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>x</mi><mo>&#x0002A;</mo><mi>P</mi><mi>h</mi><mi>i</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <ul>
   <li>부드러운 활성화 함수</li>
   <li>Transformer 계열에서 자주 사용</li>
@@ -303,5 +324,17 @@
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

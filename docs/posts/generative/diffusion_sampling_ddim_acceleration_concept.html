@@ -81,6 +81,27 @@
       letter-spacing: 0.1px;
       background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
     }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block mjx-container {
+      margin: 0 !important;
+      text-align: center !important;
+      font-size: 112% !important;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
     pre {
       margin: 0.8em 0 1.05em;
       background: var(--pre-bg);
@@ -166,7 +187,7 @@ x_T → x_T-1 → x_T-2 → ... → x_0
 
 <p>DDPM의 reverse step:</p>
 
-<p><code>x_{t-1} = (1/√α_t)(x_t - (1-α_t)/√(1-ᾱ_t) ε_θ(x_t,t)) + σ_t z</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002F;</mo><mi>√</mi><msub><mi>α</mi><mi>t</mi></msub><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo>&#x02212;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><msub><mi>α</mi><mi>t</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>√</mi><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>α</mi><msub><mi>̄</mi><mi>t</mi></msub><mo stretchy="false">&#x00029;</mo><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo>&#x0002C;</mo><mi>t</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo>&#x0002B;</mo><msub><mi>σ</mi><mi>t</mi></msub><mi>z</mi></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -193,7 +214,7 @@ x_T → x_T-1 → x_T-2 → ... → x_0
 
 <p>sampling complexity:</p>
 
-<p><code>O(T)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>O</mi><mo stretchy="false">&#x00028;</mo><mi>T</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <h2>3. DDIM 핵심 아이디어</h2>
 
@@ -210,11 +231,11 @@ x_T → x_T-1 → x_T-2 → ... → x_0
 
 <p>DDIM update:</p>
 
-<p><code>x_{t-1} = √ᾱ_{t-1} x_0 + √(1-ᾱ_{t-1}) ε_θ(x_t,t)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><mi>√</mi><mi>α</mi><msub><mi>̄</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002B;</mo><mi>√</mi><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>α</mi><msub><mi>̄</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy="false">&#x00029;</mo><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo>&#x0002C;</mo><mi>t</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>여기서</p>
 
-<p><code>x_0 = (x_t - √(1-ᾱ_t) ε_θ(x_t,t)) / √ᾱ_t</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo>&#x02212;</mo><mi>√</mi><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>α</mi><msub><mi>̄</mi><mi>t</mi></msub><mo stretchy="false">&#x00029;</mo><msub><mi>ε</mi><mi>θ</mi></msub><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo>&#x0002C;</mo><mi>t</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>√</mi><mi>α</mi><msub><mi>̄</mi><mi>t</mi></msub></mrow></math></div>
 
 <h3>기호 의미</h3>
 
@@ -323,7 +344,7 @@ repeat
 
 <p>즉:</p>
 
-<p><code>q(x_t | x_0)</code></p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>q</mi><mo stretchy="false">&#x00028;</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy="false">&#x0007C;</mo><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
 <p>분포는 동일하지만 sampling path가 달라집니다.</p>
 
@@ -396,5 +417,17 @@ repeat
       });
     })();
   </script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\(', '\)']],
+        displayMath: [['\[', '\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>
