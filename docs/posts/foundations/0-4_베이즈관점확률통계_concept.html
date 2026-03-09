@@ -503,12 +503,23 @@
   </script>
   <script>
     window.MathJax = {
+      loader: {
+        load: ['input/tex', 'input/mml', 'output/chtml']
+      },
       tex: {
         inlineMath: [['\(', '\)']],
         displayMath: [['\[', '\]']]
       },
+      chtml: {
+        scale: 1.03,
+        mtextInheritFont: true,
+        matchFontHeight: false
+      },
       options: {
         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      startup: {
+        typeset: true
       }
     };
   </script>

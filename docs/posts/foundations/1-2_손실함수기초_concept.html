@@ -94,6 +94,24 @@
       text-align: center !important;
       font-size: 112% !important;
     }
+    .math-block mjx-container[display="true"] {
+      display: block;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0;
+    }
+    .math-block math {
+      display: block;
+      text-align: center;
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+    .math-block mfrac {
+      font-size: 1.05em;
+    }
+    mjx-container[jax="CHTML"] {
+      line-height: 0;
+    }
     .tip {
       margin: 0.9em 0 1.1em;
       padding: 12px 14px;
@@ -335,12 +353,23 @@
   </script>
   <script>
     window.MathJax = {
+      loader: {
+        load: ['input/tex', 'input/mml', 'output/chtml']
+      },
       tex: {
         inlineMath: [['\(', '\)']],
         displayMath: [['\[', '\]']]
       },
+      chtml: {
+        scale: 1.03,
+        mtextInheritFont: true,
+        matchFontHeight: false
+      },
       options: {
         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      startup: {
+        typeset: true
       }
     };
   </script>
