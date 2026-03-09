@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -192,6 +227,25 @@
 
 <h3>당시 상황과 역사적 맥락</h3>
 <p>2017년 당시 번역/요약 모델의 주류는 RNN/LSTM 기반 seq2seq였습니다. 문제는 두 가지였습니다. 첫째, 순차 처리라 학습이 느렸습니다. 둘째, 긴 문장에서 앞 정보가 뒤로 잘 전달되지 않았습니다. Transformer는 이 병목을 "Attention 중심 구조"로 바꿔 해결했습니다.</p>
+
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Transformer%2C%20full%20architecture.png" alt="Transformer 전체 인코더-디코더 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Transformer 전체 구조. 인코더와 디코더가 어떻게 쌓이고, attention과 feed-forward가 어디에 들어가는지 한 번에 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Transformer,_full_architecture.png">원본 / 라이선스</a> · dvgodoy · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Transformer%2C%20one%20encoder%20block.png" alt="Transformer 인코더 블록 상세 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Encoder 블록 상세도. self-attention, add &amp; norm, feed-forward가 한 블록 안에서 어떻게 이어지는지 이해하기 좋다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Transformer,_one_encoder_block.png">원본 / 라이선스</a> · dvgodoy · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Transformer%2C%20one%20decoder%20block.png" alt="Transformer 디코더 블록 상세 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Decoder 블록 상세도. masked self-attention과 encoder-decoder attention이 왜 둘 다 필요한지 시각적으로 정리해준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Transformer,_one_decoder_block.png">원본 / 라이선스</a> · dvgodoy · CC BY 4.0</div>
+  </figure>
+</div>
 
 <h3>Transformer 이전: RNN은 어떻게 읽었나?</h3>
 <p>대표 구조는 RNN(Recurrent Neural Network)입니다. RNN은 문장을 순서대로 처리합니다.</p>

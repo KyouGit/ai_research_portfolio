@@ -99,6 +99,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -177,6 +212,20 @@
 <p class="meta"><strong>태그:</strong> generative,vae,latent_variable_model,elbo,reparameterization</p>
 <div class="tip">VAE를 제대로 이해하려면 먼저 "데이터 뒤에 직접 보이지 않는 잠재 원인이 있다"는 Latent Variable Model 관점부터 잡아야 한다.</div>
 <p>일반 autoencoder는 입력을 압축했다가 복원하는 구조지만, 그 latent vector가 샘플링 가능한 확률공간이라는 보장은 없다. VAE는 latent를 확률변수로 두고, "보이지 않는 원인 변수 \(z\)가 데이터를 생성한다"는 생성 모델 관점으로 문제를 다시 세운다.</p>
+
+<h3>그림으로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/VAE%20Basic.jpg" alt="VAE 기본 구조도" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>VAE의 큰 흐름. 입력에서 잠재분포 파라미터를 추정하고, 샘플링된 잠재변수로 다시 복원하는 구조를 한 장으로 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:VAE_Basic.jpg">원본 / 라이선스</a> · EugenioTL · CC BY-SA 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Reparameterized%20Variational%20Autoencoder.png" alt="Reparameterization trick이 포함된 VAE 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>Reparameterization trick이 어디에서 등장하는지 보여주는 그림. \(\mu, \sigma\)와 \(\epsilon\)이 어떻게 결합되어 \(z\)를 만드는지 시각적으로 확인할 수 있다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Reparameterized_Variational_Autoencoder.png">원본 / 라이선스</a> · EugenioTL · CC BY-SA 4.0</div>
+  </figure>
+</div>
 
 <h3>1. Latent Variable Model이란 무엇인가</h3>
 <p>Latent Variable Model은 데이터 \(x\)를 직접 설명하는 대신, 그 뒤에 숨어 있는 잠재변수 \(z\)가 있다고 가정하는 모델이다.</p>

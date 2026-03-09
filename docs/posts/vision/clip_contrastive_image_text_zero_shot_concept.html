@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -209,6 +244,20 @@ Image → CNN → Classifier → Label
 <p>목표:</p>
 
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>i</mi><mi>m</mi><mi>a</mi><mi>g</mi><mi>e</mi><mo>&#x0002C;</mo><mi>t</mi><mi>e</mi><mi>x</mi><mi>t</mi><mo stretchy="false">&#x00029;</mo><mi>↑</mi><mi>i</mi><mi>f</mi><mi>m</mi><mi>a</mi><mi>t</mi><mi>c</mi><mi>h</mi><mi>e</mi><mi>d</mi></mrow></math></div>
+
+<h3>그림으로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Contrastive%20Language-Image%20Pretraining.png" alt="CLIP의 이미지-텍스트 대조학습 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>CLIP의 핵심 구조. 이미지 인코더와 텍스트 인코더가 각각 임베딩을 만들고, 같은 의미의 쌍은 가깝게 학습한다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Contrastive_Language-Image_Pretraining.png">원본 / 라이선스</a> · OpenAI · MIT License</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Positive%20and%20negative%20pairs%20for%20contrastive%20learning.png" alt="대조학습의 positive pair와 negative pair 예시" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>대조학습에서 positive pair는 가깝게, negative pair는 멀어지게 학습된다는 점을 직관적으로 보여주는 자료다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Positive_and_negative_pairs_for_contrastive_learning.png">원본 / 라이선스</a> · A potato hater · CC BY-SA 4.0</div>
+  </figure>
+</div>
 
 <h2>1. CLIP 핵심 아이디어</h2>
 

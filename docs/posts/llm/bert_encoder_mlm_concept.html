@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -202,6 +237,25 @@
 <li>BERT -> 문장 전체를 동시에 읽음</li>
 </ul>
 <p>즉 문장의 앞뒤 정보를 모두 활용합니다.</p>
+
+<h3>그림으로 먼저 잡기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/BERT%20embeddings%2001.png" alt="BERT 입력 임베딩 구성" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>토큰 임베딩, 세그먼트 임베딩, 위치 임베딩이 합쳐져 BERT 입력이 되는 과정을 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:BERT_embeddings_01.png">원본 / 라이선스</a> · Daniel Voigt Godoy · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/BERT%20masked%20language%20modelling%20task.png" alt="BERT masked language modeling 사전학습 과제" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>[MASK] 토큰을 가리고 원래 단어를 맞추는 MLM 과제가 BERT의 양방향 문맥 학습을 어떻게 유도하는지 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:BERT_masked_language_modelling_task.png">원본 / 라이선스</a> · Daniel Voigt Godoy · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/BERT%20encoder-only%20attention.svg" alt="BERT encoder-only attention 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>BERT가 디코더 없이 encoder-only 구조로 문장 전체를 동시에 바라본다는 점을 직관적으로 보여주는 그림이다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:BERT_encoder-only_attention.svg">원본 / 라이선스</a> · d2l-ai 저자진 · CC BY-SA 4.0</div>
+  </figure>
+</div>
 
 <h2>1. BERT 구조</h2>
 <p>BERT는 Transformer <strong>Encoder stack</strong>으로 구성됩니다.</p>

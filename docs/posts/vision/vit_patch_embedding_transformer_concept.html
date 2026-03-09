@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -200,6 +235,20 @@ Image → Conv → Conv → Conv → Classifier
 <p><strong>"이미지를 Transformer로 처리할 수 있을까?"</strong></p>
 
 <p>이 질문에 대한 답이 <strong>Vision Transformer (ViT)</strong>입니다.</p>
+
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vision%20Transformer.png" alt="Vision Transformer 전체 처리 흐름" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>이미지를 patch로 쪼개고, 각 patch를 token처럼 임베딩한 뒤 Transformer encoder에 넣는 ViT의 전체 흐름이다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Vision_Transformer.png">원본 / 라이선스</a> · Daniel Voigt Godoy · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vision%20Transformer.svg" alt="Vision Transformer 구조 요약 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>CLS 토큰, positional encoding, encoder stack이 어떻게 연결되는지 더 압축된 형태로 보여주는 ViT 개념도다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Vision_Transformer.svg">원본 / 라이선스</a> · d2l-ai 저자진 · CC BY-SA 4.0</div>
+  </figure>
+</div>
 
 <h2>1. 핵심 아이디어</h2>
 

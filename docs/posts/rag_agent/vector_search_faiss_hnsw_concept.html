@@ -99,6 +99,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -177,6 +212,25 @@
 <p class="meta"><strong>태그:</strong> rag,vector_search,faiss,hnsw</p>
 <div class="tip">RAG에서 중요한 것은 "좋은 답변" 이전에 "맞는 문서를 빨리 찾는 것"이다. vector search는 그 검색 엔진 역할을 한다.</div>
 <p>임베딩 모델이 질문과 문서를 벡터로 바꿔도, 그다음에 빠르게 가장 가까운 벡터를 찾아야 실제 시스템이 된다. 이때 exact search만 쓰면 느릴 수 있어서 ANN 기법이 필요하다.</p>
+
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hierarchical%20Navigable%20Small%20World%20%28HNSW%29.png" alt="HNSW 다층 탐색 구조" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>HNSW의 핵심은 위층의 성긴 그래프에서 대략적인 위치를 찾고, 아래층으로 내려오며 점점 정밀하게 탐색하는 다층 구조다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Hierarchical_Navigable_Small_World_(HNSW).png">원본 / 라이선스</a> · Rose electric · CC BY 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Nearest%20neighbor%20graph.svg" alt="Nearest neighbor graph 예시" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>벡터 검색을 그래프 관점으로 볼 때 가장 가까운 이웃 연결이 어떻게 생기는지 보여주는 기본 그림이다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Nearest_neighbor_graph.svg">원본 / 라이선스</a> · David Eppstein · CC0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/K-nearest%20Neighbors.png" alt="k-NN 개념도" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>질의점 주변의 최근접 이웃을 기준으로 답을 정하는 k-NN 개념도. exact search와 ANN의 출발점을 설명할 때 유용하다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:K-nearest_Neighbors.png">원본 / 라이선스</a> · Pkuwangyan06 · CC BY-SA 4.0</div>
+  </figure>
+</div>
 <h3>1. 핵심 유사도</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>d</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mi>q</mi><mi>&#x000B7;</mi><mi>d</mi></mrow><mrow><mo fence="false" stretchy="false">&#x02016;</mo><mi>q</mi><mo fence="false" stretchy="false">&#x02016;</mo><mo fence="false" stretchy="false">&#x02016;</mo><mi>d</mi><mo fence="false" stretchy="false">&#x02016;</mo></mrow></mfrac></mrow></math></div>
 <p>코사인 유사도는 두 벡터 방향이 얼마나 비슷한지 본다. 질문과 문서 임베딩이 비슷할수록 관련 문서일 가능성이 높다.</p>
