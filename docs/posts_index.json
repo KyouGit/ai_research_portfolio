@@ -781,5 +781,104 @@
     "category": "General",
     "updated_utc": "2026-03-04 12:00:00Z",
     "summary": "큰 신경망 학습을 kernel 관점에서 해석하는 NTK 핵심 정리"
+  },
+  {
+    "slug": "entropy_information_theory_concept",
+    "title": "M-1. [수학] Entropy",
+    "href": "posts/foundations/entropy_information_theory_concept.html",
+    "tags": "AI, foundations, math, entropy, information theory",
+    "category": "General",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "정보량과 엔트로피, Cross-Entropy/KL 연결을 딥러닝 관점으로 정리"
+  },
+  {
+    "slug": "expectation_variance_statistics_concept",
+    "title": "M-2. [수학] Expectation / Variance",
+    "href": "posts/foundations/expectation_variance_statistics_concept.html",
+    "tags": "AI, foundations, math, expectation, variance, statistics",
+    "category": "General",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "기댓값/분산의 정의와 학습 안정성, 추정 오차 해석까지 핵심 정리"
+  },
+  {
+    "slug": "cnn_basics_convolution_pooling_concept",
+    "title": "DL-1. [기초] CNN Basics",
+    "href": "posts/foundations/cnn_basics_convolution_pooling_concept.html",
+    "tags": "AI, foundations, CNN, convolution, pooling",
+    "category": "General",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "합성곱/풀링/채널 개념과 CNN의 표현 학습 원리를 입문-중급 관점으로 정리"
+  },
+  {
+    "slug": "batchnorm_internal_covariate_shift_concept",
+    "title": "DL-2. [기초] BatchNorm",
+    "href": "posts/foundations/batchnorm_internal_covariate_shift_concept.html",
+    "tags": "AI, foundations, batchnorm, normalization, optimization",
+    "category": "General",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "BatchNorm 동작식, 학습/추론 모드 차이와 안정화 효과를 핵심만 정리"
+  },
+  {
+    "slug": "hessian_curvature_optimization_concept",
+    "title": "OPT-1. [최적화] Hessian / Curvature",
+    "href": "posts/foundations/hessian_curvature_optimization_concept.html",
+    "tags": "AI, foundations, optimization, Hessian, curvature",
+    "category": "General",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "곡률(Hessian) 관점에서 수렴 속도, 학습률 안정성, sharp/flat minima를 정리"
+  },
+  {
+    "slug": "autoencoder_latent_representation_concept",
+    "title": "REP-1. [표현학습] Autoencoder",
+    "href": "posts/generative/autoencoder_latent_representation_concept.html",
+    "tags": "AI, generative, representation learning, autoencoder, latent",
+    "category": "Generative",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "인코더-디코더 기반 압축 표현 학습과 reconstruction objective 핵심 정리"
+  },
+  {
+    "slug": "vae_elbo_reparameterization_concept",
+    "title": "REP-2. [표현학습] VAE",
+    "href": "posts/generative/vae_elbo_reparameterization_concept.html",
+    "tags": "AI, generative, VAE, ELBO, reparameterization",
+    "category": "Generative",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "ELBO 분해, KL 정규화, reparameterization trick까지 VAE 핵심 원리 정리"
+  },
+  {
+    "slug": "transformer_ffn_structure_concept",
+    "title": "TR-1. [Transformer] FFN 구조",
+    "href": "posts/llm/transformer_ffn_structure_concept.html",
+    "tags": "AI, llm, transformer, FFN, MLP block",
+    "category": "LLM",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "Transformer 블록의 FFN 역할, 차원 확장-축소, 활성함수 선택 포인트 정리"
+  },
+  {
+    "slug": "pretraining_objectives_mlm_clm_span_concept",
+    "title": "TR-2. [Transformer] Pretraining Objective",
+    "href": "posts/llm/pretraining_objectives_mlm_clm_span_concept.html",
+    "tags": "AI, llm, pretraining, MLM, CLM, span corruption",
+    "category": "LLM",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "MLM/CLM/Span corruption 목적함수 차이와 모델별 트레이드오프 비교 정리"
+  },
+  {
+    "slug": "vector_search_faiss_hnsw_concept",
+    "title": "RAG-1. [Retrieval] Vector Search",
+    "href": "posts/rag_agent/vector_search_faiss_hnsw_concept.html",
+    "tags": "AI, rag, retrieval, vector search, FAISS, HNSW",
+    "category": "LLM",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "벡터 검색의 ANN 원리, FAISS/HNSW 인덱스 전략, 속도-정확도 tradeoff 정리"
+  },
+  {
+    "slug": "llm_evaluation_metrics_faithfulness_helpfulness_concept",
+    "title": "EVAL-1. [평가] LLM Evaluation Metrics",
+    "href": "posts/llm/llm_evaluation_metrics_faithfulness_helpfulness_concept.html",
+    "tags": "AI, llm, evaluation, faithfulness, helpfulness, groundedness",
+    "category": "LLM",
+    "updated_utc": "2026-03-08 00:00:00Z",
+    "summary": "정확성/근거성/유용성 중심의 LLM 평가 지표와 RAG 평가 프레임워크 정리"
   }
 ]
