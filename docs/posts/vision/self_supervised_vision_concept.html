@@ -10,11 +10,14 @@
 <h3>1. Contrastive learning</h3>
 <p>같은 이미지에서 만든 두 view는 가깝게, 다른 이미지는 멀게 학습한다. SimCLR 같은 계열이 여기에 속한다.</p>
 <p>이 방식은 표현 공간에서 "같은 의미는 가까이, 다른 의미는 멀리"라는 구조를 학습하게 만든다. 그래서 다운스트림 분류나 검색에 좋은 초기 표현을 주는 경우가 많다.</p>
+<p>중요한 점은 모델이 직접 클래스 이름을 배우는 것이 아니라, 어떤 변형에도 유지되어야 할 공통 구조를 배우게 된다는 것이다. 그래서 라벨 없이도 꽤 강한 representation이 만들어진다.</p>
 <h3>2. Masked image modeling</h3>
 <p>이미지 일부를 가리고 복원하게 하면서 표현을 배운다. 텍스트의 MLM과 비슷한 발상이다.</p>
 <p>ViT 계열과도 잘 연결되며, "가려진 부분을 맞히기 위해 문맥을 이해해야 한다"는 점에서 representation 학습에 강한 신호를 준다.</p>
+<p>contrastive learning이 view 간 일치성에 초점을 둔다면, masked image modeling은 장면의 문맥을 통해 빠진 정보를 복원하는 능력에 더 가깝다. 두 계열이 모두 self-supervised이지만, 모델에 요구하는 학습 방식은 꽤 다르다.</p>
 <h3>3. 왜 중요한가</h3>
 <ul><li>라벨 없이 대규모 데이터에서 표현을 학습할 수 있다.</li><li>downstream task로 전이할 수 있는 강한 feature를 얻는다.</li></ul>
+<p>그래서 self-supervised vision은 "라벨을 줄이는 기술"이면서 동시에 "더 일반적인 표현을 미리 학습하는 기술"로도 볼 수 있다. 이 관점이 있으면 왜 비전 foundation model 흐름과 자연스럽게 이어지는지 이해하기 쉽다.</p>
 <h3>4. 체크리스트</h3>
 <ul><li>self-supervised learning의 목적을 설명할 수 있는가?</li><li>contrastive learning과 masked image modeling 차이를 말할 수 있는가?</li></ul>
 </article></main></body></html>
