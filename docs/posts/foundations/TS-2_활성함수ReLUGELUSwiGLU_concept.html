@@ -191,6 +191,7 @@
 <h3>문제 설정</h3>
 <p>신경망은 선형 연산만으로는 복잡한 패턴을 학습할 수 없기 때문에 비선형 활성함수가 필요합니다.</p>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>a</mi><mo>&#x0003D;</mo><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo stretchy="false">&#x00028;</mo><mi>W</mi><mi>x</mi><mo>&#x0002B;</mo><mi>b</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
+<p>이 부분이 중요한 이유는, 층을 아무리 많이 쌓아도 각 층이 모두 선형이면 전체 네트워크도 결국 하나의 큰 선형변환과 같아지기 때문입니다. 즉 활성함수는 "깊게 쌓는 것"을 실제 표현력 증가로 바꿔 주는 핵심 장치입니다.</p>
 
 <h3>직관 비유</h3>
 <ul>
@@ -207,6 +208,7 @@
   <li>vanishing gradient 완화에 도움</li>
 </ul>
 <p>주의: 음수 영역 gradient가 0이라 dead neuron 문제가 생길 수 있습니다.</p>
+<p>그래서 ReLU는 빠르고 강력하지만, 모든 상황에서 가장 부드러운 선택은 아닙니다. CNN이나 비교적 단순한 MLP에서는 여전히 강력한 기본값이지만, 더 정교한 표현이 필요한 구조에서는 다른 활성함수가 자주 고려됩니다.</p>
 
 <h2>2. GELU</h2>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>G</mi><mi>E</mi><mi>L</mi><mi>U</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mi>x</mi><mo>&#x0002A;</mo><mi>P</mi><mi>h</mi><mi>i</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
@@ -216,6 +218,7 @@
   <li>Transformer 계열에서 자주 사용</li>
 </ul>
 <p>주의: ReLU보다 계산량이 다소 큽니다.</p>
+<p>GELU를 직관적으로 보면 "값을 0/1로 딱 자르는" 대신, 입력이 클수록 더 자연스럽게 통과시키는 방식입니다. 그래서 정보가 갑자기 끊기지 않고 부드럽게 흐르며, Transformer 계열에서 안정적인 학습에 잘 맞는 편입니다.</p>
 
 <h2>3. SwiGLU</h2>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>w</mi><mi>i</mi><mi>G</mi><mi>L</mi><mi>U</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mi>x</mi><mi>W</mi><mn>1</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0002A;</mo><mi>S</mi><mi>w</mi><mi>i</mi><mi>s</mi><mi>h</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mi>W</mi><mn>2</mn><mo stretchy="false">&#x00029;</mo></mrow></math></div>
@@ -226,6 +229,7 @@
   <li>최근 LLM FFN에서 널리 사용</li>
 </ul>
 <p>주의: 파라미터/연산량이 증가합니다.</p>
+<p>SwiGLU는 단순히 "새 활성함수 하나"라기보다 gating 구조를 활용해 어떤 정보를 더 강하게 살리고 어떤 정보는 약하게 통과시키는 방식에 가깝습니다. 그래서 대형 언어모델의 FFN에서는 표현력을 올리는 선택지로 자주 등장합니다.</p>
 
 <h2>4. 활성함수 비교</h2>
 <table>

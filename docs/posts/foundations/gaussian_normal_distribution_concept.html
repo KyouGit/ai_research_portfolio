@@ -29,6 +29,7 @@
       <p class="meta"><strong>태그:</strong> foundations,statistics,gaussian,normal_distribution</p>
       <div class="tip">정규분포는 "평균 근처 값이 가장 자주 나오고, 멀어질수록 드물어진다"는 패턴을 가장 대표적으로 표현하는 분포다.</div>
       <p>정규분포는 통계에서 가장 자주 나오는 분포 중 하나다. 딥러닝에서도 초기화, 노이즈 모델링, VAE prior, 표준화 같은 많은 개념이 결국 정규분포와 연결된다.</p>
+      <p>중요한 이유는 단지 자주 쓰이기 때문만이 아니다. 평균과 분산이라는 비교적 단순한 두 숫자로 분포의 핵심 모양을 설명할 수 있어서, 복잡한 현상을 처음 모델링할 때 출발점으로 쓰기 좋다.</p>
 
       <h3>1. 기본 식</h3>
       <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><msqrt><mn>2</mn><mi>&pi;</mi><msup><mi>&sigma;</mi><mn>2</mn></msup></msqrt></mrow></mfrac><msup><mi>e</mi><mrow><mo>-</mo><mfrac><msup><mrow><mo stretchy="false">(</mo><mi>x</mi><mo>-</mo><mi>&mu;</mi><mo stretchy="false">)</mo></mrow><mn>2</mn></msup><mrow><mn>2</mn><msup><mi>&sigma;</mi><mn>2</mn></msup></mrow></mfrac></mrow></msup></mrow></math></div>
@@ -43,12 +44,14 @@
 
       <h3>3. 직관</h3>
       <p>시험 점수, 측정 오차, 센서 노이즈처럼 많은 실제 데이터가 평균 주변에 몰리고 극단값은 드물다. 정규분포는 이런 패턴을 수학적으로 아주 잘 표현한다.</p>
+      <p>그래서 정규분포를 이해하면 "평균에서 멀어질수록 드문 값"이라는 감각을 여러 분야에 재사용할 수 있다. 딥러닝에서는 가중치 초기화가 너무 크면 불안정해지고, 너무 작으면 신호가 약해지는데, 정규분포 기반 초기화는 이 균형을 다루는 출발점이 된다.</p>
 
       <h3>4. 표준정규분포</h3>
       <p>평균이 0이고 표준편차가 1인 분포를 표준정규분포라고 한다. 다른 정규분포도 표준화해서 이 형태로 바꿀 수 있다.</p>
 
       <h3>5. 딥러닝 연결</h3>
       <p>입문 단계에서는 "정규분포는 평균과 퍼짐 정도만으로 많은 현상을 설명하는 기본 모델"이라고 이해하면 충분하다. 이후 Xavier/He 초기화, BatchNorm, VAE를 배우면 왜 이 분포가 반복해서 등장하는지 감각이 생긴다.</p>
+      <p>면접에서는 "왜 VAE prior를 보통 <code>N(0, I)</code>로 두는가?" 같은 질문으로 이어지기도 한다. 이때 답의 핵심은 계산이 편해서만이 아니라, 중심이 0이고 방향마다 같은 스케일을 갖는 단순한 기준 분포라서 latent space를 해석하고 regularize하기 쉽다는 점이다.</p>
 
       <h3>6. 체크리스트</h3>
       <ul>
