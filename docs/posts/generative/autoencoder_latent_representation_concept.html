@@ -178,15 +178,18 @@
 <div class="tip">Autoencoder는 "중요한 정보만 남기도록 압축했다가 다시 복원하게 만드는 모델"이다.</div>
 <p>Autoencoder는 입력을 저차원 latent representation으로 압축하고, 그 표현만으로 원래 입력을 다시 복원하도록 학습한다. 이 과정을 통해 데이터의 핵심 구조를 학습할 수 있다.</p>
 <p>핵심은 단순 복사가 아니라 병목을 통해 "무엇을 버리고 무엇을 남길지"를 배우게 한다는 점이다. 그래서 autoencoder는 차원 축소, representation learning, 이상탐지, denoising 등으로 자연스럽게 이어진다.</p>
+<p>이 문서를 읽을 때는 autoencoder를 단순 복원 모델로만 보기보다, 표현 학습의 가장 직관적인 예시로 보는 것이 좋다. 이후 VAE, sparse autoencoder, representation editing으로 이어지는 출발점이기 때문이다.</p>
 <h3>1. 구조</h3>
 <ul><li>Encoder: 입력을 latent vector로 압축</li><li>Decoder: latent vector에서 원래 입력을 복원</li></ul>
 <h3>2. 핵심 목적</h3>
 <p>단순 복사가 아니라, 제한된 병목 구조를 통해 "무엇이 중요한 정보인가"를 배우게 하는 것이다.</p>
+<p>만약 병목이 충분히 강하지 않으면 모델은 그냥 입력을 그대로 베끼는 쪽으로 흘러갈 수 있다. 그래서 구조와 regularization이 representation 품질에 직접 영향을 준다.</p>
 <h3>3. 대표 loss</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo fence="false" stretchy="false">&#x02016;</mo><mi>x</mi><mo>&#x02212;</mo><mover><mrow><mi>x</mi></mrow><mo stretchy="false">&#x0005E;</mo></mover><msup><mo fence="false" stretchy="false">&#x02016;</mo><mn>2</mn></msup></mrow></math></div>
 <p>입력 \(x\)와 복원 결과 \(\hat{x}\) 차이를 줄이는 것이 기본 목표다.</p>
 <h3>4. 왜 중요한가</h3>
 <ul><li>차원 축소와 representation learning의 기본 예시다.</li><li>후속 모델인 VAE를 이해하는 발판이 된다.</li><li>denoising autoencoder, sparse autoencoder 같은 확장으로 이어진다.</li></ul>
+<p>면접에서는 "왜 autoencoder가 PCA와 닮았지만 더 일반적인가" 또는 "왜 latent representation이 useful feature가 될 수 있는가" 같은 질문으로 이어지기 쉽다.</p>
 <h3>5. 체크리스트</h3>
 <ul><li>왜 병목이 필요한가?</li><li>단순 identity mapping과 representation learning 차이는 무엇인가?</li><li>VAE와 어떻게 다른가?</li></ul>
     </article>

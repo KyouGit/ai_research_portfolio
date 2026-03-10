@@ -187,15 +187,18 @@
 <p class="meta"><strong>태그:</strong> generative,gan,생성모델</p>
 <div class="tip">GAN은 "가짜를 만드는 생성자"와 "가짜를 구별하는 판별자"가 서로 경쟁하면서 함께 강해지는 구조다.</div>
 <p>GAN은 생성 모델의 대표적인 출발점이다. 목표는 진짜 데이터처럼 보이는 샘플을 만드는 것이다. 핵심은 생성자와 판별자가 게임처럼 서로를 속이고 막는 과정을 통해 학습된다는 점이다.</p>
+<p>초심자에게 중요한 관점은 GAN이 데이터를 직접 확률식으로 모델링하기보다, "진짜처럼 보이게 만들 수 있는가"를 경쟁 구조로 학습한다는 점이다. 그래서 likelihood 기반 모델과는 접근 철학이 꽤 다르다.</p>
 <h3>1. 핵심 수식</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mi>G</mi></msub><msub><mo>max</mo><mi>D</mi></msub><mi>V</mi><mo stretchy="false">&#x00028;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>G</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>&#x1D53C;</mi><mrow><mi>x</mi><mi>&#x0007E;</mi><msub><mi>p</mi><mrow><mi>d</mi><mi>a</mi><mi>t</mi><mi>a</mi></mrow></msub></mrow></msub><mo stretchy="false">[</mo><mi>log</mi><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">]</mo><mo>&#x0002B;</mo><msub><mi>&#x1D53C;</mi><mrow><mi>z</mi><mi>&#x0007E;</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>z</mi><mo stretchy="false">&#x00029;</mo></mrow></msub><mo stretchy="false">[</mo><mi>log</mi><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>D</mi><mo stretchy="false">&#x00028;</mo><mi>G</mi><mo stretchy="false">&#x00028;</mo><mi>z</mi><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">&#x00029;</mo><mo stretchy="false">]</mo></mrow></math></div>
 <p>판별자 \(D\)는 진짜와 가짜를 구분하려 하고, 생성자 \(G\)는 판별자를 속이는 샘플을 만든다.</p>
 <h3>2. 왜 중요한가</h3>
 <ul><li>명시적인 확률분포 식을 쓰지 않고도 고품질 샘플을 만들 수 있다.</li><li>이미지 생성, 스타일 변환, 데이터 증강의 출발점이 되었다.</li><li>후속 모델인 StyleGAN 등을 이해하는 기반이 된다.</li></ul>
+<p>즉 GAN은 생성 모델 역사에서 "샘플 품질"을 강하게 밀어 올린 계열로 볼 수 있다. 이후 diffusion이 부상했어도, 생성 경쟁 구조와 mode collapse 같은 핵심 문제를 이해하려면 여전히 좋은 출발점이다.</p>
 <h3>3. 자주 만나는 문제</h3>
 <ul><li>학습 불안정</li><li>mode collapse: 몇 가지 패턴만 반복 생성</li><li>생성자와 판별자의 균형 붕괴</li></ul>
 <h3>4. 먼저 이해해야 할 포인트</h3>
 <p>GAN을 처음 볼 때는 "누가 loss를 최소화하고 누가 최대화하는지"와 "왜 경쟁 구조가 생성 품질을 끌어올리는지"를 이해하는 것이 가장 중요하다.</p>
+<p>면접에서는 여기에 더해 "왜 GAN은 학습이 불안정한가", "왜 mode collapse가 생기는가"까지 이어서 말할 수 있으면 좋다.</p>
 <h3>5. 더 깊게 보기</h3>
 <p>수식, 직관, 장단점을 더 자세히 보려면 아래 상세 문서를 같이 읽으면 좋다.</p>
 <p><a href="./gan_minmax_generator_discriminator_concept.html">GAN 생성자-판별자 min-max 구조 상세 설명</a></p>
