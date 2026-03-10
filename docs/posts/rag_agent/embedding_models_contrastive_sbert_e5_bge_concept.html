@@ -212,6 +212,7 @@
 
 Negative pair:
 (query, irrelevant document)</code></pre>
+<p>이 단계의 핵심은 단순히 loss를 줄이는 것이 아니라, 검색에 쓰기 좋은 의미 공간을 만드는 것입니다. 즉 관련 있는 query-document 쌍은 가깝게, 무관한 쌍은 멀어지도록 벡터 공간 자체를 훈련합니다.</p>
 <p>대표적인 loss:</p>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002B;</mo><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>Σ</mi><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>s</mi><mi>i</mi><mi>m</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><msub><mi>d</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mi>τ</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 
@@ -225,6 +226,7 @@ Negative pair:
 
 <h3>왜 필요한가</h3>
 <p>관련 문서는 가까워지고 비관련 문서는 멀어지도록 학습합니다.</p>
+<p>그래서 contrastive learning은 retrieval의 첫 단계라고 볼 수 있습니다. 여기서 공간이 잘못 만들어지면 뒤에서 아무리 좋은 검색 엔진을 써도 가까운 문서 후보 자체가 어긋날 수 있습니다.</p>
 
 <h3>주의점</h3>
 <p>negative sample 품질이 중요합니다.</p>
@@ -241,6 +243,22 @@ Negative pair:
 
 <h3>왜 필요한가</h3>
 <p>벡터 방향 기반 의미 유사도를 측정합니다.</p>
+<p>즉 contrastive learning이 "벡터를 잘 만드는 단계"라면, similarity 계산은 "그 벡터들 중 누가 더 가까운지 읽는 규칙"입니다. 학습 단계와 검색 단계가 여기서 이어집니다.</p>
+
+<h2>2.5 Contrastive Learning에서 FAISS까지 전체 흐름</h2>
+<pre><code>1) query-document pair 준비
+2) contrastive learning으로 embedding model 학습
+3) 문서 전체를 embedding vector로 변환
+4) 문서 vector를 FAISS index에 저장
+5) 사용자 query를 embedding으로 변환
+6) cosine / inner product 기준 최근접 문서 검색
+7) top-k 문서를 reranker 또는 generator로 전달</code></pre>
+<p>초심자가 가장 자주 헷갈리는 지점은 <strong>contrastive learning</strong>과 <strong>FAISS</strong>를 같은 계층의 기술로 보는 것입니다. 하지만 둘의 역할은 분명히 다릅니다.</p>
+<ul>
+<li><strong>contrastive learning:</strong> 좋은 임베딩 공간을 학습하는 단계</li>
+<li><strong>FAISS:</strong> 이미 만들어진 임베딩 공간에서 최근접 이웃을 빠르게 찾는 검색 엔진</li>
+</ul>
+<p>즉 contrastive learning은 "벡터를 잘 만들기", FAISS는 "그 벡터를 빨리 찾기"에 가깝습니다. 둘은 연결되지만 서로 대체할 수는 없습니다.</p>
 
 <h2>3. SBERT</h2>
 <p>SBERT (Sentence-BERT)는 문장 embedding을 위한 모델입니다.</p>
@@ -373,6 +391,7 @@ Document encoder</code></pre>
 </tr>
 </tbody>
 </table>
+<p>여기서도 역할 분리가 분명합니다. <code>model.encode()</code>는 contrastive objective로 학습된 표현 함수를 호출하는 것이고, <code>faiss.search()</code>는 그 결과 벡터를 대상으로 빠른 검색을 수행하는 단계입니다.</p>
 
 <h2>자주 하는 오해 5개</h2>
 <ul>
