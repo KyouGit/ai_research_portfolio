@@ -6,12 +6,15 @@
 <p class="meta"><strong>태그:</strong> research,baseline,ablation,error_analysis</p>
 <div class="tip">좋은 실험은 점수가 높은 것보다 "왜 좋아졌는지 설명 가능한가"가 더 중요하다.</div>
 <p>Baseline은 비교 기준이다. Ablation은 어떤 구성 요소가 실제로 기여했는지 떼어보는 실험이다. Error analysis는 어디서 실패하는지를 정성/정량으로 분석하는 과정이다.</p>
+<p>논문과 면접에서 실험이 약하다고 평가받는 가장 흔한 이유는 개선 숫자는 있는데 설계 논리가 약한 경우다. 그래서 이 세 가지는 결과표를 읽는 법이 아니라, 주장 자체를 지탱하는 증거 구조로 이해해야 한다.</p>
 <h3>1. Baseline</h3>
 <p>Baseline이 약하면 개선 수치가 커도 설득력이 약하다. 따라서 단순 baseline과 강한 baseline을 함께 두는 것이 좋다.</p>
+<p>예를 들어 retrieval을 개선했다고 말하려면 BM25 같은 전통 baseline뿐 아니라 강한 dense baseline과도 비교해야 한다. 그래야 정말 새 방법이 의미 있는지 판단할 수 있다.</p>
 <h3>2. Ablation</h3>
 <p>Ablation은 "이 모듈이 정말 필요한가"를 검증한다. 새 기법을 여러 개 한꺼번에 넣었다면 각각을 빼 보며 어떤 요소가 핵심인지 보여줘야 한다.</p>
 <h3>3. Error analysis</h3>
 <p>실패 사례를 유형별로 나누면 모델의 약점이 보인다. 예를 들어 RAG에서는 retrieval failure와 generation hallucination을 분리해서 보는 식이다.</p>
+<p>이 단계가 중요하다는 뜻은, 단순히 "성능이 조금 낮다"로 끝내지 않고 무엇 때문에 낮은지 구조적으로 말할 수 있어야 다음 개선 방향도 설계할 수 있다는 뜻이다.</p>
 <h3>4. 면접 포인트</h3>
 <p>면접에서는 "baseline을 왜 그렇게 골랐나", "ablation으로 무엇을 검증했나", "대표 failure case는 무엇이었나"를 자주 묻는다.</p>
 <h3>5. 체크리스트</h3>

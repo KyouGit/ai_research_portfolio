@@ -6,10 +6,13 @@
 <p class="meta"><strong>태그:</strong> vision,self_supervised,contrastive,mim</p>
 <div class="tip">Self-supervised learning은 사람이 라벨을 달아주지 않아도, 데이터 자체에서 학습 신호를 만들어 표현을 배우는 방식이다.</div>
 <p>비전에서는 라벨 수집 비용이 크기 때문에 self-supervised learning이 중요하다. 대표적으로 contrastive learning과 masked image modeling이 있다.</p>
+<p>핵심은 "정답 라벨이 없으면 학습을 못 한다"는 생각을 깨는 데 있다. 이미지 자체를 변형하거나 일부를 가리면서, 모델이 스스로 복원하거나 일치 여부를 맞히게 만들 수 있다.</p>
 <h3>1. Contrastive learning</h3>
 <p>같은 이미지에서 만든 두 view는 가깝게, 다른 이미지는 멀게 학습한다. SimCLR 같은 계열이 여기에 속한다.</p>
+<p>이 방식은 표현 공간에서 "같은 의미는 가까이, 다른 의미는 멀리"라는 구조를 학습하게 만든다. 그래서 다운스트림 분류나 검색에 좋은 초기 표현을 주는 경우가 많다.</p>
 <h3>2. Masked image modeling</h3>
 <p>이미지 일부를 가리고 복원하게 하면서 표현을 배운다. 텍스트의 MLM과 비슷한 발상이다.</p>
+<p>ViT 계열과도 잘 연결되며, "가려진 부분을 맞히기 위해 문맥을 이해해야 한다"는 점에서 representation 학습에 강한 신호를 준다.</p>
 <h3>3. 왜 중요한가</h3>
 <ul><li>라벨 없이 대규모 데이터에서 표현을 학습할 수 있다.</li><li>downstream task로 전이할 수 있는 강한 feature를 얻는다.</li></ul>
 <h3>4. 체크리스트</h3>

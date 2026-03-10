@@ -6,12 +6,15 @@
 <p class="meta"><strong>태그:</strong> vision,segmentation,semantic,instance</p>
 <div class="tip">분류가 이미지 전체에 하나의 라벨을 붙이는 문제라면, segmentation은 픽셀 단위로 무엇이 어디 있는지 더 촘촘하게 맞히는 문제다.</div>
 <p>Segmentation은 객체 검출보다 더 세밀한 시각 이해를 요구한다. 픽셀마다 라벨을 예측해야 하므로 위치와 경계를 훨씬 정교하게 다뤄야 한다.</p>
+<p>초심자 관점에서는 "bounding box보다 더 많은 정보를 내는 문제"라고 보면 이해가 쉽다. 단순히 사각형 위치만 맞히는 것이 아니라, 실제 물체 형태를 픽셀 수준으로 복원해야 하기 때문이다.</p>
 <h3>1. Semantic segmentation</h3>
 <p>같은 클래스의 픽셀을 모두 같은 라벨로 본다. 예를 들어 사람 두 명이 있어도 둘 다 `person` 픽셀로만 표시된다.</p>
 <h3>2. Instance segmentation</h3>
 <p>같은 클래스여도 객체 인스턴스를 서로 구분한다. 그래서 사람 A와 사람 B를 따로 나눠서 마스크를 만든다.</p>
+<p>즉 semantic segmentation이 "무슨 클래스인가"에 더 가깝다면, instance segmentation은 "어떤 개별 객체인가"까지 구분하는 문제다.</p>
 <h3>3. 왜 중요한가</h3>
 <ul><li>자율주행, 의료영상, 로봇 비전처럼 위치 정밀도가 중요한 곳에서 자주 쓰인다.</li><li>Detection보다 더 풍부한 장면 이해를 제공한다.</li></ul>
+<p>그래서 segmentation은 성능이 조금만 떨어져도 경계가 무너지거나 작은 구조가 사라질 수 있어, 평가와 시각화 해석도 detection보다 더 민감하다.</p>
 <h3>4. 체크리스트</h3>
 <ul><li>semantic과 instance segmentation 차이를 설명할 수 있는가?</li><li>왜 segmentation은 detection보다 더 세밀한 문제인가?</li></ul>
 </article></main></body></html>
