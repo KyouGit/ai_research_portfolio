@@ -669,5 +669,56 @@
       });
     })();
   </script>
+<script>
+(function localLinkFix() {
+  var path = decodeURIComponent(window.location.pathname || "");
+  var match = path.match(/^\/(?:files|lab\/tree)\/(.+)$/);
+  if (!match) return;
+
+  var fsPath = match[1];
+  var docsMarker = "/ai_research_portfolio/docs/";
+  var docsIdx = fsPath.indexOf(docsMarker);
+  if (docsIdx === -1) return;
+
+  var docsDir = fsPath.slice(0, docsIdx + docsMarker.length);
+  var currentDir = fsPath.slice(0, fsPath.lastIndexOf("/") + 1);
+
+  function normalize(baseDir, href) {
+    var raw = href.split("#")[0].split("?")[0];
+    var combined = raw.charAt(0) === "/" ? raw : baseDir + raw;
+    var parts = combined.split("/");
+    var stack = [];
+    for (var i = 0; i < parts.length; i += 1) {
+      var part = parts[i];
+      if (!part || part === ".") continue;
+      if (part === "..") {
+        if (stack.length) stack.pop();
+        continue;
+      }
+      stack.push(part);
+    }
+    return stack.join("/");
+  }
+
+  document.querySelectorAll("a[href]").forEach(function (link) {
+    var href = link.getAttribute("href");
+    if (!href || href.charAt(0) === "#" || /^[a-z]+:/i.test(href)) return;
+
+    var targetFsPath = null;
+    if (href.indexOf("/ai_research_portfolio/") === 0) {
+      var suffix = href.slice("/ai_research_portfolio/".length);
+      targetFsPath = docsDir + (suffix || "index.html");
+    } else if (href.charAt(0) === "/") {
+      return;
+    } else {
+      targetFsPath = normalize(currentDir, href);
+    }
+
+    var hashIndex = href.indexOf("#");
+    var hash = hashIndex >= 0 ? href.slice(hashIndex) : "";
+    link.setAttribute("href", "/files/" + targetFsPath + hash);
+  });
+})();
+</script>
 </body>
 </html>
