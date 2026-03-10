@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -186,6 +221,19 @@
 <p class="meta"><strong>난이도:</strong> 기초</p>
 <p class="meta"><strong>태그:</strong> 수치안정성,softmax,logsumexp,딥러닝기초</p>
 <p>딥러닝은 매우 큰 수와 매우 작은 수를 동시에 계산합니다. 부동소수점 한계 때문에 overflow/underflow가 생기며, 특히 <code>exp</code>가 들어가는 softmax 계열에서 자주 문제가 발생합니다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Softmax%20vs%20max.jpg" alt="softmax와 max의 차이를 비교한 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>softmax는 하나만 남기는 hard max가 아니라, 가장 큰 값을 강조하면서도 전체를 확률로 유지하는 연속 함수라는 점을 보여준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Softmax_vs_max.jpg">원본 / 라이선스</a> · VikiLina · CC BY-SA 4.0</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gradient%20descent.svg" alt="기울기 기반 최적화의 등고선 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>수치가 불안정하면 최적화 경로도 흔들릴 수 있다는 점을 설명할 때, gradient descent가 표면 위를 이동하는 그림이 직관을 준다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Gradient_descent.svg">원본 / 라이선스</a> · Olegalexandrov · Public domain</div>
+  </figure>
+</div>
 
 <h3>왜 수치 안정성이 중요한가</h3>
 <ul>

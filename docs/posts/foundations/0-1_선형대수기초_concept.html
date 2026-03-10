@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -189,6 +224,24 @@
 <p class="meta"><strong>타입:</strong> concept</p>
 <p class="meta"><strong>선수지식:</strong> 없음</p>
 <p>딥러닝 모델은 결국 벡터와 행렬을 반복 계산하는 구조입니다. 이 문서는 입문자가 수식을 읽고 코드와 연결할 수 있도록 선형대수 핵심만 압축 정리합니다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Linalg_projection_1.png" alt="벡터의 투영 개념도" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>벡터를 어떤 축이나 부분공간 위로 내려놓는 projection 개념도다. 내적, 길이, 직교 분해를 직관적으로 이해할 때 가장 먼저 도움이 된다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Linalg_projection_1.png">원본 / 라이선스</a> · Nicholas Longo · CC BY-SA 2.5</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Linalg_projection_and_orthog.png" alt="벡터를 투영 성분과 직교 성분으로 분해한 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>하나의 벡터를 projection 성분과 orthogonal 성분으로 나누는 그림이다. residual, 오차, 직교성 해석에 바로 연결된다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Linalg_projection_and_orthog.png">원본 / 라이선스</a> · Nicholas Longo · CC BY-SA 2.5</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Basis%20transformation.png" alt="기저 변환과 좌표 변화 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>같은 점이라도 basis가 바뀌면 좌표 표현이 달라진다는 기저 변환 그림이다. 행렬이 좌표계와 표현 방식에 깊게 연결된다는 감각을 잡기 좋다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Basis_transformation.png">원본 / 라이선스</a> · Perditax · CC0</div>
+  </figure>
+</div>
 
 <h3>문제 설정</h3>
 <p>딥러닝의 거의 모든 레이어는 아래 한 줄로 표현됩니다.</p>

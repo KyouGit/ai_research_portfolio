@@ -109,6 +109,41 @@
     .math-block mfrac {
       font-size: 1.05em;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f3f6fb;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .image-card .license {
+      margin-top: 6px;
+      font-size: 0.86rem;
+      color: #5f748d;
+    }
+    .image-card .license a {
+      color: inherit;
+    }
     mjx-container[jax="CHTML"] {
       line-height: 0;
     }
@@ -186,6 +221,24 @@
 <p class="meta"><strong>난이도:</strong> 기초</p>
 <p class="meta"><strong>태그:</strong> 기초수학,확률통계,딥러닝기초</p>
 <p>딥러닝 모델은 "정답의 확률"을 예측합니다. 즉 핵심 목표는 입력이 주어졌을 때 정답일 확률 <code>P(y|x)</code>를 높이는 것입니다.</p>
+<h3>시각 자료로 먼저 보기</h3>
+<div class="image-grid">
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fair%20dice%20probability%20distribution.svg" alt="주사위의 확률질량함수 예시" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>이산 확률분포의 가장 쉬운 예시다. 각 값에 어떤 확률이 붙는지 보면서 probability mass function 감각을 잡기 좋다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Fair_dice_probability_distribution.svg">원본 / 라이선스</a> · Oleg Alexandrov · Public domain</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dice%20Distribution%20%28bar%29.svg" alt="두 개의 주사위 합 분포 막대그래프" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>확률이 항상 균등하지는 않다는 점을 보여주는 예시다. 두 주사위 합처럼 결과마다 확률이 달라지는 분포를 한 번에 볼 수 있다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Dice_Distribution_(bar).svg">원본 / 라이선스</a> · Tim Stellmach · Public domain</div>
+  </figure>
+  <figure class="image-card">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Normal%20Distribution%20PDF.svg" alt="정규분포 곡선 비교 그림" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+    <figcaption>평균과 분산이 바뀌면 분포 곡선이 어떻게 달라지는지 보여주는 정규분포 그림이다. 이후 loss, 노이즈, 초기화 문서와도 연결된다.</figcaption>
+    <div class="license"><a href="https://commons.wikimedia.org/wiki/File:Normal_Distribution_PDF.svg">원본 / 라이선스</a> · Inductiveload · Public domain</div>
+  </figure>
+</div>
 
 <h3>왜 딥러닝에서 확률이 중요한가</h3>
 <ul>
