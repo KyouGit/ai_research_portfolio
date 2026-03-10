@@ -212,6 +212,8 @@
 <p class="meta"><strong>태그:</strong> foundations,entropy,cross_entropy,kl</p>
 <div class="tip">Entropy는 데이터 자체의 불확실성, Cross-Entropy는 모델이 정답 분포를 얼마나 잘 맞추는지, KL은 두 분포 차이를 따로 떼어 본 값이다.</div>
 <p>딥러닝에서 classification loss를 배우다 보면 CrossEntropy가 자주 등장한다. 그런데 이 loss를 제대로 이해하려면 Entropy와 KL divergence까지 함께 봐야 한다.</p>
+<p>이 세 개념은 이름이 비슷해서 처음에는 하나처럼 느껴지지만, 역할을 나누면 훨씬 단순해진다. Entropy는 데이터 자체가 얼마나 예측하기 어려운지, Cross-Entropy는 실제 데이터와 모델 예측을 함께 봤을 때 비용이 얼마나 큰지, KL divergence는 그 차이 중 "모델이 틀린 정도"만 떼어낸 값이다.</p>
+<p>그래서 이 문서를 읽을 때는 공식을 외우기보다 "왜 분류 loss가 저 형태인가"를 이해하는 데 초점을 두는 편이 좋다. 이 감각이 잡히면 language modeling, distillation, ELBO까지 같은 언어로 읽힌다.</p>
 <h3>시각 자료로 먼저 보기</h3>
 <div class="image-grid">
   <figure class="image-card">
@@ -228,6 +230,7 @@
 <h3>1. Entropy</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>H</mi><mo stretchy="false">&#x00028;</mo><mi>X</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02212;</mo><msub><mo>&#x02211;</mo><mi>x</mi></msub><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mi>log</mi><mi>p</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>Entropy는 분포의 불확실성을 나타낸다. 동전이 항상 앞면이면 entropy가 낮고, 앞면/뒷면이 50 대 50이면 entropy가 높다.</p>
+<p>핵심은 가능한 결과가 고르게 열려 있을수록 더 예측하기 어렵다는 점이다. 하나가 거의 확실하면 새 정보가 별로 없고 entropy도 작다. 반대로 무엇이 나올지 애매하면 정보량이 크고 entropy가 커진다.</p>
 <h3>2. Cross-Entropy</h3>
 <div class="math-block">
   <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -261,6 +264,7 @@
   </math>
 </div>
 <p>KL divergence는 "실제 분포 \(p\)를 기준으로 봤을 때, 모델 분포 \(q\)가 얼마나 다른가"를 측정하는 값이다. 이름은 divergence지만, 우리가 흔히 생각하는 대칭 거리와는 다르다.</p>
+<p>즉 KL은 단순 거리라기보다 "실제 분포를 모델이 얼마나 비효율적으로 설명하고 있는가"를 보는 값에 가깝다. 그래서 방향이 중요하고, \(D_{KL}(p\|q)\)와 \(D_{KL}(q\|p)\)는 일반적으로 서로 다르다.</p>
 <h3>3-1. 공식의 각 항이 뜻하는 것</h3>
 <ul>
   <li><code>p(x)</code>: 실제로 맞추고 싶은 기준 분포</li>

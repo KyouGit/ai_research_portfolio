@@ -243,6 +243,8 @@
 
 <h3>한 줄 직관</h3>
 <p>Expectation은 "확률적으로 기대되는 평균값"이고, Variance는 "값이 평균에서 얼마나 퍼져 있는지"를 측정하는 값이다.</p>
+<div class="tip">Expectation은 분포의 중심을, Variance는 그 중심 주변의 흔들림 크기를 말한다. 둘을 함께 봐야 분포를 제대로 이해할 수 있다.</div>
+<p>이 두 개념은 기초 통계에서 끝나는 것이 아니라, 딥러닝의 평균 loss, gradient noise, BatchNorm, 초기화 안정성까지 이어진다. 그래서 "평균"과 "흔들림"을 읽는 언어라고 생각하면 이후 문서와 연결하기 쉽다.</p>
 
 <h3>직관적 비유</h3>
 <p>주사위를 던지는 상황을 생각해보자.</p>
@@ -289,6 +291,7 @@
 <p>예를 들어 공정한 주사위에서는 다음처럼 계산한다.</p>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>E</mi><mo stretchy="false">[</mo><mi>X</mi><mo stretchy="false">]</mo><mo>&#x0003D;</mo><mo stretchy="false">&#x00028;</mo><mn>1</mn><mo>&#x0002B;</mo><mn>2</mn><mo>&#x0002B;</mo><mn>3</mn><mo>&#x0002B;</mo><mn>4</mn><mo>&#x0002B;</mo><mn>5</mn><mo>&#x0002B;</mo><mn>6</mn><mo stretchy="false">&#x00029;</mo><mo>&#x0002F;</mo><mn>6</mn><mo>&#x0003D;</mo><mn>3.5</mn></mrow></math></div>
 <p>즉 실제로 3.5가 나오지는 않지만, 장기적으로 평균 결과는 3.5에 가까워진다.</p>
+<p>중요한 점은 기댓값이 실제 한 번의 관측값과 같을 필요는 없다는 것이다. 3.5라는 값은 "여러 번 반복했을 때의 평균적 행동"을 나타낸다. 이 감각이 있어야 expected loss나 expected gradient 같은 표현도 자연스럽게 읽힌다.</p>
 
 <h3>주의점</h3>
 <ul>
@@ -312,6 +315,7 @@
 
 <h3>직관</h3>
 <p>평균에서 멀리 떨어진 값이 많을수록 분산이 커진다.</p>
+<p>그래서 분산은 "흔들림의 크기"라고 생각하면 된다. 평균이 같아도 값이 넓게 퍼져 있으면 분산이 크고, 평균 근처에 몰려 있으면 분산이 작다. 딥러닝에서 학습이 불안정하다는 말도 결국 이런 흔들림이 크다는 뜻으로 읽을 수 있다.</p>
 <table>
   <thead>
     <tr>

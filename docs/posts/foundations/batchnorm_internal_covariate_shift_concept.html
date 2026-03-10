@@ -177,9 +177,12 @@
 <p class="meta"><strong>태그:</strong> foundations,batchnorm,정규화,학습안정화</p>
 <div class="tip">BatchNorm은 "값의 분포가 레이어를 지날수록 너무 흔들리지 않게 만들어 학습을 편하게 하는 장치"라고 이해하면 된다.</div>
 <p>딥러닝에서 같은 모델이라도 초기화나 학습률에 따라 학습이 잘 되기도 하고 갑자기 흔들리기도 한다. BatchNorm은 이런 흔들림을 줄여서 더 큰 learning rate를 써도 안정적으로 학습되게 돕는 대표적인 정규화 기법이다.</p>
+<p>처음 BatchNorm을 보면 단순히 평균 0, 분산 1로 맞추는 기술처럼 보일 수 있다. 하지만 더 중요한 역할은 각 레이어가 너무 다른 스케일의 입력을 받지 않게 해서 최적화를 훨씬 다루기 쉬운 상태로 만든다는 데 있다.</p>
+<p>또 BatchNorm은 무조건 표준화만 하는 것이 아니라, \(\gamma\)와 \(\beta\)를 통해 필요한 스케일과 이동을 다시 학습한다. 즉 "일단 안정한 기준으로 맞춘 뒤, 필요한 표현력은 다시 회복하게 하는 장치"라고 이해하는 편이 정확하다.</p>
 <h3>1. 핵심 수식</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover><mrow><mi>x</mi></mrow><mo stretchy="false">&#x0005E;</mo></mover><mo>&#x0003D;</mo><mfrac><mrow><mi>x</mi><mo>&#x02212;</mo><msub><mi>&#x003BC;</mi><mi>B</mi></msub></mrow><mrow><msqrt><mrow><msubsup><mi>&#x003C3;</mi><mi>B</mi><mn>2</mn></msubsup><mo>&#x0002B;</mo><mi>&#x003F5;</mi></mrow></msqrt></mrow></mfrac><mo>&#x0002C;</mo><mspace width="2em" /><mi>y</mi><mo>&#x0003D;</mo><mi>&#x003B3;</mi><mover><mrow><mi>x</mi></mrow><mo stretchy="false">&#x0005E;</mo></mover><mo>&#x0002B;</mo><mi>&#x003B2;</mi></mrow></math></div>
 <p>앞부분은 미니배치 평균과 분산으로 입력을 정규화하는 단계이고, 뒤의 \(\gamma, \beta\)는 정규화된 값을 다시 학습 가능한 형태로 조정하는 파라미터다.</p>
+<p>이 구조를 보면 왜 BatchNorm이 단순한 전처리가 아니라 레이어 안에 들어가는 학습 모듈인지 알 수 있다. 정규화로 학습을 안정하게 만들고, 동시에 학습 가능한 파라미터로 유연성을 유지한다.</p>
 <h3>2. 왜 필요한가</h3>
 <ul><li>레이어를 지날수록 activation 스케일이 커지거나 작아지는 문제를 줄인다.</li><li>학습 초기에 gradient가 너무 불안정해지는 상황을 완화한다.</li><li>실무에서는 더 빠른 수렴과 튜닝 난이도 감소로 이어지는 경우가 많다.</li></ul>
 <h3>3. 직관</h3>

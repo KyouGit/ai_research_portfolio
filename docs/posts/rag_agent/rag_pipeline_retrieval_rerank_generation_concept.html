@@ -230,6 +230,9 @@
 <ul>
 <li>모델 내부 지식 + 외부 지식 결합</li>
 </ul>
+<div class="tip">RAG는 "LLM이 혼자 기억해서 답하는 구조"가 아니라, "필요한 문서를 먼저 찾고 그 문서를 바탕으로 답하게 하는 구조"다.</div>
+<p>그래서 RAG를 이해할 때는 생성 모델보다 먼저 검색 시스템 관점이 필요하다. 질문과 관련 없는 문서를 가져오면 generation 단계가 아무리 좋아도 환각이 생기기 쉽다. 반대로 좋은 문서를 찾으면 답변 품질은 크게 좋아진다.</p>
+<p>retrieval, rerank, generation을 구분하는 이유도 각 단계의 실패 원인이 다르기 때문이다. retrieval이 틀리면 근거 자체가 없고, rerank가 약하면 중요한 문서가 뒤로 밀리며, generation이 약하면 근거를 갖고도 설명을 못 만든다.</p>
 <p>RAG 시스템은 보통 다음 3단계로 구성됩니다.</p>
 <pre><code>Query
  ↓
@@ -255,6 +258,7 @@ Generation</code></pre>
 <h2>1. Retrieval 단계</h2>
 <p>사용자 질문과 가장 관련 있는 문서를 검색합니다.</p>
 <p>문서와 질문을 embedding 공간으로 변환합니다.</p>
+<p>이 단계의 핵심은 질문과 문서를 같은 벡터 공간 위에 올려놓는 것이다. 그래야 의미가 비슷한 것들이 공간상에서도 가까워지고, nearest neighbor search로 빠르게 찾을 수 있다. 즉 retrieval은 단순 키워드 검색이 아니라 의미 기반 검색이다.</p>
 <p>수식:</p>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>q</mi><mo>&#x0003D;</mo><mi>f</mi><mo stretchy="false">&#x00028;</mo><mi>q</mi><mi>u</mi><mi>e</mi><mi>r</mi><mi>y</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>d</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mi>f</mi><mo stretchy="false">&#x00028;</mo><mi>d</mi><mi>o</mi><mi>c</mi><mi>u</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="false">&#x00029;</mo></mrow></math></div>

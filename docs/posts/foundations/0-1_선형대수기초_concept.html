@@ -224,6 +224,9 @@
 <p class="meta"><strong>타입:</strong> concept</p>
 <p class="meta"><strong>선수지식:</strong> 없음</p>
 <p>딥러닝 모델은 결국 벡터와 행렬을 반복 계산하는 구조입니다. 이 문서는 입문자가 수식을 읽고 코드와 연결할 수 있도록 선형대수 핵심만 압축 정리합니다.</p>
+<div class="tip">선형대수를 볼 때는 "벡터는 값의 묶음", "행렬은 그 값을 한 번에 바꾸는 규칙"이라고 잡고 시작하면 수식이 훨씬 덜 추상적으로 느껴진다.</div>
+<p>딥러닝에서 데이터는 거의 항상 벡터 형태로 표현된다. 이미지도 숫자의 집합이고, 단어도 embedding 벡터이며, 배치 전체는 행렬이나 텐서가 된다. 그래서 선형대수는 별도의 이론이라기보다 신경망이 계산되는 기본 언어에 가깝다.</p>
+<p>중요한 것은 공식을 외우는 것보다, 행렬곱이 "입력을 다른 특징 공간으로 다시 표현하는 과정"이라는 감각을 잡는 것이다. 그 관점이 잡히면 fully connected layer, attention, convolution도 결국 같은 언어로 읽힌다.</p>
 <h3>시각 자료로 먼저 보기</h3>
 <div class="image-grid">
   <figure class="image-card">
@@ -247,11 +250,13 @@
 <p>딥러닝의 거의 모든 레이어는 아래 한 줄로 표현됩니다.</p>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>W</mi><mi>x</mi><mo>&#x0002B;</mo><mi>b</mi></mrow></math></div>
 <p>이 식을 정확히 이해하려면 벡터, 행렬곱, 차원, 노름 개념이 필요합니다.</p>
+<p>이 한 줄은 딥러닝 레이어의 뼈대다. <code>x</code>는 입력 벡터, <code>W</code>는 가중치 행렬, <code>b</code>는 보정값이고, 결과 <code>y</code>는 변환된 새 표현이다. 결국 신경망은 "표현을 계속 바꿔 가는 기계"라고 볼 수 있다.</p>
 
 <h3>왜 선형대수가 딥러닝의 시작인가</h3>
 <p>신경망 레이어의 기본 연산은 아래 한 줄입니다.</p>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>W</mi><mi>x</mi><mo>&#x0002B;</mo><mi>b</mi></mrow></math></div>
 <p>벡터, 행렬곱, 전치, 내적, 노름을 이해하면 대부분의 딥러닝 수식을 읽을 수 있습니다.</p>
+<p>예를 들어 attention은 query와 key의 내적을 계산하고, CNN은 국소적인 선형 연산을 반복하며, diffusion 모델도 큰 틀에서는 행렬 기반 연산으로 구현된다. 즉 분야가 달라 보여도 내부 계산 구조는 선형대수 위에 서 있다.</p>
 
 <h3>직관 비유</h3>
 <ul>

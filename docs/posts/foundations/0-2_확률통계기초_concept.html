@@ -221,6 +221,9 @@
 <p class="meta"><strong>난이도:</strong> 기초</p>
 <p class="meta"><strong>태그:</strong> 기초수학,확률통계,딥러닝기초</p>
 <p>딥러닝 모델은 "정답의 확률"을 예측합니다. 즉 핵심 목표는 입력이 주어졌을 때 정답일 확률 <code>P(y|x)</code>를 높이는 것입니다.</p>
+<div class="tip">확률은 "불확실한 상황을 숫자로 표현하는 언어"다. 딥러닝도 정답을 단정적으로 출력하기보다, 각 후보가 얼마나 그럴듯한지를 확률처럼 계산한다.</div>
+<p>예를 들어 고양이 분류 모델은 단순히 "cat"이라고 말하는 것이 아니라, <code>P(cat|image)</code>, <code>P(dog|image)</code>, <code>P(car|image)</code>처럼 여러 후보의 가능성을 동시에 낸다. 학습은 이 분포가 실제 정답 분포에 더 가까워지도록 바꾸는 과정이다.</p>
+<p>그래서 확률/통계를 이해하면 분류 문제뿐 아니라 language modeling, generative model, uncertainty estimation까지 같은 프레임으로 연결해서 볼 수 있다. 이후에 나오는 likelihood, cross-entropy, KL divergence도 모두 여기서 출발한다.</p>
 <h3>시각 자료로 먼저 보기</h3>
 <div class="image-grid">
   <figure class="image-card">
@@ -246,6 +249,7 @@
   <li>감성 분류: <code>P(positive|text)</code></li>
 </ul>
 <p>모델은 정답 자체가 아니라 정답일 가능성을 계산하고, 가장 높은 확률의 클래스를 선택합니다.</p>
+<p>즉 모델의 출력은 "하나의 값"이 아니라 "가능성의 분포"라고 보는 편이 정확하다. softmax가 중요한 이유도 바로 이 분포를 만들기 위해서다. 이 관점이 있어야 loss 함수도 단순 점수 차이가 아니라 분포 차이를 줄이는 과정으로 이해된다.</p>
 
 <h3>1) 조건부 확률 (Conditional Probability)</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>y</mi><mo stretchy="false">&#x0007C;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy="false">&#x00029;</mo></mrow><mrow><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></mfrac></mrow></math></div>
@@ -256,6 +260,7 @@
   <li><code>P(x)</code>: 입력 확률</li>
 </ul>
 <p>왜 필요한가: 딥러닝은 항상 입력 조건 하에서 정답 확률을 계산합니다.</p>
+<p>분류 모델에서 <code>P(y|x)</code>를 높인다는 말은, 같은 입력 <code>x</code>에 대해 정답 클래스에 더 큰 확률을 주도록 파라미터를 조정한다는 뜻이다. 언어 모델에서는 앞 문맥이 <code>x</code>, 다음 토큰이 <code>y</code>가 된다. 그래서 조건부 확률은 다양한 모델을 하나로 묶는 공통 구조다.</p>
 
 <h3>2) 기댓값 (Expectation)</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>E</mi><mo stretchy="false">[</mo><mi>X</mi><mo stretchy="false">]</mo><mo>&#x0003D;</mo><msub><mo>&#x02211;</mo><mi>x</mi></msub><mi>x</mi><mi>P</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
