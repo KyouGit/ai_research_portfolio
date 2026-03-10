@@ -188,6 +188,9 @@
 <p class="meta"><strong>난이도:</strong> 입문</p>
 <p class="meta"><strong>선수지식:</strong> 없음</p>
 <div class="tip">SentencePiece는 "공백으로 먼저 자르지 말고, 문자열 전체에서 바로 subword를 배우자"는 발상이다.</div>
+<p>BPE나 WordPiece를 먼저 배우면 SentencePiece도 비슷해 보일 수 있다. 하지만 핵심 차이는 전처리 철학이다. SentencePiece는 언어마다 단어 경계를 따로 정하지 않고, 공백까지 포함한 원문 문자열 자체에서 subword를 배운다.</p>
+<p>그래서 공백 규칙이 영어처럼 명확하지 않은 언어나, 다국어를 한 모델로 처리해야 하는 상황에서 특히 강하다. 한국어 문서에서도 이 차이를 이해하면 왜 SentencePiece가 자주 쓰이는지 바로 연결된다.</p>
+<div class="tip">SentencePiece는 "공백으로 먼저 자르지 말고, 문자열 전체에서 바로 subword를 배우자"는 발상이다.</div>
 <p>BPE나 WordPiece를 배운 뒤 SentencePiece를 보면 비슷해 보이지만, 핵심 차이는 전처리 철학이다. 언어마다 단어 경계를 따로 정하지 않고, 공백까지 포함한 원문 문자열 자체에서 subword를 배운다. 그래서 다국어 환경이나 공백 규칙이 약한 언어에서 특히 강하다.</p>
 
 <h3>문제 설정</h3>
@@ -198,6 +201,7 @@
 <li>한국어</li>
 </ul>
 <p>이 문제를 해결하기 위해 Google이 개발한 토크나이저가 <strong>SentencePiece</strong>입니다.</p>
+<p>즉 SentencePiece는 tokenizer 앞에 별도의 language-specific pre-tokenizer를 두지 않아도 된다는 장점이 있다. 파이프라인이 더 단순해지고, 언어별 예외처리도 줄어든다.</p>
 <p>즉 SentencePiece는 tokenizer 이전에 language-dependent pre-tokenizer를 두지 않아도 된다는 장점이 있다. 이 덕분에 한국어, 일본어, 중국어처럼 공백 규칙이 영어와 다른 언어에서도 더 일관된 파이프라인을 만들 수 있다.</p>
 
 <h3>직관 비유</h3>

@@ -222,6 +222,9 @@
 <p><strong>타입:</strong> concept</p>
 <p><strong>난이도:</strong> 중급</p>
 <p><strong>선수지식:</strong> 있음 — 확률분포, Gaussian Noise, Neural Network</p>
+<div class="tip">DDPM은 "한 번에 이미지를 그리는 모델"이 아니라, "노이즈를 아주 조금씩 걷어내며 샘플을 복원하는 모델"이라고 보면 된다.</div>
+<p>GAN처럼 한 번에 이미지를 뽑는 접근과 달리, diffusion 계열은 생성 과정을 수백 단계의 작은 복원 문제로 쪼갠다. 그래서 학습은 비교적 안정적이고 생성 품질도 높지만, 대신 샘플링이 느릴 수 있다.</p>
+<p>이 문서를 읽을 때는 forward process와 reverse process를 꼭 짝으로 생각하면 좋다. 학습은 "어떻게 더럽혀졌는지"를 알고, 생성은 "그 더럽혀진 상태를 어떻게 되돌릴지"를 배우는 과정이다.</p>
 
 <h3>문제 설정</h3>
 <p>이미지를 생성하는 또 다른 접근은 <strong>점진적으로 노이즈를 제거하는 것</strong>입니다.</p>
