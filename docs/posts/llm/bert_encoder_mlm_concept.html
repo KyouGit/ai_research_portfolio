@@ -222,6 +222,8 @@
 <p class="meta"><strong>타입:</strong> concept</p>
 <p class="meta"><strong>난이도:</strong> 중급</p>
 <p class="meta"><strong>선수지식:</strong> 있음 — Self-Attention, Transformer Encoder</p>
+<div class="tip">BERT의 핵심은 "다음 단어를 한 방향으로 예측하는 모델"이 아니라, "문장 전체를 동시에 보고 빈칸을 맞히며 양방향 문맥을 배우는 모델"이라는 점이다.</div>
+<p>GPT 계열에 익숙하면 BERT도 그냥 또 다른 Transformer처럼 보일 수 있다. 하지만 BERT는 목적 자체가 다르다. 문장을 생성하는 데 최적화된 모델이 아니라, 문장 안에서 단어의 의미를 깊게 이해하는 데 최적화된 encoder 중심 모델이다.</p>
 
 <h3>문제 설정</h3>
 <p>기존 언어 모델(GPT 이전)은 대부분 <strong>단방향 언어 모델</strong>이었습니다.</p>
@@ -230,6 +232,7 @@
 <p>즉 이전 단어만 보고 다음 단어를 예측합니다.</p>
 <p>하지만 자연어 이해(NLU)에서는 <strong>양방향 문맥</strong>이 중요합니다.</p>
 <p>BERT는 이를 해결하기 위해 <strong>bidirectional Transformer Encoder</strong>를 사용합니다.</p>
+<p>즉 BERT는 왼쪽 문맥만 보거나 오른쪽 문맥만 보는 대신, 문장 전체를 동시에 읽는다. 그래서 분류, 문장쌍 이해, 개체명 인식처럼 "이 문장이 무슨 뜻인가"를 해석하는 작업에서 강점을 보였다.</p>
 
 <h3>직관 비유</h3>
 <ul>

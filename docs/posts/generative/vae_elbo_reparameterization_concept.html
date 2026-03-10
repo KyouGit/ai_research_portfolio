@@ -212,6 +212,7 @@
 <p class="meta"><strong>태그:</strong> generative,vae,latent_variable_model,elbo,reparameterization</p>
 <div class="tip">VAE를 제대로 이해하려면 먼저 "데이터 뒤에 직접 보이지 않는 잠재 원인이 있다"는 Latent Variable Model 관점부터 잡아야 한다.</div>
 <p>일반 autoencoder는 입력을 압축했다가 복원하는 구조지만, 그 latent vector가 샘플링 가능한 확률공간이라는 보장은 없다. VAE는 latent를 확률변수로 두고, "보이지 않는 원인 변수 \(z\)가 데이터를 생성한다"는 생성 모델 관점으로 문제를 다시 세운다.</p>
+<p>그래서 VAE는 단순 압축기가 아니라 확률 생성 모델이다. latent가 단순 숫자 배열이 아니라 분포 위의 변수라는 점이 핵심이고, 이 차이 때문에 ELBO, KL, reparameterization trick이 모두 등장한다.</p>
 
 <h3>그림으로 먼저 보기</h3>
 <div class="image-grid">
@@ -229,6 +230,7 @@
 
 <h3>1. Latent Variable Model이란 무엇인가</h3>
 <p>Latent Variable Model은 데이터 \(x\)를 직접 설명하는 대신, 그 뒤에 숨어 있는 잠재변수 \(z\)가 있다고 가정하는 모델이다.</p>
+<p>이 관점이 중요한 이유는 복잡한 데이터를 더 작은 원인 구조로 설명하게 해주기 때문이다. 얼굴 이미지라면 표정, 조명, 시점 같은 잠재 요인이 있을 수 있고, VAE는 이런 숨은 요인을 확률적으로 다루는 틀을 제공한다.</p>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>&#x0222B;</mo><mi>p</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo>)</mo><mi>d</mi><mi>z</mi></mrow></math></div>
 <p>이 식의 뜻은 "관측 데이터 \(x\)의 확률은, 모든 가능한 잠재변수 \(z\)를 고려해 합치거나 적분한 결과"라는 것이다.</p>
 <p>예를 들어 얼굴 이미지 \(x\)가 있다고 하자. 이 이미지를 직접 설명하는 대신, 그 뒤에</p>

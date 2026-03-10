@@ -177,9 +177,11 @@
 <p class="meta"><strong>태그:</strong> llm,transformer,ffn</p>
 <div class="tip">Attention이 "어디를 볼지"를 정한다면, FFN은 "모은 정보를 각 토큰 안에서 다시 변환하고 가공하는 역할"을 한다.</div>
 <p>Transformer 블록을 보면 attention만 눈에 띄기 쉽지만, 실제 계산량과 파라미터 상당수는 FFN에 있다. 그래서 FFN을 이해하지 못하면 Transformer 구조를 절반만 이해한 셈이다.</p>
+<p>많은 입문자가 Transformer를 attention만으로 이해하지만, 실제로 토큰 표현을 풍부하게 가공하는 큰 부분은 FFN이 담당한다. attention이 문맥을 모아 주는 단계라면, FFN은 그 문맥을 바탕으로 각 토큰 내부 표현을 더 복잡하게 바꾸는 단계라고 볼 수 있다.</p>
 <h3>1. 기본 식</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>F</mi><mi>F</mi><mi>N</mi><mo stretchy="false">&#x00028;</mo><mi>x</mi><mo stretchy="false">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>W</mi><mn>2</mn></msub><mspace width="0.167em" /><mi>&#x003C3;</mi><mo stretchy="false">&#x00028;</mo><msub><mi>W</mi><mn>1</mn></msub><mi>x</mi><mo>&#x0002B;</mo><msub><mi>b</mi><mn>1</mn></msub><mo stretchy="false">&#x00029;</mo><mo>&#x0002B;</mo><msub><mi>b</mi><mn>2</mn></msub></mrow></math></div>
 <p>보통 hidden dimension을 크게 늘렸다가 다시 줄이는 구조를 쓴다. 이 과정에서 토큰별 비선형 변환 능력이 생긴다.</p>
+<p>이 차원 확장-축소 구조가 중요한 이유는, 단순 선형층 하나로는 만들기 어려운 비선형 표현력을 제공하기 때문이다. 그래서 FFN은 attention 뒤에서 조용히 일하지만, 실제 모델 성능에는 매우 큰 영향을 준다.</p>
 <h3>2. 역할</h3>
 <ul><li>Attention이 모은 문맥 정보를 재조합한다.</li><li>각 토큰 표현을 더 풍부한 특징 공간으로 옮긴다.</li><li>모델 표현력을 크게 높인다.</li></ul>
 <h3>3. 왜 token-wise인가</h3>

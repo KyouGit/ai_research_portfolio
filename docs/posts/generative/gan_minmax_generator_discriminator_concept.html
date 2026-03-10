@@ -222,6 +222,8 @@
 <p><strong>타입:</strong> concept</p>
 <p><strong>난이도:</strong> 중급</p>
 <p><strong>선수지식:</strong> 있음 — 확률분포, Cross-Entropy, Gradient Descent</p>
+<div class="tip">GAN은 "가짜를 만드는 생성자"와 "가짜를 잡아내는 판별자"가 서로 경쟁하면서 같이 좋아지는 구조다.</div>
+<p>생성 모델을 직접 확률식으로 세우는 대신, GAN은 문제를 게임처럼 바꾼다. generator는 진짜 같은 샘플을 만들려 하고, discriminator는 그 샘플이 진짜인지 가짜인지 맞히려 한다. 이 경쟁이 잘 맞물리면 generator가 점점 더 현실적인 샘플을 만들게 된다.</p>
 
 <h3>문제 설정</h3>
 <p>생성 모델의 목표는 실제 데이터와 비슷한 데이터를 생성하는 것입니다.</p>
@@ -235,6 +237,7 @@
 <p>하지만 직접 분포를 모델링하는 것은 어렵습니다.</p>
 
 <p>GAN은 이 문제를 <strong>게임 구조</strong>로 해결합니다.</p>
+<p>즉 GAN은 확률분포를 직접 쓰는 대신, "판별자를 속일 수 있을 정도로 진짜 같은가"를 목표로 삼는 우회 전략이다. 그래서 학습이 직관적이면서도, 동시에 불안정성과 mode collapse 같은 고유한 어려움도 생긴다.</p>
 <h3>시각 자료로 먼저 보기</h3>
 <div class="image-grid">
   <figure class="image-card">

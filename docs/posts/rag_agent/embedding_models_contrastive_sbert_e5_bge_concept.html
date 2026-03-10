@@ -187,6 +187,8 @@
 <p class="meta"><strong>타입:</strong> concept</p>
 <p class="meta"><strong>난이도:</strong> 중급</p>
 <p class="meta"><strong>선수지식:</strong> 있음 — Transformer, Cosine Similarity, Vector Search</p>
+<div class="tip">좋은 embedding model의 핵심은 "뜻이 비슷한 문장은 가까이, 관련 없는 문장은 멀리" 오도록 벡터 공간을 학습하는 것이다.</div>
+<p>RAG 성능은 생성 모델보다 retrieval 품질에서 먼저 갈리는 경우가 많다. 그리고 retrieval 품질은 결국 embedding model이 질문과 문서를 얼마나 잘 같은 공간에 배치하느냐에 크게 좌우된다.</p>
 
 <h3>문제 설정</h3>
 <p>RAG 시스템에서는 질문과 문서를 벡터 공간으로 변환하여 유사도를 계산합니다.</p>
@@ -201,6 +203,7 @@
 </ul>
 <p>목표는 의미적으로 유사한 문장이 <strong>벡터 공간에서 가까워지도록</strong> 만드는 것입니다.</p>
 <p>대표적인 학습 방식이 <strong>contrastive learning</strong>입니다.</p>
+<p>즉 embedding model은 단순 인코더가 아니라 의미 공간 설계자라고 볼 수 있다. SBERT, e5, BGE 같은 모델 차이도 결국 어떤 데이터와 어떤 contrastive objective로 그 공간을 만들었는지에서 나온다.</p>
 
 <h2>1. Contrastive Learning</h2>
 <p>contrastive learning은 긍정 쌍과 부정 쌍을 사용하여 embedding을 학습합니다.</p>

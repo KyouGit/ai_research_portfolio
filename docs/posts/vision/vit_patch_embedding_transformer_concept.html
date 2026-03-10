@@ -222,6 +222,8 @@
 <p><strong>타입:</strong> concept</p>
 <p><strong>난이도:</strong> 중급</p>
 <p><strong>선수지식:</strong> 있음 — Self-Attention, Transformer, Linear Layer</p>
+<div class="tip">ViT는 "이미지를 CNN처럼 보지 말고, 작은 패치들의 시퀀스로 바꿔서 Transformer에 넣자"는 아이디어다.</div>
+<p>처음 보면 이 발상이 낯설지만, 핵심은 이미지를 완전히 다른 대상이 아니라 "시각 토큰들의 집합"으로 다시 해석하는 데 있다. NLP에서 단어를 token으로 다뤘듯이, ViT는 이미지 patch를 token처럼 다룬다.</p>
 
 <h3>문제 설정</h3>
 <p>기존 컴퓨터 비전 모델은 CNN을 사용했습니다.</p>
@@ -235,6 +237,7 @@ Image → Conv → Conv → Conv → Classifier
 <p><strong>"이미지를 Transformer로 처리할 수 있을까?"</strong></p>
 
 <p>이 질문에 대한 답이 <strong>Vision Transformer (ViT)</strong>입니다.</p>
+<p>즉 ViT는 convolution 중심의 inductive bias를 줄이고, 대신 충분한 데이터와 self-attention의 전역 문맥 처리 능력을 활용하려는 시도라고 볼 수 있다. 그래서 ViT를 이해하면 vision과 NLP 구조가 하나의 공통 프레임으로 이어진다는 감각도 잡힌다.</p>
 
 <h3>시각 자료로 먼저 보기</h3>
 <div class="image-grid">
