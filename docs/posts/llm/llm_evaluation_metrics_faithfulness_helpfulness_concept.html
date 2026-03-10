@@ -177,12 +177,16 @@
 <p class="meta"><strong>태그:</strong> llm,evaluation,faithfulness,helpfulness</p>
 <div class="tip">좋은 LLM 답변은 "그럴듯한 말"이 아니라, 근거에 충실하고 사용자에게 실제로 도움이 되는 답변이어야 한다.</div>
 <p>LLM 평가에서 자주 헷갈리는 것이 faithfulness와 helpfulness다. 둘 다 중요하지만 보는 관점이 다르다.</p>
+<p>이 구분이 중요한 이유는 LLM이 너무 쉽게 말은 자연스럽지만 근거는 빈약한 답변을 만들 수 있기 때문이다. 그래서 평가는 하나의 점수로 끝내기보다, 답변이 얼마나 근거에 anchored되어 있는지와 실제 문제 해결에 얼마나 기여하는지를 분리해서 봐야 한다.</p>
 <h3>1. Faithfulness</h3>
 <p>주어진 근거나 문맥을 벗어나지 않고 답했는지를 본다. RAG에서는 retrieved document에 없는 내용을 마음대로 만들어내면 faithfulness가 낮다.</p>
+<p>특히 검색 기반 시스템에서는 faithfulness가 낮으면 겉보기에는 유창해도 신뢰할 수 없는 답변이 된다. 그래서 citation, groundedness, evidence alignment 같은 기준이 같이 따라온다.</p>
 <h3>2. Helpfulness</h3>
 <p>사용자 질문에 실제로 도움이 되는 답변인지 본다. 정답만 맞아도 너무 모호하거나 실용성이 떨어지면 helpfulness가 낮을 수 있다.</p>
+<p>helpfulness는 사용자 관점의 효용이다. 같은 사실을 말해도 너무 짧거나 실행 가능한 정보가 없으면 덜 도움이 되고, 맥락에 맞춘 구조화된 답변일수록 helpfulness는 더 높아질 수 있다.</p>
 <h3>3. 왜 둘을 분리해야 하나</h3>
 <ul><li>faithful하지만 너무 짧고 불친절한 답변이 있을 수 있다.</li><li>helpful해 보이지만 근거를 벗어난 hallucination 답변이 있을 수 있다.</li></ul>
+<p>그래서 실제 평가 설계에서는 두 축을 함께 봐야 한다. 사용자 만족만 보면 hallucination을 놓치기 쉽고, 반대로 근거 충실성만 보면 실제 사용성이나 설명 품질을 놓칠 수 있다.</p>
 <h3>4. 실무에서의 의미</h3>
 <p>RAG, customer support, agent 시스템에서는 groundedness, factuality, harmlessness 같은 추가 지표도 함께 본다. 결국 한 개의 점수만으로는 모델 품질을 설명하기 어렵다.</p>
 <h3>5. 체크리스트</h3>

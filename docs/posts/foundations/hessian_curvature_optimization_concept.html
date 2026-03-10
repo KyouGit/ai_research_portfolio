@@ -212,6 +212,7 @@
 <p class="meta"><strong>태그:</strong> foundations,hessian,curvature,optimization</p>
 <div class="tip">gradient가 "어느 방향으로 내려갈지"를 알려준다면, Hessian은 "그 방향의 지형이 얼마나 가파르고 휘어져 있는지"를 알려준다.</div>
 <p>딥러닝에서 loss surface는 단순한 그릇 모양이 아니다. 어떤 방향은 매우 급하고, 어떤 방향은 완만하다. 이 차이를 설명하는 핵심 개념이 곡률(curvature)이고, 그것을 수학적으로 담는 도구가 Hessian이다.</p>
+<p>처음 공부할 때 Hessian은 너무 추상적으로 느껴질 수 있다. 하지만 실전에서는 왜 어떤 optimizer가 잘 흔들리고, 왜 어떤 학습은 learning rate에 민감하며, 왜 어떤 지점은 gradient가 작아도 쉽게 수렴하지 않는지를 설명하는 중요한 배경 개념이다. 즉 Hessian은 최적화 난이도를 읽는 언어라고 보면 된다.</p>
 <h3>시각 자료로 먼저 보기</h3>
 <div class="image-grid">
   <figure class="image-card">
@@ -233,6 +234,7 @@
 <h3>1. Hessian 정의</h3>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>H</mi><mo>&#x0003D;</mo><msup><mo>&#x02207;</mo><mn>2</mn></msup><mi>L</mi><mo stretchy="false">&#x00028;</mo><mi>&#x003B8;</mi><mo stretchy="false">&#x00029;</mo></mrow></math></div>
 <p>Hessian은 2차 미분을 모아 만든 행렬이다. 각 원소는 한 파라미터를 조금 움직였을 때 gradient가 어떻게 바뀌는지를 나타낸다.</p>
+<p>gradient가 "지금 어느 방향으로 내려갈지"를 알려주는 1차 정보라면, Hessian은 그 방향 주변의 표면이 얼마나 굽어 있는지를 알려주는 2차 정보다. 그래서 더 많은 정보를 주지만 계산과 해석도 훨씬 어렵다.</p>
 <h3>2. 왜 중요한가</h3>
 <ul><li>곡률이 큰 방향에서는 작은 학습률도 필요할 수 있다.</li><li>곡률이 작은 방향에서는 너무 작은 step만 가면 수렴이 느리다.</li><li>즉 같은 learning rate라도 방향마다 적절성이 다르다.</li></ul>
 <h3>3. 직관</h3>
@@ -242,6 +244,7 @@
 <p>여기서 마지막 2차 항이 곡률 정보를 담는다. 이 항이 있으면 단순히 "내리막 방향"뿐 아니라 "얼마나 급하게 휘어져 있는가"까지 고려할 수 있다.</p>
 <h3>5. 실무에서의 의미</h3>
 <ul><li>sharp minimum과 flat minimum 구분</li><li>학습률 스케줄링 필요성</li><li>2차 최적화 기법의 직관 제공</li></ul>
+<p>다만 실제 대형 모델에서는 Hessian 전체를 직접 계산하는 일은 거의 불가능하다. 그래서 Hessian-vector product, trace 근사, 최대 고유값 추정처럼 일부 정보만 읽는 방식이 주로 쓰인다. 중요하지만 그대로 전부 계산하지는 않는 이유가 여기에 있다.</p>
 <h3>6. 체크리스트</h3>
 <ul><li>gradient와 Hessian의 역할 차이를 설명할 수 있는가?</li><li>곡률이 큰 방향에서 왜 step size가 문제가 되는가?</li><li>momentum이나 Adam이 왜 도움이 되는지 지형 관점에서 설명할 수 있는가?</li></ul>
     </article>

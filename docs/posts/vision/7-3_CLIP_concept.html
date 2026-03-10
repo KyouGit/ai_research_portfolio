@@ -187,10 +187,13 @@
 <p class="meta"><strong>태그:</strong> vision,clip,contrastive,zero_shot</p>
 <div class="tip">CLIP은 이미지와 텍스트를 같은 의미 공간에 올려 놓고, 서로 맞는 쌍은 가깝게 학습하는 모델이다.</div>
 <p>CLIP이 중요한 이유는 이미지 분류를 위해 반드시 분류기 헤드를 새로 학습하지 않아도, 텍스트 프롬프트만으로 zero-shot 분류가 가능하다는 점이다.</p>
+<p>이 문서를 볼 때는 CLIP을 단순한 이미지 분류 모델로 이해하면 아쉽다. CLIP의 진짜 의미는 이미지와 문장을 같은 임베딩 공간에서 비교 가능하게 만들었다는 데 있다. 그래서 분류, 검색, 멀티모달 매칭이 하나의 공통 표현 학습 문제로 묶인다.</p>
 <h3>1. 핵심 아이디어</h3>
 <ul><li>이미지 인코더와 텍스트 인코더를 따로 둔다.</li><li>맞는 이미지-문장 쌍은 가깝게, 아닌 쌍은 멀게 학습한다.</li><li>라벨 이름을 문장으로 바꾸면 zero-shot classification이 가능하다.</li></ul>
+<p>특히 "라벨을 정수 id가 아니라 자연어 설명으로 바꾼다"는 점이 중요하다. 이 순간 모델은 단순한 고정 클래스 분류기가 아니라, 언어로 정의된 개념과 시각 정보를 연결하는 표현 학습기로 바뀐다.</p>
 <h3>2. 왜 중요한가</h3>
 <p>CLIP은 vision과 language를 하나의 표현 공간으로 연결하면서, 멀티모달 표현 학습의 방향을 크게 바꿨다.</p>
+<p>그래서 CLIP 이후에는 학습 데이터에 없던 클래스도 문장 설명만으로 어느 정도 인식할 수 있는가가 중요한 질문이 되었다. 즉 supervised accuracy 중심에서 더 유연한 의미 일반화 능력을 보는 방향으로 기준이 넓어진 것이다.</p>
 <h3>3. 더 깊게 보기</h3>
 <p><a href="./clip_contrastive_image_text_zero_shot_concept.html">CLIP contrastive learning과 zero-shot 상세 문서</a></p>
     </article>
