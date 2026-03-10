@@ -448,7 +448,7 @@
         <article>
           <h3>3-5 Residual / LayerNorm</h3>
           <ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> residual connection과 LayerNorm이 학습 안정성에 주는 효과 설명</li></ul>
-          <p class="meta">관련 문서: 준비 중</p>
+          <p class="meta">관련 문서: <a href="./posts/llm/residual_layernorm_transformer_concept.html">3-5 Residual / LayerNorm (중급)</a></p>
         </article>
       </div>
     </section>
@@ -485,7 +485,7 @@
         <article><h3>5-1 정렬</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 상</li><li><strong>이해 목표:</strong> InstructGPT/Constitutional AI/DPO 차이 설명</li></ul><p class="meta">관련 문서: <a href="./posts/llm/5-1_InstructGPT_concept.html">InstructGPT</a> / <a href="./posts/llm/5-1_ConstitutionalAI_concept.html">Constitutional AI</a> / <a href="./posts/llm/5-1_DPO_concept.html">DPO</a> / <a href="./posts/llm/llm_alignment_rlhf_constitutional_dpo_concept.html">5-1 LLM 정렬 (중상)</a></p></article>
         <article><h3>5-2 추론 강화</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 상</li><li><strong>이해 목표:</strong> CoT/Self-Consistency/DeepSeek-R1 흐름 설명</li></ul><p class="meta">관련 문서: <a href="./posts/llm/5-2_ChainOfThought_concept.html">CoT</a> / <a href="./posts/llm/5-2_SelfConsistency_concept.html">Self-Consistency</a> / <a href="./posts/llm/5-2_DeepSeekR1_concept.html">DeepSeek-R1</a> / <a href="./posts/llm/reasoning_cot_self_consistency_r1_concept.html">5-2 추론 강화 (상)</a></p></article>
         <article><h3>5-3 효율화/서빙</h3><ul><li><strong>우선순위:</strong> P2</li><li><strong>난이도:</strong> 상</li><li><strong>이해 목표:</strong> MoE(Switch/Mixtral) 구조적 장단점 설명</li></ul><p class="meta">관련 문서: <a href="./posts/llm/5-3_SwitchTransformers_concept.html">Switch</a> / <a href="./posts/llm/5-3_Mixtral_concept.html">Mixtral</a> / <a href="./posts/llm/moe_switch_mixtral_serving_efficiency_concept.html">5-3 효율화/서빙 (상)</a></p></article>
-        <article><h3>5-4 RLHF 세부 메커니즘</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 상</li><li><strong>이해 목표:</strong> reward model, PPO, preference optimization 흐름 설명</li></ul><p class="meta">관련 문서: 준비 중</p></article>
+        <article><h3>5-4 RLHF 세부 메커니즘</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 상</li><li><strong>이해 목표:</strong> reward model, PPO, preference optimization 흐름 설명</li></ul><p class="meta">관련 문서: <a href="./posts/llm/rlhf_reward_model_ppo_preference_concept.html">5-4 RLHF 세부 메커니즘 (상)</a></p></article>
       </div>
     </section>
 
@@ -511,10 +511,10 @@
         <article><h3>6.5-6 Feature Store</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> training-serving skew 원인과 방지 전략 설명</li></ul><p class="meta">도구: Feast, Tecton / 관련 문서: <a href="./posts/rag_agent/feature_store_training_serving_skew_concept.html">6.5-6 Feature Store (중급)</a></p></article>
         <article><h3>6.5-7 LLMOps</h3><ul><li><strong>우선순위:</strong> P0</li><li><strong>난이도:</strong> 중상</li><li><strong>이해 목표:</strong> Prompt versioning, RAG evaluation, Guardrails 설계 포인트 설명</li></ul><p class="meta">도구: LangSmith, TruLens, PromptLayer / 관련 문서: <a href="./posts/rag_agent/llmops_prompt_versioning_rag_evaluation_guardrails_concept.html">6.5-7 LLMOps (중상)</a></p></article>
         <article><h3>6.5-8 LLM Evaluation Metrics</h3><ul><li><strong>우선순위:</strong> P0</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> faithfulness/helpfulness/groundedness 지표와 평가 셋 설계 설명</li></ul><p class="meta">관련 문서: <a href="./posts/llm/llm_evaluation_metrics_faithfulness_helpfulness_concept.html">EVAL-1 LLM Evaluation Metrics (중급)</a></p></article>
-        <article><h3>6.5-9 Baseline / Ablation / Error Analysis</h3><ul><li><strong>우선순위:</strong> P0</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> 논문/면접에서 baseline 선정, ablation, failure case 분석 설명</li></ul><p class="meta">관련 문서: 준비 중</p></article>
-        <article><h3>6.5-10 Reproducibility / Statistical Testing</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중상</li><li><strong>이해 목표:</strong> seed variance, confidence interval, 유의성 검정 필요성 설명</li></ul><p class="meta">관련 문서: 준비 중</p></article>
-        <article><h3>6.5-11 System Tradeoff Design</h3><ul><li><strong>우선순위:</strong> P0</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> latency, cost, memory, quality 간 의사결정 프레임 설명</li></ul><p class="meta">관련 문서: 준비 중</p></article>
-        <article><h3>6.5-12 Offline vs Online Evaluation</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> 오프라인 지표와 실제 사용자 지표 차이 설명</li></ul><p class="meta">관련 문서: 준비 중</p></article>
+        <article><h3>6.5-9 Baseline / Ablation / Error Analysis</h3><ul><li><strong>우선순위:</strong> P0</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> 논문/면접에서 baseline 선정, ablation, failure case 분석 설명</li></ul><p class="meta">관련 문서: <a href="./posts/rag_agent/baseline_ablation_error_analysis_concept.html">6.5-9 Baseline / Ablation / Error Analysis (중급)</a></p></article>
+        <article><h3>6.5-10 Reproducibility / Statistical Testing</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중상</li><li><strong>이해 목표:</strong> seed variance, confidence interval, 유의성 검정 필요성 설명</li></ul><p class="meta">관련 문서: <a href="./posts/rag_agent/reproducibility_statistical_testing_concept.html">6.5-10 Reproducibility / Statistical Testing (중상)</a></p></article>
+        <article><h3>6.5-11 System Tradeoff Design</h3><ul><li><strong>우선순위:</strong> P0</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> latency, cost, memory, quality 간 의사결정 프레임 설명</li></ul><p class="meta">관련 문서: <a href="./posts/rag_agent/system_tradeoff_design_concept.html">6.5-11 System Tradeoff Design (중급)</a></p></article>
+        <article><h3>6.5-12 Offline vs Online Evaluation</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> 오프라인 지표와 실제 사용자 지표 차이 설명</li></ul><p class="meta">관련 문서: <a href="./posts/rag_agent/offline_online_evaluation_concept.html">6.5-12 Offline vs Online Evaluation (중급)</a></p></article>
       </div>
     </section>
 
@@ -526,8 +526,8 @@
         <article><h3>7-3 DETR</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> set prediction과 bipartite matching 관점 설명</li></ul><p class="meta">관련 문서: <a href="./posts/vision/7-2_DETR_concept.html">DETR (중급)</a> / <a href="./posts/vision/detr_set_prediction_bipartite_matching_concept.html">7-3 DETR (중급)</a></p></article>
         <article><h3>7-4 CLIP</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> 이미지-텍스트 대조학습과 zero-shot 전이 설명</li></ul><p class="meta">관련 문서: <a href="./posts/vision/7-3_CLIP_concept.html">CLIP (중급)</a> / <a href="./posts/vision/clip_contrastive_image_text_zero_shot_concept.html">7-4 CLIP (중급)</a></p></article>
         <article><h3>7-5 Detection Metrics</h3><ul><li><strong>우선순위:</strong> P1</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> IoU, precision-recall, mAP 계산과 해석 설명</li></ul><p class="meta">관련 문서: <a href="./posts/vision/detection_metrics_iou_map_concept.html">7-5 Detection Metrics (중급)</a></p></article>
-        <article><h3>7-6 Segmentation</h3><ul><li><strong>우선순위:</strong> P2</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> semantic/instance segmentation 차이와 대표 평가 방식 설명</li></ul><p class="meta">관련 문서: 준비 중</p></article>
-        <article><h3>7-7 Self-Supervised Vision</h3><ul><li><strong>우선순위:</strong> P2</li><li><strong>난이도:</strong> 중상</li><li><strong>이해 목표:</strong> contrastive / masked image modeling 기반 표현 학습 설명</li></ul><p class="meta">관련 문서: 준비 중</p></article>
+        <article><h3>7-6 Segmentation</h3><ul><li><strong>우선순위:</strong> P2</li><li><strong>난이도:</strong> 중</li><li><strong>이해 목표:</strong> semantic/instance segmentation 차이와 대표 평가 방식 설명</li></ul><p class="meta">관련 문서: <a href="./posts/vision/segmentation_semantic_instance_concept.html">7-6 Segmentation (중급)</a></p></article>
+        <article><h3>7-7 Self-Supervised Vision</h3><ul><li><strong>우선순위:</strong> P2</li><li><strong>난이도:</strong> 중상</li><li><strong>이해 목표:</strong> contrastive / masked image modeling 기반 표현 학습 설명</li></ul><p class="meta">관련 문서: <a href="./posts/vision/self_supervised_vision_concept.html">7-7 Self-Supervised Vision (중상)</a></p></article>
       </div>
     </section>
 

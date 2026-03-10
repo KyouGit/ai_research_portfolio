@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>AI Research Portfolio Post</title><style>:root{--bg:#f6f8fc;--surface:#fff;--text:#172033;--muted:#5f6b85;--line:#d8e0ef;--accent:#1f4f99;--code-bg:#eef3ff;--code-line:#d6e1ff}*{box-sizing:border-box}body{margin:0;color:var(--text);background:radial-gradient(circle at 10% 0%,#eef4ff 0%,var(--bg) 38%,var(--bg) 100%);font-family:"Noto Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.7}.wrap{max-width:980px;margin:0 auto;padding:28px 16px 56px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.topbar a{text-decoration:none;color:var(--accent);border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:.9rem;font-weight:600}.post{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 12px 28px rgba(31,42,68,.06)}h1,h2,h3,h4{line-height:1.3;margin:1.25em 0 .55em}h2{font-size:clamp(1.35rem,2.2vw,1.8rem);margin-top:0}h3{font-size:clamp(1.1rem,1.7vw,1.3rem);color:#183964}p{margin:.6em 0}ul{margin:.65em 0 .9em 1.2em;padding:0}li{margin:.2em 0}code{background:var(--code-bg);border:1px solid var(--code-line);border-radius:7px;padding:.12em .38em;font-size:.93em;color:#17396f}.tip{margin:.9em 0 1.1em;padding:12px 14px;border-left:4px solid #86a8df;background:#f7faff;border-radius:10px;color:#26415f}.meta{color:var(--muted);font-size:.92rem}</style></head>
+<body><main class="wrap"><nav class="topbar" aria-label="Quick navigation"><a href="/ai_research_portfolio/">Live Blog</a><a href="/ai_research_portfolio/roadmap.html">Roadmap</a><a href="/ai_research_portfolio/index.html">Index</a></nav><article class="post">
+<h2>Segmentation 이해</h2>
+<p class="meta"><strong>난이도:</strong> 중급</p>
+<p class="meta"><strong>태그:</strong> vision,segmentation,semantic,instance</p>
+<div class="tip">분류가 이미지 전체에 하나의 라벨을 붙이는 문제라면, segmentation은 픽셀 단위로 무엇이 어디 있는지 더 촘촘하게 맞히는 문제다.</div>
+<p>Segmentation은 객체 검출보다 더 세밀한 시각 이해를 요구한다. 픽셀마다 라벨을 예측해야 하므로 위치와 경계를 훨씬 정교하게 다뤄야 한다.</p>
+<h3>1. Semantic segmentation</h3>
+<p>같은 클래스의 픽셀을 모두 같은 라벨로 본다. 예를 들어 사람 두 명이 있어도 둘 다 `person` 픽셀로만 표시된다.</p>
+<h3>2. Instance segmentation</h3>
+<p>같은 클래스여도 객체 인스턴스를 서로 구분한다. 그래서 사람 A와 사람 B를 따로 나눠서 마스크를 만든다.</p>
+<h3>3. 왜 중요한가</h3>
+<ul><li>자율주행, 의료영상, 로봇 비전처럼 위치 정밀도가 중요한 곳에서 자주 쓰인다.</li><li>Detection보다 더 풍부한 장면 이해를 제공한다.</li></ul>
+<h3>4. 체크리스트</h3>
+<ul><li>semantic과 instance segmentation 차이를 설명할 수 있는가?</li><li>왜 segmentation은 detection보다 더 세밀한 문제인가?</li></ul>
+</article></main></body></html>
