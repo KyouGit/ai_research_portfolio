@@ -177,6 +177,7 @@
 <p class="meta"><strong>태그:</strong> generative,autoencoder,latent</p>
 <div class="tip">Autoencoder는 "중요한 정보만 남기도록 압축했다가 다시 복원하게 만드는 모델"이다.</div>
 <p>Autoencoder는 입력을 저차원 latent representation으로 압축하고, 그 표현만으로 원래 입력을 다시 복원하도록 학습한다. 이 과정을 통해 데이터의 핵심 구조를 학습할 수 있다.</p>
+<p>핵심은 단순 복사가 아니라 병목을 통해 "무엇을 버리고 무엇을 남길지"를 배우게 한다는 점이다. 그래서 autoencoder는 차원 축소, representation learning, 이상탐지, denoising 등으로 자연스럽게 이어진다.</p>
 <h3>1. 구조</h3>
 <ul><li>Encoder: 입력을 latent vector로 압축</li><li>Decoder: latent vector에서 원래 입력을 복원</li></ul>
 <h3>2. 핵심 목적</h3>
