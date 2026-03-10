@@ -199,12 +199,15 @@
 <li>지시(instruction) 이해 부족</li>
 </ul>
 <p>이를 해결하기 위해 사용하는 방법이 <strong>LLM Alignment</strong>입니다.</p>
+<div class="tip">Alignment는 모델을 더 똑똑하게 만드는 과정이라기보다, 이미 배운 언어 능력을 "사람이 원하는 방식"으로 조정하는 과정에 가깝다.</div>
+<p>Pretraining만 거친 모델은 인터넷 텍스트를 잘 이어 쓰지만, 사용자 지시를 안전하고 유용하게 따르는 것은 별개의 문제다. 그래서 alignment는 "무엇을 말할 수 있는가"보다 "어떻게 행동해야 하는가"를 다루는 단계라고 볼 수 있다.</p>
 
 <h3>직관 비유</h3>
 <ul>
 <li>Pretraining -> 언어 지식 학습</li>
 <li>Alignment -> 사람 기준에 맞게 행동 조정</li>
 </ul>
+<p>즉 alignment는 언어 능력을 다시 만드는 것이 아니라, 이미 가진 능력 위에 선호도와 안전 기준을 덧입히는 절차다. 이 차이를 이해하면 RLHF, Constitutional AI, DPO가 왜 모두 "정답 분포" 대신 "선호 비교"를 다루는지 자연스럽게 보인다.</p>
 
 <h2>1. InstructGPT</h2>
 <p>InstructGPT는 <strong>RLHF (Reinforcement Learning from Human Feedback)</strong> 기반 정렬 방법입니다.</p>

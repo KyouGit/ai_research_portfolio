@@ -187,6 +187,9 @@
 <p><strong>타입:</strong> concept</p>
 <p><strong>난이도:</strong> 중급</p>
 <p><strong>선수지식:</strong> 있음 — Transformer, Self-Attention, Object Detection</p>
+<div class="tip">DETR의 핵심은 detection을 "박스를 많이 뿌리고 나중에 겹친 걸 지우는 문제"가 아니라, "정답 객체 집합을 직접 예측하는 문제"로 다시 정의한 것이다.</div>
+<p>기존 detection 파이프라인은 anchor, NMS, 복잡한 후처리에 많이 의존했다. DETR은 Transformer를 사용해 이미지 전체를 한 번에 보고, object query로 필요한 객체를 직접 뽑아내도록 만든다. 그래서 detection을 더 깔끔한 end-to-end 구조로 바꿨다는 의미가 크다.</p>
+<p>이 문서를 읽을 때는 성능 숫자보다 "왜 bipartite matching이 필요한가"에 집중하면 좋다. DETR은 중복 예측을 NMS로 지우는 대신, 학습 단계에서부터 하나의 예측을 하나의 정답과 매칭하는 방식으로 문제를 푼다.</p>
 
 <h3>문제 설정</h3>
 <p>기존 object detection 모델(YOLO, Faster R-CNN)은 다음 문제를 가지고 있습니다.</p>
@@ -200,6 +203,7 @@
 <p><strong>DETR (Detection Transformer)</strong>은 이 문제를 다음 방식으로 해결합니다.</p>
 
 <p><strong>"Object detection을 set prediction 문제로 변환"</strong></p>
+<p>여기서 set prediction이라는 말이 중요하다. 객체들은 순서가 있는 시퀀스가 아니라 "순서 없는 집합"이기 때문에, DETR은 어떤 query가 어떤 객체를 맡을지 학습 중에 매칭해 주어야 한다.</p>
 
 <h2>1. DETR 핵심 아이디어</h2>
 

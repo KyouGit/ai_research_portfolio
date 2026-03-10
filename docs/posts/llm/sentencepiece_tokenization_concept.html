@@ -187,6 +187,8 @@
 <p class="meta"><strong>타입:</strong> concept</p>
 <p class="meta"><strong>난이도:</strong> 입문</p>
 <p class="meta"><strong>선수지식:</strong> 없음</p>
+<div class="tip">SentencePiece는 "공백으로 먼저 자르지 말고, 문자열 전체에서 바로 subword를 배우자"는 발상이다.</div>
+<p>BPE나 WordPiece를 배운 뒤 SentencePiece를 보면 비슷해 보이지만, 핵심 차이는 전처리 철학이다. 언어마다 단어 경계를 따로 정하지 않고, 공백까지 포함한 원문 문자열 자체에서 subword를 배운다. 그래서 다국어 환경이나 공백 규칙이 약한 언어에서 특히 강하다.</p>
 
 <h3>문제 설정</h3>
 <p>기존 토크나이저(BPE, WordPiece)는 대부분 <strong>공백 기반 단어 분리</strong>를 전제로 합니다. 하지만 일부 언어에서는 공백이 단어 경계를 정확히 나타내지 않습니다.</p>
@@ -196,6 +198,7 @@
 <li>한국어</li>
 </ul>
 <p>이 문제를 해결하기 위해 Google이 개발한 토크나이저가 <strong>SentencePiece</strong>입니다.</p>
+<p>즉 SentencePiece는 tokenizer 이전에 language-dependent pre-tokenizer를 두지 않아도 된다는 장점이 있다. 이 덕분에 한국어, 일본어, 중국어처럼 공백 규칙이 영어와 다른 언어에서도 더 일관된 파이프라인을 만들 수 있다.</p>
 
 <h3>직관 비유</h3>
 <ul>
