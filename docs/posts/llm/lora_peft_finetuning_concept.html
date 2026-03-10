@@ -29,6 +29,7 @@
       <p class="meta"><strong>태그:</strong> llm,lora,peft,fine_tuning</p>
       <div class="tip">LoRA는 큰 모델 전체를 다시 학습하지 않고, "작은 추가 행렬만 학습해서 필요한 변화만 얹는" 파인튜닝 방식이다.</div>
       <p>대형 언어모델을 full fine-tuning 하려면 메모리와 시간이 많이 든다. PEFT(Parameter-Efficient Fine-Tuning)는 이 비용을 줄이기 위해 일부 파라미터만 추가하거나 조정하는 계열 방법이고, LoRA는 그중 가장 대표적이다.</p>
+      <p>핵심은 "기존 모델 지식을 버리지 않고, 필요한 변화만 작게 넣는다"는 데 있다. 그래서 한 베이스 모델을 여러 도메인이나 태스크로 빠르게 확장할 때 특히 실용적이다.</p>
 
       <h3>1. 왜 필요한가</h3>
       <ul>
@@ -40,6 +41,7 @@
       <h3>2. LoRA 핵심 아이디어</h3>
       <p>원래 가중치 <code>W</code>를 직접 바꾸는 대신, 작은 저랭크 업데이트 <code>&Delta;W = BA</code>만 학습한다. 여기서 <code>A</code>, <code>B</code>의 차원은 작아서 전체 비용이 크게 줄어든다.</p>
       <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>W</mi><mo>'</mo><mo>=</mo><mi>W</mi><mo>+</mo><mi>B</mi><mi>A</mi></mrow></math></div>
+      <p>직관적으로는 거대한 행렬 전체를 새로 쓰는 대신, 그 행렬에 대한 "작은 보정값"만 따로 저장하는 셈이다. 그래서 저장 공간과 학습 비용이 함께 줄어든다.</p>
 
       <h3>3. 직관</h3>
       <p>베이스 모델이 이미 많은 지식을 갖고 있다고 보면, LoRA는 그 위에 "작은 수정 메모"만 붙이는 방식이다. 그래서 새로운 task에 적응하면서도 원래 모델 자체를 크게 건드리지 않는다.</p>
@@ -50,6 +52,7 @@
         <li>장점: 베이스 모델 공유가 쉬워 배포와 실험 반복이 편하다</li>
         <li>한계: task에 따라 full fine-tuning보다 표현력이 부족할 수 있다</li>
       </ul>
+      <p>즉 LoRA는 항상 full fine-tuning보다 낫다는 뜻이 아니라, 품질 손실을 어느 정도 감수하는 대신 비용을 크게 줄이는 절충안이라고 보는 것이 정확하다.</p>
 
       <h3>5. 면접 포인트</h3>
       <p>면접에서는 보통 "왜 full fine-tuning 대신 LoRA를 쓰는가", "왜 low-rank가 가능하다고 보는가", "adapter 여러 개를 어떻게 관리할 수 있는가"를 묻는다. 이 세 질문에 답할 수 있으면 충분하다.</p>

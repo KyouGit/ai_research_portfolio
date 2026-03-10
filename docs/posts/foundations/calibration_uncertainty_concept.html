@@ -27,12 +27,14 @@
       <p class="meta"><strong>태그:</strong> foundations,calibration,uncertainty,evaluation</p>
       <div class="tip">모델이 자신 있어 보인다고 해서 정말 맞는 것은 아니다. calibration은 "확신의 크기"와 "실제 정답률"이 얼마나 잘 맞는지를 보는 개념이다.</div>
       <p>분류 모델이 0.99 확률로 정답이라고 말해도 자주 틀린다면, 그 모델은 overconfident하다. uncertainty와 calibration은 이런 문제를 정량적으로 다루는 개념이다.</p>
+      <p>이 주제가 중요한 이유는 많은 모델이 단순 accuracy 기준으로는 좋아 보여도, 실제 서비스에서는 자신감 표현이 엉망일 수 있기 때문이다. 특히 고위험 환경에서는 "맞히는가"만큼 "얼마나 확실한 척하는가"도 중요하다.</p>
 
       <h3>1. Calibration이란</h3>
       <p>모델이 80% 확률이라고 한 예측들이 실제로도 약 80% 맞아야 calibrated 되었다고 말할 수 있다. 즉 calibration은 confidence와 accuracy의 일치 정도를 본다.</p>
 
       <h3>2. Uncertainty란</h3>
       <p>모델이 얼마나 확신하지 못하는지를 나타낸다. 데이터가 애매하거나 학습 데이터와 다른 분포를 만나면 uncertainty가 커져야 자연스럽다.</p>
+      <p>즉 uncertainty는 모델이 모르는 것을 모른다고 말할 수 있는 능력과도 연결된다. 이 점이 없으면 모델은 낯선 입력에도 평소처럼 확신 높은 답을 내놓기 쉽다.</p>
 
       <h3>3. 왜 중요한가</h3>
       <ul>
@@ -49,6 +51,7 @@
 
       <h3>5. 면접 포인트</h3>
       <p>면접에서는 "accuracy가 높으면 calibration도 좋은가"를 자주 묻는다. 답은 아니다. 정확도가 높아도 confidence 분포가 실제 정답률과 어긋날 수 있다.</p>
+      <p>여기서 한 단계 더 나아가면 "OOD 상황에서 calibration은 왜 더 중요해지는가"까지 연결할 수 있다. distribution shift 환경에서는 단순 정확도보다 경고 신호를 얼마나 잘 내는지가 더 중요해질 수 있기 때문이다.</p>
 
       <h3>6. 체크리스트</h3>
       <ul>
