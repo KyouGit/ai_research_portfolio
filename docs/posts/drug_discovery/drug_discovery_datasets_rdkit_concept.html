@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root { --bg:#f6f8fc; --surface:#fff; --text:#172033; --muted:#5f6b85; --line:#d8e0ef; --accent:#1f4f99; }
+    * { box-sizing:border-box; } body { margin:0; color:var(--text); background:radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%); font-family:"Noto Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.7; }
+    .wrap { max-width:980px; margin:0 auto; padding:28px 16px 56px; } .topbar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+    .topbar a { text-decoration:none; color:var(--accent); border:1px solid #d8e0ef; background:#fff; border-radius:999px; padding:6px 12px; font-size:.9rem; font-weight:600; }
+    .post { background:#fff; border:1px solid #d8e0ef; border-radius:16px; padding:24px; box-shadow:0 12px 28px rgba(31,42,68,.06); }
+    h2,h3 { line-height:1.3; margin:1.25em 0 .55em; } h2 { font-size:clamp(1.35rem,2.2vw,1.8rem); margin-top:0; } h3 { font-size:clamp(1.1rem,1.7vw,1.3rem); color:#183964; }
+    p { margin:.6em 0; } ul { margin:.65em 0 .9em 1.2em; padding:0; } .tip { margin:.9em 0 1.1em; padding:12px 14px; border-left:4px solid #86a8df; background:#f7faff; border-radius:10px; color:#26415f; } .meta { color:#5f6b85; font-size:.92rem; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a><a href="/ai_research_portfolio/roadmap.html">Roadmap</a><a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
+      <h2>바이오인포매틱스 도구와 데이터셋: RDKit, ChEMBL, PubChem, PDB</h2>
+      <p class="meta"><strong>난이도:</strong> 입문</p>
+      <p class="meta"><strong>태그:</strong> drug_discovery,rdkit,chembl,pubchem,pdb,dataset</p>
+      <div class="tip">Drug discovery AI는 모델만 알아서는 부족하다. 어떤 데이터셋을 쓰는지, 분자 전처리는 어떤 라이브러리로 하는지, 구조 데이터는 어디서 얻는지를 알아야 실험이 돌아간다.</div>
+      <h3>1. RDKit</h3>
+      <p>RDKit은 분자 파싱, fingerprint 계산, SMILES 변환, 분자 속성 계산, scaffold 분리 등 약물 AI 실험의 기본 도구다.</p>
+      <h3>2. 대표 데이터셋</h3>
+      <ul>
+        <li><strong>ChEMBL:</strong> bioactivity 데이터 중심</li>
+        <li><strong>PubChem:</strong> 대규모 화합물 저장소</li>
+        <li><strong>PDB:</strong> 단백질과 복합체 3D 구조 저장소</li>
+        <li><strong>BindingDB:</strong> binding affinity 중심 데이터</li>
+      </ul>
+    </article>
+  </main>
+</body>
+</html>
