@@ -305,6 +305,7 @@
             <li><strong>난이도:</strong> 하</li>
             <li><strong>이해 목표:</strong> vanishing/exploding 원인과 gradient clipping 필요성 설명</li>
           </ul>
+          <p class="meta">관련 문서: <a href="./posts/foundations/TS-3_Gradient안정화_concept.html">TS-3 Gradient 안정화 (기초)</a></p>
         </article>
       </div>
     </section>
@@ -647,5 +648,22 @@
     </section>
 
   </main>
+  <script>
+    (function () {
+      var isJupyterView =
+        window.location.pathname.indexOf("/lab/") !== -1 ||
+        window.location.pathname.indexOf("/files/") !== -1 ||
+        window.self !== window.top;
+
+      if (!isJupyterView) return;
+
+      document.querySelectorAll('a[href]').forEach(function (link) {
+        var href = link.getAttribute('href');
+        if (!href || href.charAt(0) === '#') return;
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      });
+    })();
+  </script>
 </body>
 </html>

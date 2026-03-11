@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Portfolio Post</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #5f6b85;
+      --line: #d8e0ef;
+      --accent: #1f4f99;
+      --code-bg: #eef3ff;
+      --code-line: #d6e1ff;
+      --pre-bg: #0f172a;
+      --pre-text: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 10% 0%, #eef4ff 0%, var(--bg) 38%, var(--bg) 100%);
+      font-family: "Noto Sans KR", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .topbar a {
+      text-decoration: none;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 28px rgba(31, 42, 68, 0.06);
+    }
+    h1, h2, h3, h4 { line-height: 1.3; margin: 1.25em 0 0.55em; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.8rem); margin-top: 0; }
+    h3 { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: #183964; }
+    p { margin: 0.6em 0; }
+    ul, ol { margin: 0.65em 0 0.9em 1.2em; padding: 0; }
+    li { margin: 0.2em 0; }
+    strong { color: #11284a; }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-line);
+      border-radius: 7px;
+      padding: 0.12em 0.38em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.93em;
+      color: #17396f;
+      word-break: break-word;
+    }
+    p > code:only-child {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin: 8px 0;
+      font-size: 0.98rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.1px;
+      background: linear-gradient(180deg, #f3f7ff 0%, #ebf1ff 100%);
+    }
+    .math-block {
+      margin: 0.9em 0 1.1em;
+      padding: 14px 16px;
+      border: 1px solid var(--code-line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      overflow-x: auto;
+    }
+    .math-block math {
+      display: block;
+      text-align: center;
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+    .tip {
+      margin: 0.9em 0 1.1em;
+      padding: 12px 14px;
+      border-left: 4px solid #86a8df;
+      background: #f7faff;
+      border-radius: 10px;
+      color: #26415f;
+    }
+    pre {
+      margin: 0.8em 0 1.05em;
+      background: var(--pre-bg);
+      color: var(--pre-text);
+      border-radius: 12px;
+      border: 1px solid #1e2d48;
+      padding: 14px;
+      overflow: auto;
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      padding: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 0.85em 0 1.05em;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+    th, td {
+      border-bottom: 1px solid #e7edf9;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+    th {
+      background: #f1f5ff;
+      color: #15335d;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="topbar" aria-label="Quick navigation">
+      <a href="/ai_research_portfolio/">Live Blog</a>
+      <a href="/ai_research_portfolio/roadmap.html">Roadmap</a>
+      <a href="/ai_research_portfolio/index.html">Index</a>
+    </nav>
+    <article class="post">
+      <h2>주제: TS-3 Gradient 안정화 (Vanishing / Exploding Gradient와 Gradient Clipping)</h2>
+      <p class="meta"><strong>분류:</strong> foundations</p>
+      <p class="meta"><strong>타입:</strong> concept</p>
+      <p class="meta"><strong>난이도:</strong> 입문</p>
+      <p class="meta"><strong>선수지식:</strong> 있음 - 미분, 체인룰(chain rule), 경사하강법(gradient descent)</p>
+
+      <div class="tip">깊은 모델에서는 gradient가 너무 작아져서 안 움직이거나, 너무 커져서 발산할 수 있다. gradient 안정화는 학습이 실제로 진행되게 만드는 기본 안전장치다.</div>
+
+      <h3>직관적 이해 (비유)</h3>
+      <p>딥러닝 학습을 산을 내려가는 과정이라고 생각해보겠습니다.</p>
+      <ul>
+        <li>Gradient: 현재 위치에서 내려가는 방향</li>
+        <li>Loss: 산의 높이</li>
+        <li>학습: 계속 내려가며 낮은 지점 찾기</li>
+      </ul>
+      <p>문제는 모델이 깊어질수록 경사가 두 가지 문제를 일으킬 수 있다는 점입니다.</p>
+      <ul>
+        <li><strong>Vanishing Gradient</strong>: 경사가 너무 작아 거의 움직이지 않음</li>
+        <li><strong>Exploding Gradient</strong>: 경사가 너무 커져 학습이 불안정</li>
+      </ul>
+      <p>이 문제 때문에 딥러닝에서는 gradient 안정화 기법이 중요하며, 대표적으로 gradient clipping을 사용합니다.</p>
+
+      <h3>왜 깊은 모델에서 Gradient 문제가 생기나</h3>
+      <p>딥러닝에서 gradient는 체인룰을 통해 뒤에서 앞으로 전달됩니다.</p>
+      <pre><code>Loss -> Layer3 -> Layer2 -> Layer1</code></pre>
+      <p>각 레이어에서 gradient가 계속 곱해지기 때문에 값이 급격히 커지거나 작아질 수 있습니다. 그래서 깊은 네트워크에서는 forward뿐 아니라 backward의 수치 안정성도 같이 관리해야 합니다.</p>
+      <p>Transformer에서 residual connection과 normalization을 강하게 쓰는 이유도 결국 깊은 층에서 gradient 흐름을 유지하기 위해서입니다.</p>
+
+      <h3>수식 1: Gradient Descent 업데이트</h3>
+      <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>&theta;</mi><mo>=</mo><mi>&theta;</mi><mo>-</mo><mi>&eta;</mi><mi>&nabla;</mi><mi>L</mi><mo stretchy="false">(</mo><mi>&theta;</mi><mo stretchy="false">)</mo></mrow></math></div>
+      <p><strong>기호 의미</strong></p>
+      <ul>
+        <li><code>&theta;</code>: 모델 파라미터</li>
+        <li><code>&eta;</code>: learning rate</li>
+        <li><code>&nabla;L(&theta;)</code>: loss의 gradient</li>
+      </ul>
+      <p><strong>왜 필요한가</strong></p>
+      <p>이 수식은 모델이 loss를 줄이기 위해 파라미터를 업데이트하는 기본 규칙입니다.</p>
+      <p><strong>한계 / 주의점</strong></p>
+      <ul>
+        <li>gradient가 너무 크면 파라미터가 크게 튀어 학습이 발산</li>
+        <li>gradient가 너무 작으면 학습이 거의 진행되지 않음</li>
+      </ul>
+
+      <h3>수식 2: 체인룰로 인한 Gradient 전파</h3>
+      <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mo>&part;</mo><mi>L</mi></mrow><mrow><mo>&part;</mo><msub><mi>x</mi><mn>1</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><mo>&part;</mo><mi>L</mi></mrow><mrow><mo>&part;</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></mfrac><mfrac><mrow><mo>&part;</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><mrow><mo>&part;</mo><msub><mi>x</mi><mrow><mi>n</mi><mo>-</mo><mn>1</mn></mrow></msub></mrow></mfrac><mo>...</mo><mfrac><mrow><mo>&part;</mo><msub><mi>x</mi><mn>2</mn></msub></mrow><mrow><mo>&part;</mo><msub><mi>x</mi><mn>1</mn></msub></mrow></mfrac></mrow></math></div>
+      <p><strong>기호 의미</strong></p>
+      <ul>
+        <li><code>L</code>: loss</li>
+        <li><code>x_1 ... x_n</code>: 각 레이어 출력</li>
+      </ul>
+      <p><strong>왜 필요한가</strong></p>
+      <p>역전파(backpropagation)는 마지막 레이어의 gradient를 처음 레이어까지 체인룰로 전달합니다.</p>
+      <p><strong>한계 / 주의점</strong></p>
+      <ul>
+        <li>많은 미분값이 곱해지면 값이 0에 가까워질 수 있음: vanishing</li>
+        <li>값이 1보다 크면 폭발적으로 커질 수 있음: exploding</li>
+      </ul>
+
+      <h3>수식 3: Gradient Clipping</h3>
+      <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>g</mi><mo>=</mo><mi>g</mi><mo>&#x000D7;</mo><mrow><mo>(</mo><mfrac><mi>c</mi><mrow><mo>&#x02016;</mo><mi>g</mi><mo>&#x02016;</mo></mrow></mfrac><mo>)</mo></mrow><mtext>&nbsp;if&nbsp;</mtext><mrow><mo>&#x02016;</mo><mi>g</mi><mo>&#x02016;</mo></mrow><mo>&gt;</mo><mi>c</mi></mrow></math></div>
+      <p><strong>기호 의미</strong></p>
+      <ul>
+        <li><code>g</code>: gradient 벡터</li>
+        <li><code>||g||</code>: gradient norm</li>
+        <li><code>c</code>: clipping threshold</li>
+      </ul>
+      <p><strong>왜 필요한가</strong></p>
+      <p>gradient가 너무 커질 경우 크기를 제한하여 학습이 폭발하지 않도록 합니다.</p>
+      <p><strong>한계 / 주의점</strong></p>
+      <ul>
+        <li>너무 강하게 clipping하면 학습 속도가 느려질 수 있음</li>
+        <li>근본 원인을 없애는 것이 아니라 안정화 보조 장치에 가까움</li>
+      </ul>
+
+      <h3>Vanishing vs Exploding 비교</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>문제</th>
+              <th>원인</th>
+              <th>증상</th>
+              <th>대표 대응</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vanishing Gradient</td>
+              <td>미분값이 반복 곱셈으로 0에 가까워짐</td>
+              <td>초기 레이어가 거의 학습되지 않음</td>
+              <td>ReLU, residual connection, normalization</td>
+            </tr>
+            <tr>
+              <td>Exploding Gradient</td>
+              <td>gradient가 반복 곱셈으로 너무 커짐</td>
+              <td>loss 발산, NaN 발생</td>
+              <td>gradient clipping, learning rate 조절</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>코드-수식 연결</h3>
+      <p>PyTorch에서 gradient clipping은 다음 코드로 구현됩니다.</p>
+      <pre><code>loss.backward()
+torch.nn.utils.clip_grad_norm_(
+    model.parameters(), max_norm=1.0
+)
+optimizer.step()</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>코드</th>
+              <th>수식 대응</th>
+              <th>설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>loss.backward()</code></td>
+              <td>체인룰 수식</td>
+              <td>gradient 계산</td>
+            </tr>
+            <tr>
+              <td><code>clip_grad_norm_</code></td>
+              <td><code>g = g * (c / ||g||)</code></td>
+              <td>gradient 크기 제한</td>
+            </tr>
+            <tr>
+              <td><code>optimizer.step()</code></td>
+              <td><code>&theta; = &theta; - &eta;&nabla;L</code></td>
+              <td>파라미터 업데이트</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>자주 하는 오해 5개</h3>
+      <ul>
+        <li>gradient clipping이 vanishing gradient를 해결한다고 생각함</li>
+        <li>gradient가 크면 항상 좋은 학습이라고 생각함</li>
+        <li>learning rate만 조정하면 exploding 문제가 항상 해결된다고 생각함</li>
+        <li>딥러닝에서 gradient 문제는 RNN에서만 발생한다고 생각함</li>
+        <li>clipping threshold는 항상 1.0이 최적이라고 생각함</li>
+      </ul>
+
+      <h3>체크리스트 (스스로 설명 가능해야 하는 질문)</h3>
+      <ul>
+        <li>Vanishing gradient가 왜 깊은 네트워크에서 발생하는가?</li>
+        <li>체인룰이 gradient 크기에 어떤 영향을 주는가?</li>
+        <li>Exploding gradient가 발생하면 학습 로그에서 어떤 현상이 나타나는가?</li>
+        <li>Gradient clipping이 어떤 수식으로 동작하는가?</li>
+        <li>Residual connection이 gradient 흐름에 왜 도움이 되는가?</li>
+      </ul>
+    </article>
+  </main>
+</body>
+</html>
