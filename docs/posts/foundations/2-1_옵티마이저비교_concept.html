@@ -168,6 +168,33 @@
       color: var(--muted);
       font-size: 0.92rem;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f8fbff;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
     @media (max-width: 640px) {
       .post { padding: 18px 14px; border-radius: 12px; }
       .topbar a { font-size: 0.84rem; padding: 5px 10px; }
@@ -198,7 +225,10 @@
   <li>w: 현재 위치</li>
   <li>gradient: 산의 기울기</li>
   <li>optimizer: 내려가는 전략</li>
+  <li>learning rate: 한 번에 내딛는 보폭</li>
+  <li>momentum: 직전까지 달려오던 관성</li>
 </ul>
+<p>여기서 learning rate와 momentum은 자주 같이 나오지만 역할은 다릅니다. learning rate는 얼마나 크게 움직일지 정하고, momentum은 이전 방향을 얼마나 계속 믿을지 정합니다.</p>
 
 <h2>1. SGD</h2>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mrow><mi>t</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>w</mi><mi>t</mi></msub><mo>&#x02212;</mo><mi>e</mi><mi>t</mi><mi>a</mi><mo>&#x0002A;</mo><msub><mi>g</mi><mi>t</mi></msub></mrow></math></div>
@@ -207,6 +237,8 @@
   <li>gradient noise에 민감하고 진동 가능</li>
 </ul>
 <p>SGD의 장점은 해석이 가장 단순하다는 점입니다. 현재 gradient가 가리키는 방향으로 한 걸음 이동한다는 구조라서, learning rate가 너무 크면 왜 흔들리고 너무 작으면 왜 느린지 직관적으로 이해하기 쉽습니다.</p>
+<p>수식에서 <code>w_t</code>는 현재 step의 파라미터, <code>g_t</code>는 그 시점 gradient, <code>η</code>는 보폭입니다. 즉 "현재 위치에서 지금 보이는 기울기만 보고 바로 이동한다"는 뜻입니다.</p>
+<p>즉 learning rate는 optimizer를 고르는 값이 아니라, 어떤 optimizer를 쓰더라도 거의 항상 중요한 공통 하이퍼파라미터입니다. 너무 크면 valley를 건너뛰고, 너무 작으면 내려가긴 하지만 시간이 매우 오래 걸립니다.</p>
 
 <h2>2. Momentum</h2>
 <div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>&#x0003D;</mo><mi>b</mi><mi>e</mi><mi>t</mi><mi>a</mi><mo>&#x0002A;</mo><msub><mi>v</mi><mrow><mi>t</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0002B;</mo><msub><mi>g</mi><mi>t</mi></msub></mrow></math></div>
@@ -217,6 +249,8 @@
 </ul>
 <p>주의: beta가 너무 크면 overshoot가 생길 수 있습니다.</p>
 <p>직관적으로는 작은 공이 울퉁불퉁한 지형을 내려가는 상황과 비슷합니다. SGD가 매 순간 기울기만 보고 방향을 바꾸는 방식이라면, Momentum은 이전 속도를 조금 기억해서 자주 바뀌는 잡음 방향에는 덜 흔들리고, 일관된 방향에는 더 빠르게 나아갑니다.</p>
+<p>첫 번째 식의 <code>v_t</code>는 일종의 "속도 메모리"입니다. 현재 gradient만 보는 것이 아니라 직전까지 누적된 방향을 섞어 쓰기 때문에, 골짜기 양옆으로 흔들리는 현상을 줄이고 더 매끄럽게 내려갈 수 있습니다.</p>
+<p>여기서 <code>β</code>는 momentum의 강도를 정합니다. 값이 크면 과거 방향을 오래 기억하고, 값이 작으면 현재 gradient 비중이 더 커집니다. 그래서 learning rate가 보폭이라면, momentum은 관성의 크기라고 보면 됩니다.</p>
 
 <h2>3. AdamW</h2>
 <p>Adam의 1차/2차 모멘트 추정:</p>
@@ -231,6 +265,30 @@
 </ul>
 <p>AdamW가 널리 쓰이는 이유는 파라미터마다 업데이트 스케일을 자동으로 조정해 주기 때문입니다. 어떤 파라미터는 gradient가 자주 크고, 어떤 파라미터는 매우 작을 수 있는데, AdamW는 이런 차이를 어느 정도 보정해 학습을 안정적으로 진행하게 돕습니다.</p>
 <p>특히 LLM이나 Transformer 계열에서는 파라미터 수가 크고 학습 스케일도 크기 때문에, AdamW처럼 adaptive한 optimizer가 실무 기본값으로 자리잡았습니다. 다만 "항상 AdamW가 최고"라기보다, 계산 비용과 일반화 특성까지 포함한 trade-off로 이해하는 편이 맞습니다.</p>
+<p>여기서 <code>m_t</code>는 gradient의 이동평균이라 Momentum과 비슷한 방향 기억 역할을 하고, <code>v_t</code>는 gradient 제곱의 이동평균이라 파라미터별 스케일 정보를 담습니다. 그래서 AdamW는 "방향 기억 + 스케일 보정"을 동시에 하는 optimizer라고 이해하면 됩니다.</p>
+
+<div class="image-grid">
+  <figure class="image-card">
+    <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-label="SGD와 Momentum과 AdamW 경로 비교 그림">
+      <defs>
+        <marker id="arrow-opt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10Z" fill="#1f4f99"/>
+        </marker>
+      </defs>
+      <path d="M20 32 C90 26, 110 80, 150 106 S220 125, 300 175" fill="none" stroke="#dbe7ff" stroke-width="30" stroke-linecap="round"/>
+      <path d="M20 32 C90 26, 110 80, 150 106 S220 125, 300 175" fill="none" stroke="#89aee8" stroke-width="4" stroke-linecap="round"/>
+      <polyline points="48,42 88,66 74,98 124,108 110,137 160,144" fill="none" stroke="#d9485f" stroke-width="4"/>
+      <polyline points="48,42 92,60 120,92 154,110 183,126" fill="none" stroke="#1f7a5c" stroke-width="4"/>
+      <polyline points="48,42 100,57 143,88 180,114 212,132" fill="none" stroke="#805ad5" stroke-width="4"/>
+      <line x1="206" y1="132" x2="246" y2="149" stroke="#805ad5" stroke-width="4" marker-end="url(#arrow-opt)"/>
+      <text x="198" y="58" font-size="14" fill="#d9485f" font-weight="700">SGD</text>
+      <text x="198" y="80" font-size="14" fill="#1f7a5c" font-weight="700">Momentum</text>
+      <text x="198" y="102" font-size="14" fill="#805ad5" font-weight="700">AdamW</text>
+      <text x="20" y="191" font-size="13" fill="#4d6483">SGD는 더 흔들리고, Momentum은 방향을 누적하고, AdamW는 스케일까지 보정한다.</text>
+    </svg>
+    <figcaption>세 optimizer는 모두 loss를 줄이는 방향으로 가지만, 경로를 만드는 방식이 다르다. SGD는 현재 gradient만 보고, Momentum은 이전 방향을 기억하며, AdamW는 파라미터별 gradient 크기까지 반영해 보폭을 조절한다.</figcaption>
+  </figure>
+</div>
 
 <h2>4. Optimizer 비교</h2>
 <table>
@@ -248,6 +306,9 @@
 <pre><code>SGD: 현재 gradient만 사용
 Momentum: 이전 gradient 방향을 유지
 AdamW: gradient 평균/분산으로 adaptive step + weight decay 분리</code></pre>
+<p>즉 세 방법을 한 줄로 정리하면 이렇습니다. SGD는 "지금 기울기만 본다", Momentum은 "이전 방향도 기억한다", AdamW는 "방향도 기억하고 파라미터별로 얼마나 크게 움직일지도 조절한다"입니다.</p>
+<p>이 관점이 잡히면 수식이 길어 보여도 결국 같은 패턴이라는 점이 보입니다. 모두 <code>현재 파라미터 + gradient 정보 + 보정 규칙</code>으로 다음 파라미터를 만드는 구조입니다.</p>
+<p>정리하면 learning rate는 "얼마나 크게 움직일까", momentum은 "이전 방향을 얼마나 유지할까"에 대한 답입니다. 둘 다 학습 속도와 안정성에 직접 영향을 주지만, 조절하는 축은 서로 다릅니다.</p>
 
 <h2>코드-수식 연결</h2>
 <table>

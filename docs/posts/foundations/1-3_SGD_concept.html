@@ -168,6 +168,33 @@
       color: var(--muted);
       font-size: 0.92rem;
     }
+    .image-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 1em 0 1.3em;
+    }
+    .image-card {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(27, 63, 111, 0.08);
+    }
+    .image-card svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #f8fbff;
+    }
+    .image-card figcaption {
+      margin-top: 10px;
+      color: #29425f;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
     @media (max-width: 640px) {
       .post { padding: 18px 14px; border-radius: 12px; }
       .topbar a { font-size: 0.84rem; padding: 5px 10px; }
@@ -194,6 +221,7 @@
 <p>신경망 학습의 목표는 손실함수(loss)를 최소화하는 파라미터를 찾는 것입니다.</p>
 <p><code>w ← w - η ∇<sub>w</sub>L</code></p>
 <p>즉 gradient가 가리키는 상승 방향의 반대로 이동해 loss를 줄입니다.</p>
+<p>이 수식은 매우 짧지만 의미는 세 덩어리로 나눠서 봐야 이해가 쉽습니다. <code>w</code>는 지금 모델이 가진 파라미터 위치, <code>∇L</code>은 loss가 가장 빨리 커지는 방향, <code>η</code>는 한 번에 얼마나 움직일지 정하는 보폭입니다.</p>
 
 <!-- deep_context:start -->
 <h3>한 줄 요약</h3>
@@ -213,6 +241,7 @@
   <li><strong>Loss</strong>: 모델의 예측이 정답과 얼마나 다른지를 숫자로 나타낸 것. 클수록 틀린 것이다.</li>
   <li><strong>Gradient</strong>: loss가 어느 방향으로 커지는지를 나타내는 방향 벡터. 반대 방향으로 가면 loss가 줄어든다.</li>
   <li><strong>Learning rate (η)</strong>: 한 번에 얼마나 움직일지 결정하는 보폭. 너무 크면 발산, 너무 작으면 느리다.</li>
+  <li><strong>Momentum</strong>: 이전 step들의 방향을 조금 기억해서 현재 update에 반영하는 장치. 흔들림을 줄이고 일관된 방향으로 더 빨리 가게 돕는다.</li>
   <li><strong>Mini-batch</strong>: 전체 데이터에서 랜덤하게 뽑은 소규모 묶음 (예: 128개).</li>
   <li><strong>Epoch</strong>: 전체 데이터를 한 번 다 훑는 것. 학습은 보통 수십~수백 epoch 반복한다.</li>
 </ul>
@@ -231,6 +260,9 @@ min L(w)   # w: 파라미터, L: loss function</code></pre>
 <pre><code class="language-python">w = w - η * ∇L(w)
 # η: learning rate (보폭)
 # ∇L(w): gradient (오르막 방향 → 반대로 가면 내리막)</code></pre>
+<p>여기서 중요한 것은 gradient가 "좋은 방향"이 아니라 <strong>loss가 커지는 방향</strong>이라는 점입니다. 그래서 업데이트 식에 항상 마이너스가 붙습니다. 마이너스가 없으면 학습이 아니라 오히려 loss를 키우는 방향으로 올라가게 됩니다.</p>
+<p>또 <code>η</code>는 방향을 바꾸지 않고 이동량만 조절합니다. 즉 gradient가 어디로 갈지를 알려주고, learning rate가 얼마나 멀리 갈지를 정한다고 생각하면 됩니다.</p>
+<p>그래서 learning rate는 optimizer의 성격을 바꾸는 값이 아니라, 같은 방향을 얼마나 공격적으로 따를지 정하는 값입니다. 아무리 좋은 optimizer라도 learning rate가 지나치게 크면 발산하고, 너무 작으면 거의 학습이 안 되는 것처럼 보일 수 있습니다.</p>
 <p>문제: 전체 데이터로 gradient를 계산해야 한다. 데이터가 1조 토큰이면 1 step에 전부 읽어야 한다. 계산량이 엄청나고 GPU를 오래 점유한다.</p>
 
 <h3>3단. SGD 아이디어 — 일부만 쓴다</h3>
@@ -243,6 +275,31 @@ min L(w)   # w: 파라미터, L: loss function</code></pre>
 <p><strong>Stochastic(확률적)</strong>이라는 이름이 여기서 나온다. 매 step마다 랜덤하게 샘플을 뽑는다.</p>
 <pre><code class="language-python">w = w - η * ∇L_i(w)
 # L_i: mini-batch i로 계산한 loss (전체 loss의 근사)</code></pre>
+<p>즉 SGD는 "방향을 대충 보더라도 자주 움직이자"는 전략입니다. 한 번의 gradient는 덜 정확하지만 계산이 훨씬 싸기 때문에, 실제 wall-clock time 기준으로는 훨씬 빠르게 학습을 진행할 수 있습니다.</p>
+
+<div class="image-grid">
+  <figure class="image-card">
+    <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-label="SGD가 경사면을 따라 조금씩 내려가는 그림">
+      <defs>
+        <marker id="arrow-sgd" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10Z" fill="#1f4f99"/>
+        </marker>
+      </defs>
+      <path d="M20 35 C90 20, 140 70, 185 105 S265 155, 300 175" fill="none" stroke="#d6e4ff" stroke-width="28" stroke-linecap="round"/>
+      <path d="M20 35 C90 20, 140 70, 185 105 S265 155, 300 175" fill="none" stroke="#6fa0e8" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="95" cy="46" r="8" fill="#d9485f"/>
+      <circle cx="148" cy="76" r="8" fill="#d9485f"/>
+      <circle cx="198" cy="113" r="8" fill="#d9485f"/>
+      <circle cx="244" cy="144" r="8" fill="#d9485f"/>
+      <line x1="95" y1="46" x2="145" y2="74" stroke="#1f4f99" stroke-width="4" marker-end="url(#arrow-sgd)"/>
+      <line x1="148" y1="76" x2="195" y2="111" stroke="#1f4f99" stroke-width="4" marker-end="url(#arrow-sgd)"/>
+      <line x1="198" y1="113" x2="240" y2="142" stroke="#1f4f99" stroke-width="4" marker-end="url(#arrow-sgd)"/>
+      <text x="20" y="24" font-size="15" fill="#14345d" font-weight="700">SGD는 현재 gradient만 보고 한 걸음씩 이동</text>
+      <text x="20" y="191" font-size="13" fill="#4d6483">step마다 noisy하지만 계산이 가볍다</text>
+    </svg>
+    <figcaption>SGD는 매 step마다 현재 mini-batch gradient만 보고 바로 이동한다. 방향은 다소 흔들릴 수 있지만, 계산이 빠르고 자주 업데이트할 수 있다.</figcaption>
+  </figure>
+</div>
 
 <h3>4단. 실제 학습 흐름</h3>
 <p>실제로는 mini-batch SGD를 사용한다. 아래가 딥러닝 학습의 기본 루프다.</p>
@@ -266,9 +323,11 @@ min L(w)   # w: 파라미터, L: loss function</code></pre>
 
 <h4>② Gradient Descent (전체 데이터)</h4>
 <pre><code class="language-python">w = w - η * ∇L(w)   # 전체 데이터 기준. 정확하지만 느리다.</code></pre>
+<p>여기서 <code>∇L(w)</code>는 전체 데이터 평균 loss를 기준으로 계산한 gradient입니다. 그래서 방향은 비교적 안정적이지만, 한 번 계산하는 데 비용이 매우 큽니다.</p>
 
 <h4>③ SGD (mini-batch)</h4>
 <pre><code class="language-python">w = w - η * ∇L_i(w)  # mini-batch 기준. 빠르고 노이즈가 있다.</code></pre>
+<p><code>∇L_i(w)</code>는 전체 loss가 아니라 현재 mini-batch가 만들어낸 근사 gradient입니다. 즉 정확도는 조금 희생하지만, 계산량을 크게 줄여 더 자주 업데이트할 수 있게 만든 것이 SGD의 핵심입니다.</p>
 <p>한계: learning rate η를 직접 정해야 하고, 모든 파라미터에 동일한 η를 사용한다. 이 한계를 극복하려고 Adam이 나왔다.</p>
 
 <h3>5단. SGD의 장단점</h3>
@@ -285,6 +344,7 @@ min L(w)   # w: 파라미터, L: loss function</code></pre>
 
 <h4>단점 — loss가 들쭉날쭉</h4>
 <p>noisy gradient 때문에 loss curve가 불안정하다. learning rate 조절이 중요하고, 잘못 설정하면 수렴이 느리거나 발산한다.</p>
+<p>이때 momentum은 learning rate와 다른 역할을 합니다. learning rate가 "한 걸음 크기"를 조절한다면, momentum은 "이전 방향을 얼마나 기억할지"를 조절합니다. 그래서 둘은 서로 대체 관계가 아니라 함께 튜닝하는 값입니다.</p>
 
 <h3>6단. SGD와 개선된 Optimizer 비교</h3>
 <table>
@@ -295,6 +355,7 @@ min L(w)   # w: 파라미터, L: loss function</code></pre>
   <tr><td>AdamW</td><td>Adam + weight decay를 gradient와 분리</td><td>LLM (거의 표준)</td></tr>
 </table>
 <p><strong>핵심</strong>: 이름이 달라도 모두 gradient를 계산하고 w를 업데이트하는 구조는 SGD와 같다. Adam은 SGD에 adaptive learning rate와 momentum을 추가한 것이다.</p>
+<p>즉 optimizer 비교의 핵심 질문은 "gradient를 계산하느냐 마느냐"가 아니라, <strong>계산된 gradient를 어떻게 더 안정적으로 쓰느냐</strong>입니다. Momentum은 방향 기억을 추가하고, Adam/AdamW는 파라미터별 스케일 조절까지 넣는다고 보면 됩니다.</p>
 
 <h3>실험 설명 섹션</h3>
 <ul>
